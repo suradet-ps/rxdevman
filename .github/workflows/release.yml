@@ -25,19 +25,19 @@ jobs:
     steps:
       # Checkout Code
       - name: Checkout Code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
           persist-credentials: false
 
       # Setup Node.js & Bun
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v6.4.0
         with:
           node-version: 24
 
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@v2.2.0
         with:
           bun-version: latest
 
@@ -47,7 +47,7 @@ jobs:
 
       # Semantic Release
       - name: Create Release
-        uses: cycjimmy/semantic-release-action@b12c8f6015dc215fe37bc154d4ad456dd3833c90 # v6.0.0
+        uses: cycjimmy/semantic-release-action@v6.0.0
         with:
           semantic_version: 25
           extra_plugins: |
