@@ -3,107 +3,295 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Welcome">
-  <div class="home-container">
-    <div class="container">
-      <div class="intro-grid">
-        <div class="intro-text-content">
-          <p class="greeting">HI, I'M SURADET</p>
-          <h1 class="headline">
-            Pharmacist by Training,<br />Developer by Passion.
-          </h1>
-          <p class="description">
-            ยินดีต้อนรับสู่ RxDev Man นะครับ ^^
-            ผมสร้างเว็บบล็อกนี้ขึ้นมาเพื่อบันทึกสิ่งที่ได้เรียนรู้ในโลกของการเขียนโปรแกรม
-            ในเว็บบล็อกนี้หลักๆก็จะเน้นไปที่บทความครับ
-            อาจจะมีเครื่องมือที่ผมสร้างขึ้นเองบ้าง หรืออาจจะมีอะไรเพิ่มเติมในอนาคต
-            ถ้าอยากรู้ว่ามีอะไรบ้าง มาค้นหากันเลยครับ
-          </p>
+
+  <!-- ── Hero ──────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container hero-inner">
+
+      <!-- Left: Text -->
+      <div class="hero-text">
+        <p class="eyebrow">HI, I'M SURADET</p>
+        <h1 class="hero-headline">
+          Pharmacist by Training,<br />
+          <span class="headline-accent">Developer by Passion.</span>
+        </h1>
+        <p class="hero-description">
+          ยินดีต้อนรับสู่ RxDev Man นะครับ ^^
+          ผมสร้างเว็บบล็อกนี้ขึ้นมาเพื่อบันทึกสิ่งที่ได้เรียนรู้ในโลกของการเขียนโปรแกรม
+          ในเว็บบล็อกนี้หลักๆก็จะเน้นไปที่บทความครับ
+          อาจจะมีเครื่องมือที่ผมสร้างขึ้นเองบ้าง หรืออาจจะมีอะไรเพิ่มเติมในอนาคต
+          ถ้าอยากรู้ว่ามีอะไรบ้าง มาค้นหากันเลยครับ
+        </p>
+        <div class="hero-cta-row">
           <a href="/blog" class="cta-button">Explore My Notes</a>
-        </div>
-        <div class="profile-image-container">
-          <img
-            src="/images/common/profile-placeholder.jpg"
-            alt="A portrait of the author"
-            class="profile-image"
-          />
+          <a href="/about" class="cta-secondary">Read About Me →</a>
         </div>
       </div>
+
+      <!-- Right: Image -->
+      <div class="hero-image-wrap">
+        <img
+          src="/images/common/profile-placeholder.jpg"
+          alt="A portrait of the author"
+          class="hero-avatar"
+        />
+      </div>
+
     </div>
-  </div>
+  </section>
+
+  <!-- ── Feature Cards ────────────────────────────────── -->
+  <section class="features">
+    <div class="container">
+      <p class="features-section-label">Explore</p>
+      <div class="features-grid">
+
+        <a href="/blog" class="feature-card">
+          <div class="feature-icon">📝</div>
+          <h3 class="feature-title">Blog</h3>
+          <p class="feature-desc">บทความเกี่ยวกับ Astro, Vue, และการพัฒนาซอฟต์แวร์</p>
+        </a>
+
+        <a href="/hosxp" class="feature-card">
+          <div class="feature-icon">🏥</div>
+          <h3 class="feature-title">HOSxP</h3>
+          <p class="feature-desc">คู่มือและเทคนิคสำหรับระบบ HOSxP โรงพยาบาล</p>
+        </a>
+
+        <a href="/tools" class="feature-card">
+          <div class="feature-icon">🔧</div>
+          <h3 class="feature-title">Tools</h3>
+          <p class="feature-desc">เครื่องมือที่สร้างขึ้นเพื่อช่วยในงานประจำวัน</p>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
 </BaseLayout>
 
 <style>
-  .home-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - 280px);
-    padding: var(--space-8) 0;
+  /* ── Hero ─────────────────────────────── */
+  .hero {
+    padding: 5rem 0 6rem;
   }
 
-  .intro-grid {
+  .hero-inner {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1.4fr 1fr;
     align-items: center;
-    gap: var(--space-12);
+    gap: 5rem;
   }
 
-  .greeting {
+  /* Eyebrow */
+  .eyebrow {
     font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    color: var(--font-color-light);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     margin-bottom: var(--space-4);
-    letter-spacing: 0.05em;
   }
 
-  .headline {
-    font-size: var(--text-xl);
+  /* Headline */
+  .hero-headline {
+    font-size: clamp(2.4rem, 4.5vw, 3.75rem);
     font-weight: 700;
-    margin-bottom: var(--space-6);
-    line-height: 1.4;
+    color: var(--color-near-black);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    margin-bottom: var(--space-5);
   }
 
-  .description {
-    font-size: var(--text-base);
-    max-width: 600px;
-    margin-bottom: var(--space-10);
+  .headline-accent {
+    color: var(--color-brand-red);
   }
 
-  .profile-image-container {
+  /* Description */
+  .hero-description {
+    color: var(--color-text-secondary);
+    font-size: 1.0625rem;  /* 17px — PostHog body */
+    max-width: 520px;
+    line-height: 1.75;
+    margin-bottom: var(--space-8);
+  }
+
+  /* CTA row */
+  .hero-cta-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    flex-wrap: wrap;
+  }
+
+  .cta-secondary {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-brand-red);
+    text-decoration: none;
+    transition: color 0.15s ease, gap 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .cta-secondary:hover {
+    color: var(--color-brand-orange);
+    gap: 0.5rem;
+  }
+
+  /* Profile image */
+  .hero-image-wrap {
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  .profile-image {
-    width: 280px;
-    height: 280px;
+  .hero-avatar {
+    width: 300px;
+    height: 300px;
     border-radius: var(--radius-full);
     object-fit: cover;
-    border: 5px solid var(--card-bg-color);
-    box-shadow: 0 10px 30px var(--shadow-hover-color);
+    border: 4px solid #ffffff;
+    box-shadow: 0 0 0 1px var(--color-border), 0 8px 0 var(--color-border);
+    flex-shrink: 0;
   }
 
+  /* ── Feature Cards ────────────────────── */
+  .features {
+    padding: 4rem 0 6rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .features-section-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-5);
+  }
+
+  .feature-card {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-bottom: 3px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.75rem 1.5rem;
+    text-decoration: none;
+    display: block;
+    transition:
+      transform 0.15s ease,
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-3px);
+    border-bottom-color: var(--color-brand-orange);
+    box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.1);
+  }
+
+  .feature-icon {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    line-height: 1;
+    display: block;
+  }
+
+  .feature-title {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--color-near-black);
+    margin-bottom: 0.4rem;
+    margin-top: 0;
+  }
+
+  .feature-desc {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0;
+    line-height: 1.65;
+  }
+
+  /* ── Responsive ───────────────────────── */
   @media (max-width: 1024px) {
-    .intro-grid {
+    .hero {
+      padding: 3.5rem 0 4rem;
+    }
+
+    .hero-inner {
       grid-template-columns: 1fr;
       text-align: center;
-      gap: var(--space-12);
+      gap: 2.5rem;
     }
-    .intro-text-content {
-      order: 2;
+
+    /* Image on top, text below */
+    .hero-image-wrap {
+      order: -1;
     }
-    .profile-image-container {
-      order: 1;
-    }
-    .description {
+
+    .hero-description {
       margin-left: auto;
       margin-right: auto;
     }
-    .profile-image {
-      width: 220px;
-      height: 220px;
+
+    .hero-cta-row {
+      justify-content: center;
+    }
+
+    .hero-avatar {
+      width: 200px;
+      height: 200px;
+    }
+
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-4);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      padding: 2.5rem 0 3rem;
+    }
+
+    .hero-inner {
+      gap: 2rem;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-headline {
+      font-size: clamp(1.875rem, 7vw, 2.4rem);
+    }
+
+    .hero-avatar {
+      width: 160px;
+      height: 160px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .feature-card,
+    .cta-secondary {
+      transition: none;
+    }
+    .feature-card:hover {
+      transform: none;
+    }
+    .cta-secondary:hover {
+      transform: none;
     }
   }
 </style>

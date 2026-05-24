@@ -23,14 +23,21 @@ const { title, icon } = Astro.props;
 <style>
   .feature-card {
     background-color: transparent;
-    padding: 1rem;
-    color: var(--font-color);
-    border-radius: var(--radius-md);
-    transition: background-color 0.2s ease-in-out;
+    border: 1px solid #BFC1B7;
+    border-bottom: 3px solid #BFC1B7;
+    border-radius: 8px;
+    padding: 1.5rem;
+    color: #4D4F46;
+    transition:
+      transform 0.15s ease,
+      border-bottom-color 0.15s ease,
+      background-color 0.15s ease;
   }
 
   .feature-card:hover {
-    background-color: var(--card-bg-color);
+    transform: translateY(-4px);
+    border-bottom-color: #EB9D2A;
+    background-color: #FDFDF8;
   }
 
   .card-header {
@@ -47,32 +54,36 @@ const { title, icon } = Astro.props;
     justify-content: center;
     width: 44px;
     height: 44px;
-    background-color: color-mix(in srgb, var(--brand-color) 10%, transparent);
-    border-radius: var(--radius-full);
+    background-color: rgba(245, 78, 0, 0.1);
+    border-radius: 8px;
   }
 
   .card-icon {
-    color: var(--brand-color);
+    color: #F54E00;
     width: 24px;
     height: 24px;
   }
 
   h3 {
     margin: 0;
-    font-size: var(--text-lg);
+    font-size: 1.0625rem;
     font-weight: 600;
-    font-family: var(--font-sans);
-    color: var(--font-color);
+    font-family: 'IBM Plex Sans', 'Noto Sans Thai', system-ui, sans-serif;
+    color: #23251D;
   }
 
   .card-content {
     line-height: 1.6;
-    color: var(--font-color-light);
+    color: #65675E;
   }
 
   .card-content :global(a) {
-    color: var(--brand-color);
+    color: #F54E00;
     text-decoration: underline;
+  }
+
+  .card-content :global(a:hover) {
+    color: #EB9D2A;
   }
 
   @media (prefers-reduced-motion: reduce) {

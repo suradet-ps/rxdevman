@@ -1,60 +1,137 @@
-/* --- rxdevman — Global Stylesheet --- */
+/* --- rxdevman — Global Stylesheet (PostHog Design System) --- */
+/* Fonts are loaded via <link> in BaseLayout.astro (non-blocking). No @import here. */
+
 @layer reset, base, components, utilities, overrides;
 
-/* --- Design Tokens --- */
+/* ─────────────────────────────────────────
+   Design Tokens — PostHog Color System
+   ───────────────────────────────────────── */
 :root {
-  /* --- Colors --- */
-  --brand-color: #4b63c5;
-  --accent-color: #7e9ddc;
-  --font-color: #232748;
-  --font-color-light: #5d5d5d;
-  --bg-color: #f2f5fc;
-  --card-bg-color: #ffffff;
-  --card-border-color: #e2e9f7;
-  --shadow-color: rgba(75, 99, 197, 0.08);
-  --shadow-hover-color: rgba(75, 99, 197, 0.15);
+  /* --- Page & Surface Colors --- */
+  --color-page-bg:        #FDFDF8;
+  --color-accent-surface: #E5E7E0;
+  --color-border:         #BFC1B7;
+  --color-card-bg:        #ffffff;
+
+  /* --- Text Colors --- */
+  --color-text-primary:   #4D4F46;
+  --color-text-secondary: #65675E;
+  --color-text-muted:     #9EA096;
+
+  /* --- Brand Colors --- */
+  --color-brand-red:      #F54E00;
+  --color-brand-orange:   #EB9D2A;
+  --color-btn-shadow:     #CD8407;
+  --color-btn-border:     #B17816;
+
+  /* --- Dark / Footer Colors --- */
+  --color-footer-bg:      #08042f;
+  --color-dark-bg:        #1e1f23;
+  --color-near-black:     #23251D;
 
   /* --- Semantic Colors --- */
-  --success-color: #10b981;
-  --warning-color: #f59e0b;
-  --danger-color: #ef4444;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger:  #ef4444;
+
+  /*
+   * Legacy aliases — keep backward-compat for blog/content components
+   * that still reference the old token names.
+   */
+  --brand-color:        var(--color-brand-red);
+  --accent-color:       var(--color-brand-orange);
+  --font-color:         var(--color-near-black);
+  --font-color-light:   var(--color-text-secondary);
+  --bg-color:           var(--color-page-bg);
+  --card-bg-color:      var(--color-card-bg);
+  --card-border-color:  var(--color-border);
+  --shadow-color:       rgba(191, 193, 183, 0.25);
+  --shadow-hover-color: rgba(191, 193, 183, 0.45);
 
   /* --- Typography — Font Families --- */
-  --font-sans: 'Prompt', system-ui, sans-serif;
-  --font-serif: var(--font-sans);
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'IBM Plex Sans', 'Noto Sans Thai', system-ui, sans-serif;
+  --font-mono: 'Source Code Pro', 'JetBrains Mono', monospace;
 
   /* --- Typography — Fluid Text Scale --- */
-  --text-xs: clamp(0.75rem, 0.7rem + 0.2vw, 0.8rem);
-  --text-sm: clamp(0.875rem, 0.85rem + 0.2vw, 0.95rem);
-  --text-base: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
-  --text-lg: clamp(1.125rem, 1.05rem + 0.4vw, 1.3rem);
-  --text-xl: clamp(1.25rem, 1.15rem + 0.6vw, 1.6rem);
+  --text-xs:   clamp(0.75rem,  0.7rem  + 0.2vw, 0.8rem);
+  --text-sm:   clamp(0.875rem, 0.85rem + 0.2vw, 0.95rem);
+  --text-base: clamp(1rem,     0.95rem + 0.3vw, 1.125rem);
+  --text-lg:   clamp(1.125rem, 1.05rem + 0.4vw, 1.3rem);
+  --text-xl:   clamp(1.25rem,  1.15rem + 0.6vw, 1.6rem);
+  --text-2xl:  clamp(1.5rem,   1.35rem + 0.9vw, 2rem);
+  --text-3xl:  clamp(1.875rem, 1.6rem  + 1.4vw, 2.5rem);
 
   /* --- Spacing --- */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
   --space-10: 2.5rem;
   --space-12: 3rem;
+  --space-16: 4rem;
 
   /* --- Border Radii --- */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-xl:   20px;
   --radius-full: 9999px;
 
   /* --- Layout widths --- */
   --container-max-width: 1200px;
-  --prose-max-width: 800px;
+  --prose-max-width:     760px;
 }
 
-/* --- @layer reset --- */
+/* ─────────────────────────────────────────
+   Keyframe Animations
+   ───────────────────────────────────────── */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50%       { transform: rotate(3deg);  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0);    }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* ─────────────────────────────────────────
+   Custom Scrollbar
+   ───────────────────────────────────────── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.35);
+}
+
+/* ─────────────────────────────────────────
+   @layer reset
+   ───────────────────────────────────────── */
 @layer reset {
   *,
   *::before,
@@ -65,13 +142,15 @@
   }
 }
 
-/* --- @layer base --- */
+/* ─────────────────────────────────────────
+   @layer base
+   ───────────────────────────────────────── */
 @layer base {
   /* --- Document Body --- */
   body {
     font-family: var(--font-sans);
-    background-color: var(--bg-color);
-    color: var(--font-color);
+    background-color: var(--color-page-bg);
+    color: var(--color-text-primary);
     font-size: var(--text-base);
     line-height: 1.7;
     overflow-x: hidden;
@@ -79,69 +158,50 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* --- Heading Defaults --- */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  /* --- Headings --- */
+  h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-sans);
-    line-height: 1.4;
     font-weight: 700;
-    color: var(--font-color);
+    color: var(--color-near-black);
+    line-height: 1.25;
     margin-bottom: var(--space-3);
+    letter-spacing: -0.01em;
   }
 
-  /* --- Typography Hierarchy --- */
-  h1 {
-    font-size: var(--text-xl);
-  }
-  h2 {
-    font-size: var(--text-lg);
-    margin-top: var(--space-10);
-  }
-  h3 {
-    font-size: var(--text-base);
-    font-weight: 600;
-  }
-  h4,
-  h5,
-  h6 {
-    font-size: var(--text-sm);
-    font-weight: 600;
-  }
+  h1 { font-size: var(--text-3xl); }
+  h2 { font-size: var(--text-2xl); margin-top: var(--space-12); }
+  h3 { font-size: var(--text-xl);  margin-top: var(--space-8); }
+  h4 { font-size: var(--text-lg);  font-weight: 600; }
+  h5, h6 { font-size: var(--text-base); font-weight: 600; }
 
   /* --- Paragraphs --- */
   p {
     margin-bottom: var(--space-5);
-    color: var(--font-color-light);
+    color: var(--color-text-secondary);
     font-size: var(--text-base);
     font-weight: 400;
   }
 
   /* --- Anchors --- */
   a {
-    color: var(--brand-color);
+    color: var(--color-brand-red);
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.2s ease;
+    transition: color 0.15s ease;
   }
 
   a:hover {
-    color: var(--accent-color);
+    color: var(--color-brand-orange);
   }
 
   a:focus-visible {
-    outline: 2px solid var(--brand-color);
+    outline: 2px solid var(--color-brand-orange);
     outline-offset: 2px;
     border-radius: var(--radius-sm);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    a {
-      transition: none;
-    }
+    a { transition: none; }
   }
 
   /* --- Images --- */
@@ -150,11 +210,27 @@
     height: auto;
     border-radius: var(--radius-md);
   }
+
+  /* --- Horizontal Rule --- */
+  hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: var(--space-8) 0;
+  }
+
+  /* --- Selection --- */
+  ::selection {
+    background-color: #EB9D2A33;
+    color: var(--color-near-black);
+  }
 }
 
-/* --- @layer components --- */
+/* ─────────────────────────────────────────
+   @layer components
+   ───────────────────────────────────────── */
 @layer components {
-  /* --- Layout: Container --- */
+
+  /* ── Layout: Container ────────────────── */
   .container {
     max-width: var(--container-max-width);
     margin: 0 auto;
@@ -167,90 +243,161 @@
     }
   }
 
-  /* --- Card Base --- */
+  /* ── Card ─────────────────────────────── */
+  /*
+   * 3D feel: normal 1px border on top/sides,
+   * thick 3px solid border on bottom for depth.
+   */
   .card {
-    background: var(--card-bg-color);
-    border: 1px solid var(--card-border-color);
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-bottom: 3px solid var(--color-border);
     border-radius: var(--radius-lg);
     padding: var(--space-6);
-    box-shadow: 0 4px 6px -1px var(--shadow-color);
     transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease,
-      border-color 0.2s ease;
+      transform 0.15s ease,
+      box-shadow 0.15s ease,
+      border-color 0.15s ease;
   }
 
   .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 25px -5px var(--shadow-hover-color);
-    border-color: var(--brand-color);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.10);
+    border-color: var(--color-btn-border);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .card {
-      transition: none;
-    }
-
-    .card:hover {
-      transform: none;
-    }
+    .card { transition: none; }
+    .card:hover { transform: none; }
   }
 
-  /* --- CTA Button --- */
+  /* ── CTA Button (3D Tactile) ──────────── */
+  /*
+   * Orange bg with a darker shadow layer underneath via
+   * border-bottom + box-shadow trick. Pressing = translate down.
+   */
   .cta-button {
-    display: inline-block;
-    background-color: var(--brand-color);
-    color: #ffffff;
-    padding: 0.8rem 1.8rem;
-    border-radius: var(--radius-full);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background-color: var(--color-brand-orange);
+    color: var(--color-near-black);
+    padding: 0.7rem 1.6rem;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--color-btn-border);
+    border-bottom-width: 4px;
+    font-family: var(--font-sans);
     font-size: var(--text-sm);
-    font-weight: 500;
+    font-weight: 700;
     text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    /* The "shadow layer" that gives the 3D depth */
+    box-shadow: 0 4px 0 var(--color-btn-shadow);
     transition:
-      transform 0.2s ease,
-      background-color 0.2s ease,
-      box-shadow 0.2s ease;
-    box-shadow: 0 4px 6px var(--shadow-hover-color);
+      transform 0.1s ease,
+      box-shadow 0.1s ease,
+      background-color 0.15s ease;
   }
 
   .cta-button:hover {
-    background-color: var(--font-color);
-    color: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px var(--shadow-hover-color);
+    background-color: #f0a83a;
+    color: var(--color-near-black);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 0 var(--color-btn-shadow);
+  }
+
+  .cta-button:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 var(--color-btn-shadow);
   }
 
   .cta-button:focus-visible {
-    outline: 2px solid var(--brand-color);
+    outline: 2px solid var(--color-brand-orange);
     outline-offset: 3px;
-    border-radius: var(--radius-full);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .cta-button {
-      transition: none;
-    }
-
-    .cta-button:hover {
-      transform: none;
-    }
+    .cta-button { transition: none; }
+    .cta-button:hover  { transform: none; }
+    .cta-button:active { transform: none; }
   }
 
-  /* --- Prose ---*/
+  /* ── Secondary Button ─────────────────── */
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background-color: var(--color-card-bg);
+    color: var(--color-brand-orange);
+    padding: 0.7rem 1.6rem;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--color-btn-border);
+    border-bottom-width: 4px;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 4px 0 var(--color-btn-shadow);
+    transition:
+      transform 0.1s ease,
+      box-shadow 0.1s ease,
+      background-color 0.15s ease;
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-accent-surface);
+    color: var(--color-near-black);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 0 var(--color-btn-shadow);
+  }
+
+  .btn-secondary:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 var(--color-btn-shadow);
+  }
+
+  .btn-secondary:focus-visible {
+    outline: 2px solid var(--color-brand-orange);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-secondary { transition: none; }
+    .btn-secondary:hover  { transform: none; }
+    .btn-secondary:active { transform: none; }
+  }
+
+  /* ── Prose (Blog / Long-form Content) ─── */
   .prose {
     max-width: var(--prose-max-width);
     margin: 0 auto;
     overflow-wrap: break-word;
     word-wrap: break-word;
+    color: var(--color-text-secondary);
+    font-size: var(--text-base);
+    line-height: 1.8;
   }
 
   .prose > :first-child {
     margin-top: 0;
   }
 
+  .prose h1,
   .prose h2,
-  .prose h3 {
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    color: var(--color-near-black);
     scroll-margin-top: 80px;
+  }
+
+  .prose h2 {
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
   }
 
   /* --- Lists --- */
@@ -259,63 +406,145 @@
     padding-left: 0;
     margin-left: var(--space-8);
     margin-bottom: var(--space-5);
-    color: var(--font-color-light);
+    color: var(--color-text-secondary);
     list-style-position: outside;
   }
 
   .prose li {
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-2);
     padding-left: var(--space-2);
+  }
+
+  /* --- Blockquote --- */
+  .prose blockquote {
+    border-left: 4px solid var(--color-brand-orange);
+    background-color: var(--color-accent-surface);
+    margin: var(--space-8) 0;
+    padding: var(--space-4) var(--space-6);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-style: italic;
+    color: var(--color-text-primary);
+  }
+
+  .prose blockquote p {
+    margin-bottom: 0;
+    color: inherit;
   }
 
   /* --- Inline code --- */
   .prose code {
     font-family: var(--font-mono);
-    background-color: var(--card-border-color);
-    color: var(--brand-color);
-    padding: 0.2em 0.4em;
+    background-color: var(--color-accent-surface);
+    color: var(--color-brand-red);
+    border: 1px solid var(--color-border);
+    padding: 0.15em 0.4em;
     border-radius: var(--radius-sm);
-    font-size: 0.9em;
+    font-size: 0.875em;
     word-break: break-word;
   }
 
   /* --- Code blocks --- */
   .prose pre {
-    background-color: var(--font-color);
-    color: #f8fafc;
-    border: 1px solid var(--card-border-color);
+    background-color: var(--color-dark-bg);
+    color: #e8e8e8;
+    border: 1px solid var(--color-border);
+    border-bottom: 3px solid var(--color-border);
     padding: var(--space-6);
     border-radius: var(--radius-md);
     overflow-x: auto;
     margin: var(--space-8) 0;
     font-family: var(--font-mono);
     font-size: var(--text-sm);
-    line-height: 1.6;
+    line-height: 1.65;
     font-weight: 400;
-    white-space: pre-wrap;
-    word-break: break-word;
+    white-space: pre;
   }
 
   @media (max-width: 768px) {
     .prose pre {
-      margin-left: 0;
-      margin-right: 0;
       border-radius: var(--radius-sm);
+      padding: var(--space-4);
     }
   }
 
-  /* --- Reset code inside pre (inherits from block) --- */
+  /* Reset code inside pre (inherits from block) */
   .prose pre > code {
     background: none;
+    border: none;
     padding: 0;
     color: inherit;
     font-size: inherit;
     line-height: inherit;
   }
+
+  /* --- Table --- */
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--space-8) 0;
+    font-size: var(--text-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .prose th {
+    background-color: var(--color-accent-surface);
+    color: var(--color-text-primary);
+    font-weight: 600;
+    text-align: left;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .prose td {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+  }
+
+  .prose tr:last-child td {
+    border-bottom: none;
+  }
+
+  .prose tr:hover td {
+    background-color: var(--color-page-bg);
+  }
 }
 
-/* --- @layer overrides --- */
+/* ─────────────────────────────────────────
+   @layer utilities
+   ───────────────────────────────────────── */
+@layer utilities {
+  /* --- Animation helpers --- */
+  .animate-wiggle  { animation: wiggle  0.5s ease-in-out infinite; }
+  .animate-float   { animation: float   3s ease-in-out infinite;   }
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      transparent 100%
+    );
+    background-size: 200% auto;
+    animation: shimmer 2s linear infinite;
+  }
 
+  /* --- Text color helpers --- */
+  .text-muted     { color: var(--color-text-muted); }
+  .text-secondary { color: var(--color-text-secondary); }
+  .text-brand-red    { color: var(--color-brand-red); }
+  .text-brand-orange { color: var(--color-brand-orange); }
+
+  /* --- Surface helpers --- */
+  .surface-accent { background-color: var(--color-accent-surface); }
+  .surface-dark   { background-color: var(--color-dark-bg); color: #e8e8e8; }
+  .surface-footer { background-color: var(--color-footer-bg); color: #e8e8e8; }
+}
+
+/* ─────────────────────────────────────────
+   @layer overrides
+   ───────────────────────────────────────── */
 @layer overrides {
   /*
    * Shiki syntax highlighter compatibility.
@@ -327,5 +556,6 @@
   .prose pre.shiki code {
     background: unset;
     color: unset;
+    border-bottom-width: 3px;
   }
 }

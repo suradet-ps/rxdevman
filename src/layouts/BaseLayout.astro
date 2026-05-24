@@ -24,22 +24,20 @@ const currentYear = new Date().getFullYear();
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#232748" />
+    <meta name="theme-color" content="#E5E7E0" />
     <title>{`${title} | rxdevman`}</title>
-    <!-- Preconnect for faster DNS resolution -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Non-blocking font load: print media trick -->
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Source+Code+Pro:wght@400;500&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Source+Code+Pro:wght@400;500&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap"
       />
     </noscript>
     <slot name="head" />
@@ -47,123 +45,314 @@ const currentYear = new Date().getFullYear();
   <body>
     <ProgressBar />
     <Navbar />
-    <main class="main-content">
-      <div class="container">
-        <slot />
-      </div>
+
+    <main>
+      <slot />
     </main>
+
+    <!--
+      ╔════════════════════════════════════════════════╗
+      ║  Footer — PostHog light-mode style             ║
+      ║  bg: #E5E7E0 (accent)  border: #BFC1B7         ║
+      ║  Logo badge overlaps the top border by 24px    ║
+      ╚════════════════════════════════════════════════╝
+    -->
     <footer class="site-footer">
-      <div class="container footer-container">
-        <div class="footer-about">
-          <h3 class="footer-title"><span class="footer-rx">rx</span><span class="footer-devman">devman</span></h3>
-          <p>
-            เริ่มต้นจากเภสัชกรรม สู่ความหลงใหลในการพัฒนา
-            บันทึกการเดินทางจากวงการสุขภาพสู่โลกเทคโนโลยี
-          </p>
-        </div>
-        <div class="footer-links">
-          <h4 class="footer-subtitle">Connect</h4>
-          <ul>
-            <li>
-              <a
-                href="https://github.com/suradet-ps/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >GitHub</a>
-            </li>
-            <li><a href="mailto:pharmacistsabot@gmail.com">Email</a></li>
-          </ul>
-        </div>
-        <div class="footer-bottom">
-          <p>&copy; {currentYear} rxdevman. All rights reserved.</p>
+
+      <!-- Logo badge — sits 24px above the footer border (PostHog -top-6) -->
+      <div class="footer-logo-row">
+        <a href="/" class="footer-logo-badge" aria-label="rxdevman home">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 200 200"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              d="M40 30 V170 M40 30 H110 C145 30 160 55 160 80 C160 110 140 125 110 125 H40 M110 125 L160 170"
+              fill="none"
+              stroke="#F54E00"
+              stroke-width="20"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M85 65 L115 95 M115 65 L85 95"
+              fill="none"
+              stroke="#F54E00"
+              stroke-width="18"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>rxdevman</span>
+        </a>
+      </div>
+
+      <!-- Main footer body -->
+      <div class="footer-body">
+        <div class="footer-inner">
+
+          <!-- Link columns -->
+          <div class="footer-grid">
+
+            <div class="footer-col">
+              <h4 class="footer-col-heading">Pages</h4>
+              <ul class="footer-col-list">
+                <li><a href="/">Home</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/tools">Tools</a></li>
+                <li><a href="/hosxp">HOSxP</a></li>
+              </ul>
+            </div>
+
+            <div class="footer-col">
+              <h4 class="footer-col-heading">Resources</h4>
+              <ul class="footer-col-list">
+                <li><a href="/invs">INVS</a></li>
+                <li><a href="/about">About</a></li>
+              </ul>
+            </div>
+
+            <div class="footer-col">
+              <h4 class="footer-col-heading">Connect</h4>
+              <ul class="footer-col-list">
+                <li>
+                  <a
+                    href="https://github.com/suradet-ps/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="footer-social-link"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.09.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+                    </svg>
+                    GitHub
+                  </a>
+                </li>
+                <li>
+                  <a href="mailto:pharmacistsabot@gmail.com" class="footer-social-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="2" y="4" width="20" height="16" rx="2" />
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                    </svg>
+                    Email
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="footer-col">
+              <h4 class="footer-col-heading">Legal</h4>
+              <ul class="footer-col-list">
+                <li><a href="/privacy">Privacy</a></li>
+              </ul>
+            </div>
+
+          </div>
+
+          <!-- Bottom bar -->
+          <div class="footer-bottom">
+            <span>&copy; {currentYear} rxdevman. All rights reserved.</span>
+          </div>
+
         </div>
       </div>
     </footer>
+
     <style>
-      .main-content {
-        min-height: calc(100vh - 250px);
-        padding: 6rem 0 4rem;
-      }
-      .site-footer {
-        background: var(--card-bg-color);
-        border-top: 1px solid var(--card-border-color);
-        padding: 4rem 0 2rem;
-      }
-      .footer-container {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr;
-        gap: var(--space-8);
-      }
-      .footer-title {
-        font-family: var(--font-sans);
-        font-size: var(--text-lg);
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        margin-bottom: var(--space-2);
-      }
-      .footer-rx {
-        color: var(--brand-color);
-      }
-      .footer-devman {
-        color: var(--font-color);
-      }
-      .footer-about p {
-        color: var(--font-color-light);
-        max-width: 400px;
-        font-size: var(--text-sm);
-      }
-      .footer-subtitle {
-        font-family: var(--font-sans);
-        font-weight: 600;
-        color: var(--font-color);
-        margin-bottom: var(--space-4);
-        font-size: var(--text-base);
-      }
-      .footer-links ul {
-        list-style: none;
-        padding: 0;
-      }
-      .footer-links li {
-        margin-bottom: var(--space-3);
-      }
-      .footer-links a {
-        color: var(--font-color-light);
-        text-decoration: none;
-        font-size: var(--text-sm);
-        transition: color 0.2s ease;
-      }
-      .footer-links a:hover {
-        color: var(--brand-color);
-      }
-      .footer-links a:focus-visible {
-        outline: 2px solid var(--brand-color);
-        outline-offset: 2px;
-        border-radius: var(--radius-sm);
-      }
-      .footer-bottom {
-        grid-column: 1 / -1;
-        text-align: center;
-        margin-top: var(--space-8);
-        padding-top: var(--space-8);
-        border-top: 1px solid var(--card-border-color);
-        font-size: var(--text-sm);
-        color: var(--font-color-light);
+      /* ── Main content ── */
+      main {
+        min-height: calc(100vh - 56px - 280px);
       }
 
-      @media (max-width: 768px) {
-        .footer-container {
-          grid-template-columns: 1fr;
-          text-align: center;
+      /* ═══════════════════════════════════════════
+         Footer
+         PostHog light-mode: bg-accent #E5E7E0
+         border-y: 1px solid #BFC1B7
+      ═══════════════════════════════════════════ */
+      .site-footer {
+        background: #e5e7e0;
+        border-top: 1px solid #bfc1b7;
+        /* Extra top padding to make room for the logo badge overlap */
+        padding-top: 0;
+      }
+
+      /* ── Logo badge row ──
+       * The badge sits ABOVE the footer top border by half its height,
+       * using translateY(-50%) + relative positioning on the footer.
+       * Matches PostHog's "relative -top-6" pattern.
+       */
+      .footer-logo-row {
+        display: flex;
+        justify-content: flex-start;
+        padding: 0 2rem;
+        /* Pull the badge up so it straddles the border */
+        margin-top: -18px;  /* half of badge height ~36px */
+      }
+
+      .footer-logo-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        background: #ffffff;
+        color: #23251d;
+        font-family: 'IBM Plex Sans', system-ui, sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        letter-spacing: -0.02em;
+        text-decoration: none;
+        padding: 0.35rem 0.7rem;
+        border-radius: 6px;
+        border: 1px solid #bfc1b7;
+        border-bottom: 3px solid #bfc1b7;
+        /* Transition for the 3D press effect */
+        transition: transform 0.12s ease, border-bottom-width 0.12s ease, background 0.15s ease;
+      }
+
+      .footer-logo-badge:hover {
+        background: #f5f5f0;
+        transform: translateY(-1px);
+      }
+
+      .footer-logo-badge:active {
+        transform: translateY(1px);
+        border-bottom-width: 1px;
+      }
+
+      /* ── Footer body ── */
+      .footer-body {
+        padding-top: 1.5rem;
+      }
+
+      .footer-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem 2rem;
+      }
+
+      /* ── 4-column link grid ── */
+      .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        padding: 2rem 0 2rem;
+        border-top: 1px solid #bfc1b7;
+        margin-bottom: 0;
+      }
+
+      /* ── Column heading ── */
+      .footer-col-heading {
+        font-family: 'IBM Plex Sans', system-ui, sans-serif;
+        font-size: 0.6875rem;    /* 11px — PostHog small all-caps */
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #9ea096;          /* text-muted */
+        margin: 0 0 0.875rem;
+      }
+
+      /* ── Column link list ── */
+      .footer-col-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;           /* tight, PostHog-like */
+      }
+
+      .footer-col-list a {
+        display: inline-block;
+        color: #4d4f46;
+        text-decoration: none;
+        font-size: 0.9375rem;    /* 15px — PostHog link size */
+        font-weight: 500;
+        padding: 0.3rem 0.5rem;
+        border-radius: 4px;
+        margin: 0 -0.5rem;
+        transition: color 0.15s ease, background 0.15s ease;
+      }
+
+      .footer-col-list a:hover {
+        color: #f54e00;
+        background: rgba(0, 0, 0, 0.05);
+      }
+
+      .footer-col-list a:focus-visible {
+        outline: 2px solid #f54e00;
+        outline-offset: 2px;
+      }
+
+      /* ── Social links in Connect column ── */
+      .footer-social-link {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 0.4rem;
+        /* Override the plain-link padding to make a pill */
+        padding: 0.3rem 0.625rem !important;
+        border: 1px solid #bfc1b7 !important;
+        border-bottom: 3px solid #bfc1b7 !important;
+        border-radius: 6px !important;
+        margin: 0 !important;
+        font-size: 0.875rem !important;
+        transition: transform 0.12s ease, border-color 0.15s ease, color 0.15s ease, border-bottom-width 0.12s ease !important;
+      }
+
+      .footer-social-link:hover {
+        color: #f54e00 !important;
+        border-color: #f54e00 !important;
+        border-bottom-color: #f54e00 !important;
+        background: transparent !important;
+        transform: translateY(-1px);
+      }
+
+      .footer-social-link:active {
+        transform: translateY(1px);
+        border-bottom-width: 1px !important;
+      }
+
+      /* ── Bottom bar ── */
+      .footer-bottom {
+        border-top: 1px solid #bfc1b7;
+        padding: 1.25rem 0 0;
+        text-align: center;
+        font-size: 0.8125rem;
+        color: #9ea096;
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 900px) {
+        .footer-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1.5rem 2rem;
         }
-        .footer-about p {
-          margin-left: auto;
-          margin-right: auto;
+      }
+
+      @media (max-width: 480px) {
+        .footer-logo-row {
+          justify-content: center;
+          padding: 0 1.5rem;
+        }
+        .footer-inner {
+          padding: 0 1.5rem 2rem;
+        }
+        .footer-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1.25rem 1.5rem;
+          padding: 1.5rem 0;
         }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .footer-links a {
+        .footer-logo-badge,
+        .footer-col-list a,
+        .footer-social-link {
           transition: none;
+        }
+        .footer-logo-badge:hover,
+        .footer-social-link:hover {
+          transform: none;
         }
       }
     </style>

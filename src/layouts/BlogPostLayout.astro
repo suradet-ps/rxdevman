@@ -125,95 +125,127 @@ const preloadHero = heroImage
       );
     gap: clamp(1.5rem, 4vw, 3rem);
   }
+
   .prose {
     grid-column: 2;
   }
+
   .right-sidebar {
     grid-column: 3;
     position: sticky;
-    top: 100px;
+    top: 80px;
     align-self: start;
-    max-height: calc(100vh - 120px);
+    max-height: calc(100vh - 100px);
     overflow-y: auto;
   }
 
+  /* ── Post Header ── */
   .post-header {
     text-align: center;
-    margin-bottom: var(--space-12);
+    margin-bottom: 3rem;
   }
+
   .category-link {
-    font-family: var(--font-mono);
+    font-family: 'Source Code Pro', monospace;
     text-transform: uppercase;
-    font-size: var(--text-sm);
-    font-weight: 500;
-    color: var(--font-color-light);
-    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #F54E00;
+    letter-spacing: 0.08em;
+    text-decoration: none;
   }
+
   .category-link:hover {
-    color: var(--brand-color);
+    color: #EB9D2A;
   }
+
   h1 {
     margin: 0.5rem 0 1rem;
-    font-size: var(--text-xl);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-family: 'IBM Plex Sans', 'Noto Sans Thai', system-ui, sans-serif;
+    font-weight: 700;
+    color: #23251D;
+    line-height: 1.2;
   }
+
   .description {
-    font-size: var(--text-sm);
-    color: var(--font-color);
+    font-size: 1rem;
+    color: #65675E;
     max-width: 680px;
     margin: 0 auto 1.5rem;
+    line-height: 1.6;
   }
+
+  /* ── Meta ── */
   .meta {
-    font-size: var(--text-sm);
-    color: var(--font-color-light);
-    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    color: #9EA096;
+    font-family: 'IBM Plex Sans', 'Noto Sans Thai', system-ui, sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
   }
+
   .separator {
-    color: var(--card-border-color);
+    color: #BFC1B7;
   }
+
+  /* ── Hero Image — PostHog 3D card style ── */
   .hero-image {
     width: 100%;
     max-height: 600px;
     object-fit: cover;
     object-position: center;
-    border: 1px solid var(--card-border-color);
+    border: 1px solid #BFC1B7;
+    border-bottom: 3px solid #BFC1B7;
+    border-radius: 8px;
     margin-bottom: 3rem;
-    background-color: var(--card-bg-color);
+    display: block;
   }
+
+  /* ── Post Footer ── */
   .post-footer {
     margin-top: 4rem;
-    border-top: 1px solid var(--card-border-color);
+    border-top: 1px solid #BFC1B7;
     padding-top: 2rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
   }
 
+  /* ── Tags ── */
   .tags-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
     justify-content: center;
   }
+
   .tag-chip {
-    background: var(--card-bg-color);
-    border: 1px solid var(--card-border-color);
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-full);
-    color: var(--font-color-light);
-    font-size: var(--text-sm);
-    transition: all 0.2s ease;
+    background: #ffffff;
+    border: 1px solid #BFC1B7;
+    border-bottom: 3px solid #BFC1B7;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    color: #4D4F46;
+    font-size: 0.8125rem;
+    font-family: 'IBM Plex Sans', 'Noto Sans Thai', system-ui, sans-serif;
+    text-decoration: none;
+    transition:
+      border-color 0.15s ease,
+      transform 0.15s ease;
   }
+
   .tag-chip:hover {
-    background: var(--font-color);
-    border-color: var(--font-color);
-    color: var(--card-bg-color);
+    border-color: #EB9D2A;
+    border-bottom-color: #EB9D2A;
+    transform: translateY(-2px);
+    color: #23251D;
   }
+
   .tag-chip:focus-visible {
-    outline: 2px solid var(--brand-color);
+    outline: 2px solid #F54E00;
     outline-offset: 2px;
   }
 
@@ -227,6 +259,7 @@ const preloadHero = heroImage
     .layout-grid {
       grid-template-columns: minmax(0, 1fr);
       gap: 1.5rem;
+      padding: 0 var(--space-6);
     }
     .left-sidebar,
     .right-sidebar {
@@ -238,11 +271,16 @@ const preloadHero = heroImage
   }
 
   @media (max-width: 768px) {
+    .layout-grid {
+      padding: 0 var(--space-4);
+    }
     .post-header {
       margin-bottom: 2rem;
     }
     .hero-image {
       border-radius: 0;
+      border-left: none;
+      border-right: none;
       margin-left: -1rem;
       margin-right: -1rem;
       width: calc(100% + 2rem);
