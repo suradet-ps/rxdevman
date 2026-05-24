@@ -1,3 +1,9 @@
+## [1.13.1](https://github.com/suradet-ps/rxdevman/compare/v1.13.0...v1.13.1) (2026-05-24)
+
+### 🐛 Bug Fixes
+
+* add mobile overlay header with logo and close button functionality ([e057a8b](https://github.com/suradet-ps/rxdevman/commit/e057a8b80bb2ab8563227bca5faad15f96460fe5))
+
 ## [1.13.0](https://github.com/suradet-ps/rxdevman/compare/v1.12.2...v1.13.0) (2026-05-24)
 
 ### 🚀 New Features
