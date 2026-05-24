@@ -54,7 +54,9 @@ const preloadHero = heroImage
     />
   )}
   <div class="layout-grid">
-    <aside class="left-sidebar"></aside>
+    <aside class="left-sidebar">
+      <Toc headings={headings} />
+    </aside>
     <article class="prose">
       <header class="post-header">
         <a
@@ -67,7 +69,6 @@ const preloadHero = heroImage
         <div class="meta">
           <span>Published on {formattedDate}</span>
           <span class="separator">•</span>
-          <!-- เรียกใช้ ViewCounter ตรงนี้ -->
           <ViewCounter slug={postSlug} />
         </div>
       </header>
@@ -109,33 +110,28 @@ const preloadHero = heroImage
 
       <RelatedPosts relatedPosts={relatedPosts} />
     </article>
-
-    <aside class="right-sidebar">
-      <Toc headings={headings} />
-    </aside>
   </div>
 </BaseLayout>
 
 <style>
   .layout-grid {
     display: grid;
-    grid-template-columns: minmax(1.5rem, 1fr) minmax(0, 800px) minmax(
-        1.5rem,
-        240px
-      );
-    gap: clamp(1.5rem, 4vw, 3rem);
+    grid-template-columns: minmax(0, 220px) minmax(0, 800px);
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    justify-content: center;
   }
 
   .prose {
     grid-column: 2;
+    min-width: 0;
   }
 
-  .right-sidebar {
-    grid-column: 3;
+  .left-sidebar {
+    grid-column: 1;
     position: sticky;
-    top: 80px;
+    top: 2rem;
     align-self: start;
-    max-height: calc(100vh - 100px);
+    max-height: calc(100vh - 4rem);
     overflow-y: auto;
   }
 
@@ -255,14 +251,12 @@ const preloadHero = heroImage
     }
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1100px) {
     .layout-grid {
       grid-template-columns: minmax(0, 1fr);
       gap: 1.5rem;
-      padding: 0 var(--space-6);
     }
-    .left-sidebar,
-    .right-sidebar {
+    .left-sidebar {
       display: none;
     }
     .prose {

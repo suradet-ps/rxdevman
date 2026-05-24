@@ -1,5 +1,5 @@
 ---
-import Navbar from '@/components/layout/Navbar.astro';
+import BentoNav from '@/components/layout/BentoNav.astro';
 import ProgressBar from '@/components/ui/ProgressBar.astro';
 import '@/styles/global.css';
 import '@/styles/terminal.css';
@@ -44,11 +44,13 @@ const currentYear = new Date().getFullYear();
   </head>
   <body>
     <ProgressBar />
-    <Navbar />
 
-    <main>
-      <slot />
-    </main>
+    <div class="page-layout">
+      <main>
+        <slot />
+      </main>
+      <BentoNav />
+    </div>
 
     <!--
       ╔════════════════════════════════════════════════╗
@@ -161,9 +163,32 @@ const currentYear = new Date().getFullYear();
     </footer>
 
     <style>
-      /* ── Main content ── */
+      /* ── Page layout (main + bento nav) ── */
+      .page-layout {
+        display: grid;
+        grid-template-columns: 1fr 260px;
+        gap: 2rem;
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 1rem 1.5rem;
+        min-height: calc(100vh - 280px);
+      }
+
       main {
-        min-height: calc(100vh - 56px - 280px);
+        min-width: 0;
+      }
+
+      @media (max-width: 900px) {
+        .page-layout {
+          grid-template-columns: 1fr;
+          gap: 0;
+          padding: 0;
+          padding-top: 56px;
+          min-height: auto;
+        }
+        main {
+          padding: 1.5rem 1.5rem;
+        }
       }
 
       /* ═══════════════════════════════════════════
