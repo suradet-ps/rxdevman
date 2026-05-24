@@ -32,7 +32,12 @@ const { slug } = Astro.props;
     }
   }
 
-  updateViewCount();
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(() => updateViewCount(), { timeout: 2000 });
+  }
+  else {
+    window.setTimeout(updateViewCount, 150);
+  }
 </script>
 
 <style>

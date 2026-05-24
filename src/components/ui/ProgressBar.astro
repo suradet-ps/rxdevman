@@ -4,20 +4,44 @@
 <div id="progress-bar" class="progress-bar"></div>
 
 <script>
-function updateProgressBar() {
-  const bar = document.getElementById('progress-bar');
-  if (!bar)
-    return;
-  const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-  const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
+const progressBar = document.getElementById('progress-bar');
 
-  bar.style.width = `${progress}%`;
+if (progressBar instanceof HTMLDivElement && !progressBar.dataset.initialized) {
+  const progressBarElement = progressBar;
+
+  progressBarElement.dataset.initialized = 'true';
+
+  let maxScroll = 0;
+  let frame = 0;
+
+  function recalculateMaxScroll() {
+    maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 0);
+  }
+
+  function renderProgress() {
+    frame = 0;
+    const progress = maxScroll > 0 ? Math.min(window.scrollY / maxScroll, 1) : 0;
+    progressBarElement.style.transform = `scaleX(${progress})`;
+  }
+
+  function requestRender() {
+    if (frame)
+      return;
+
+    frame = window.requestAnimationFrame(renderProgress);
+  }
+
+  function syncProgress() {
+    recalculateMaxScroll();
+    requestRender();
+  }
+
+  document.addEventListener('astro:page-load', syncProgress);
+  window.addEventListener('scroll', requestRender, { passive: true });
+  window.addEventListener('resize', syncProgress, { passive: true });
+
+  syncProgress();
 }
-
-document.addEventListener('astro:page-load', updateProgressBar);
-window.addEventListener('scroll', updateProgressBar, { passive: true });
-
-updateProgressBar();
 </script>
 
 <style>
@@ -27,8 +51,10 @@ updateProgressBar();
     left: 0;
     height: 3px;
     background: linear-gradient(to right, #F54E00, #EB9D2A);
-    width: 0%;
+    width: 100%;
     z-index: 999999;
-    transition: width 0.1s linear;
+    transform: scaleX(0);
+    transform-origin: left center;
+    will-change: transform;
   }
 </style>

@@ -112,7 +112,9 @@ const platforms = [
     const copyBtn = document.getElementById('copy-link-btn');
     const copyTooltip = document.getElementById('copy-tooltip');
 
-    if (copyBtn && copyTooltip) {
+    if (copyBtn && copyTooltip && !copyBtn.dataset.initialized) {
+      copyBtn.dataset.initialized = 'true';
+
       copyBtn.addEventListener('click', async () => {
         const url = (copyBtn instanceof HTMLButtonElement ? copyBtn.dataset.url : null) ?? window.location.href;
         try {
@@ -171,7 +173,9 @@ const platforms = [
     // and is only revealed here when the API is available.
     const nativeShareBtn = document.getElementById('native-share-btn');
 
-    if (nativeShareBtn) {
+    if (nativeShareBtn && !nativeShareBtn.dataset.initialized) {
+      nativeShareBtn.dataset.initialized = 'true';
+
       if (navigator.share) {
         nativeShareBtn.style.display = 'flex';
         nativeShareBtn.addEventListener('click', async () => {
@@ -190,7 +194,9 @@ const platforms = [
           }
         });
       }
-      // If navigator.share is unsupported the button stays hidden (display: none from CSS).
+      else {
+        nativeShareBtn.hidden = true;
+      }
     }
   }
 

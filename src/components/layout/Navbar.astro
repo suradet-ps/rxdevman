@@ -88,49 +88,103 @@ const navbar = document.getElementById('navbar');
 const hamburger = document.getElementById('hamburger');
 const overlay = document.getElementById('mobile-overlay');
 
-// Scroll effect: add .scrolled class when past threshold
-let scrollRAF: number | null = null;
-function onScroll() {
-  if (scrollRAF)
-    return;
-  scrollRAF = requestAnimationFrame(() => {
-    const shouldScroll = window.scrollY > 20;
-    navbar?.classList.toggle('scrolled', shouldScroll);
-    scrollRAF = null;
+if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && overlay instanceof HTMLDivElement && !overlay.dataset.initialized) {
+  const navbarElement = navbar;
+  const hamburgerButton = hamburger;
+  const overlayElement = overlay;
+
+  overlayElement.dataset.initialized = 'true';
+
+  const overlayLinks = Array.from(overlayElement.querySelectorAll('a'));
+  let scrollFrame = 0;
+  let isMenuOpen = false;
+  let isScrolled = false;
+
+  function syncScrollState() {
+    scrollFrame = 0;
+    const nextScrolled = window.scrollY > 20;
+    if (nextScrolled === isScrolled)
+      return;
+
+    isScrolled = nextScrolled;
+    navbarElement.classList.toggle('scrolled', nextScrolled);
+  }
+
+  function requestScrollState() {
+    if (scrollFrame)
+      return;
+
+    scrollFrame = window.requestAnimationFrame(syncScrollState);
+  }
+
+  function setMenuState(nextOpen: boolean) {
+    if (nextOpen === isMenuOpen)
+      return;
+
+    isMenuOpen = nextOpen;
+    overlayElement.classList.toggle('open', nextOpen);
+    hamburgerButton.classList.toggle('active', nextOpen);
+    hamburgerButton.setAttribute('aria-expanded', String(nextOpen));
+    overlayElement.setAttribute('aria-hidden', String(!nextOpen));
+    document.body.classList.toggle('no-scroll', nextOpen);
+    document.documentElement.classList.toggle('no-scroll', nextOpen);
+    overlayElement.inert = !nextOpen;
+
+    if (nextOpen) {
+      overlayLinks[0]?.focus();
+    }
+    else {
+      hamburgerButton.focus();
+    }
+  }
+
+  function handleOverlayKeydown(event: KeyboardEvent) {
+    if (!isMenuOpen || event.key !== 'Tab')
+      return;
+
+    const focusable = [hamburgerButton, ...overlayLinks];
+    const firstFocusable = focusable[0];
+    const lastFocusable = focusable[focusable.length - 1];
+
+    if (event.shiftKey && document.activeElement === firstFocusable) {
+      event.preventDefault();
+      lastFocusable?.focus();
+    }
+    else if (!event.shiftKey && document.activeElement === lastFocusable) {
+      event.preventDefault();
+      firstFocusable?.focus();
+    }
+  }
+
+  overlayElement.inert = true;
+  requestScrollState();
+
+  window.addEventListener('scroll', requestScrollState, { passive: true });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 900) {
+      setMenuState(false);
+    }
+
+    requestScrollState();
+  }, { passive: true });
+
+  hamburgerButton.addEventListener('click', () => {
+    setMenuState(!isMenuOpen);
+  });
+
+  overlayElement.addEventListener('click', (event) => {
+    const link = event.target instanceof Element ? event.target.closest('a') : null;
+    if (link)
+      setMenuState(false);
+  });
+
+  overlayElement.addEventListener('keydown', handleOverlayKeydown);
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && isMenuOpen)
+      setMenuState(false);
   });
 }
-window.addEventListener('scroll', onScroll, { passive: true });
-onScroll();
-
-// Mobile menu
-function openMenu() {
-  overlay?.classList.add('open');
-  hamburger?.classList.add('active');
-  hamburger?.setAttribute('aria-expanded', 'true');
-  overlay?.setAttribute('aria-hidden', 'false');
-  document.body.classList.add('no-scroll');
-  document.documentElement.classList.add('no-scroll');
-}
-
-function closeMenu() {
-  overlay?.classList.remove('open');
-  hamburger?.classList.remove('active');
-  hamburger?.setAttribute('aria-expanded', 'false');
-  overlay?.setAttribute('aria-hidden', 'true');
-  document.body.classList.remove('no-scroll');
-  document.documentElement.classList.remove('no-scroll');
-}
-
-hamburger?.addEventListener('click', () => {
-  overlay?.classList.contains('open') ? closeMenu() : openMenu();
-});
-
-overlay?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && overlay?.classList.contains('open'))
-    closeMenu();
-});
 </script>
 
 <style>
@@ -311,10 +365,17 @@ document.addEventListener('keydown', (e) => {
     z-index: 999997;
     overflow-y: auto;
     transform: translateX(100%);
+    visibility: hidden;
+    pointer-events: none;
+    will-change: transform;
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .mobile-overlay.open { transform: translateX(0); }
+  .mobile-overlay.open {
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+  }
 
   .mobile-nav {
     display: flex;
@@ -402,6 +463,10 @@ document.addEventListener('keydown', (e) => {
   /* ─── Global side-effects ─── */
   :global(body.no-scroll),
   :global(html.no-scroll) { overflow: hidden; }
+
+  :global(html) {
+    scrollbar-gutter: stable;
+  }
 
   /* ─── Reduced motion ─── */
   @media (prefers-reduced-motion: reduce) {

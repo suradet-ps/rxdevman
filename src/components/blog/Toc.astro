@@ -23,35 +23,48 @@ const filteredHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
 )}
 
 <script>
-document.addEventListener('astro:page-load', () => {
-  const tocLinks = document.querySelectorAll('.toc-item a');
+type TocWindow = Window & {
+  __rxdevmanTocObserver?: IntersectionObserver;
+};
+
+function initToc() {
+  const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.toc-item a'));
   if (tocLinks.length === 0)
     return;
+
+  const tocWindow = window as TocWindow;
+  tocWindow.__rxdevmanTocObserver?.disconnect();
 
   const observer = new IntersectionObserver((entries) => {
     const intersectingEntries = entries.filter(entry => entry.isIntersecting);
 
-    if (intersectingEntries.length > 0) {
-      intersectingEntries.sort(
-        (a, b) => a.boundingClientRect.top - b.boundingClientRect.top,
-      );
+    if (intersectingEntries.length === 0)
+      return;
 
-      const activeEntry = intersectingEntries[0];
-      const id = activeEntry.target.getAttribute('id');
+    intersectingEntries.sort(
+      (a, b) => a.boundingClientRect.top - b.boundingClientRect.top,
+    );
 
-      tocLinks.forEach((link) => {
-        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
-      });
-    }
+    const activeEntry = intersectingEntries[0];
+    const id = activeEntry.target.getAttribute('id');
+
+    tocLinks.forEach((link) => {
+      link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+    });
   }, {
     rootMargin: '0px 0px -80% 0px',
-    threshold: 1.0,
+    threshold: 1,
   });
 
   document.querySelectorAll('.prose h2, .prose h3').forEach((heading) => {
     observer.observe(heading);
   });
-});
+
+  tocWindow.__rxdevmanTocObserver = observer;
+}
+
+document.addEventListener('astro:page-load', initToc);
+initToc();
 </script>
 
 <style>
@@ -78,7 +91,7 @@ document.addEventListener('astro:page-load', () => {
     color: var(--font-color-light);
     border-left: 2px solid var(--card-border-color);
     padding-left: 1rem;
-    transition: all 0.2s ease;
+    transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   }
   .toc-item a:hover {
     color: var(--font-color);
