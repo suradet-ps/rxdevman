@@ -1,165 +1,177 @@
 ---
 const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/tools', label: 'Tools' },
-  { href: '/hosxp', label: 'HOSxP' },
-  { href: '/invs', label: 'INVS' },
-  { href: '/about', label: 'About' },
+  { href: '/', label: 'Home', icon: 'home' },
+  { href: '/blog', label: 'Blog', icon: 'blog' },
+  { href: '/tools', label: 'Tools', icon: 'tools' },
+  { href: '/hosxp', label: 'HOSxP', icon: 'hosxp' },
+  { href: '/invs', label: 'INVS', icon: 'invs' },
+  { href: '/about', label: 'About', icon: 'about' },
 ];
 
 const pathname = Astro.url.pathname;
+
+function isActive(href: string) {
+  return href === '/' ? pathname === '/' : pathname.startsWith(href);
+}
 ---
 
 <header class="navbar" id="navbar">
   <div class="navbar-inner">
-
     <!-- Logo -->
     <a href="/" class="logo" aria-label="rxdevman Homepage">
-      <svg
-        class="logo-svg"
-        width="32"
-        height="32"
-        viewBox="0 0 200 200"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-      >
-        <path
-          d="M40 30 V170 M40 30 H110 C145 30 160 55 160 80 C160 110 140 125 110 125 H40 M110 125 L160 170"
-          fill="none"
-          stroke="#F54E00"
-          stroke-width="18"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M85 65 L115 95 M115 65 L85 95"
-          fill="none"
-          stroke="#F54E00"
-          stroke-width="15"
-          stroke-linecap="round"
-        />
+      <svg class="logo-svg" width="28" height="28" viewBox="0 0 200 200" aria-hidden="true">
+        <path d="M40 30 V170 M40 30 H110 C145 30 160 55 160 80 C160 110 140 125 110 125 H40 M110 125 L160 170" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M85 65 L115 95 M115 65 L85 95" fill="none" stroke="currentColor" stroke-width="15" stroke-linecap="round" />
       </svg>
-      <span class="logo-text">
-        <span class="logo-rx">rx</span><span class="logo-devman">devman</span>
-      </span>
+      <span class="logo-text"><span class="logo-rx">rx</span><span class="logo-devman">devman</span></span>
     </a>
 
     <!-- Desktop nav -->
     <nav class="nav-links" aria-label="Main navigation">
-      {navLinks.map(({ href, label }) => {
-        const isActive
-          = href === '/'
-            ? pathname === '/'
-            : pathname.startsWith(href);
-        return (
-          <a
-            href={href}
-            class:list={['nav-link', { active: isActive }]}
-          >
-            {label}
-          </a>
-        );
-      })}
+      {navLinks.map(({ href, label }) => (
+        <a
+          href={href}
+          class:list={['nav-link', { active: isActive(href) }]}
+        >
+          <span class="nav-link-text">{label}</span>
+        </a>
+      ))}
     </nav>
 
-    <!-- Right: CTA + hamburger -->
+    <!-- Right area (mobile hamburger only) -->
     <div class="navbar-right">
-      <a href="/blog" class="cta-btn">Get Started</a>
-      <button
-        class="hamburger"
-        id="hamburger"
-        aria-label="Toggle navigation"
-        aria-expanded="false"
-        aria-controls="mobile-overlay"
-      >
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobile-overlay">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
     </div>
-
   </div>
 </header>
 
-<!-- Mobile overlay (outside header so it can be full-screen) -->
+<!-- Mobile overlay -->
 <div class="mobile-overlay" id="mobile-overlay" aria-hidden="true">
   <nav class="mobile-nav" aria-label="Mobile navigation">
-    {navLinks.map(({ href, label }) => {
-      const isActive
-        = href === '/'
-          ? pathname === '/'
-          : pathname.startsWith(href);
-      return (
-        <a
-          href={href}
-          class:list={['mobile-link', { active: isActive }]}
-        >
-          {label}
-        </a>
-      );
-    })}
-    <a href="/blog" class="cta-btn mobile-cta">Get Started</a>
+    {navLinks.map(({ href, label, icon }) => (
+      <a
+        href={href}
+        class:list={['mobile-link', { active: isActive(href) }]}
+      >
+        <span class="mobile-link-icon">
+          {icon === 'home' && (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
+          )}
+          {icon === 'blog' && (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+          )}
+          {icon === 'tools' && (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5" /><line x1="12" y1="19" x2="20" y2="19" /></svg>
+          )}
+          {icon === 'hosxp' && (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
+          )}
+          {icon === 'invs' && (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><rect x="8" y="2" width="8" height="4" rx="1" ry="1" /></svg>
+          )}
+          {icon === 'about' && (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+          )}
+        </span>
+        <span class="mobile-link-text">{label}</span>
+      </a>
+    ))}
   </nav>
 </div>
 
 <script>
-  const hamburger = document.getElementById('hamburger');
-  const overlay = document.getElementById('mobile-overlay');
+const navbar = document.getElementById('navbar');
+const hamburger = document.getElementById('hamburger');
+const overlay = document.getElementById('mobile-overlay');
 
-  function openMenu() {
-    overlay?.classList.add('open');
-    hamburger?.classList.add('active');
-    hamburger?.setAttribute('aria-expanded', 'true');
-    overlay?.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('no-scroll');
-  }
-
-  function closeMenu() {
-    overlay?.classList.remove('open');
-    hamburger?.classList.remove('active');
-    hamburger?.setAttribute('aria-expanded', 'false');
-    overlay?.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('no-scroll');
-  }
-
-  hamburger?.addEventListener('click', () => {
-    overlay?.classList.contains('open') ? closeMenu() : openMenu();
+// Scroll effect: add .scrolled class when past threshold
+let scrollRAF: number | null = null;
+function onScroll() {
+  if (scrollRAF)
+    return;
+  scrollRAF = requestAnimationFrame(() => {
+    const shouldScroll = window.scrollY > 20;
+    navbar?.classList.toggle('scrolled', shouldScroll);
+    scrollRAF = null;
   });
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
 
-  overlay?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+// Mobile menu
+function openMenu() {
+  overlay?.classList.add('open');
+  hamburger?.classList.add('active');
+  hamburger?.setAttribute('aria-expanded', 'true');
+  overlay?.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('no-scroll');
+  document.documentElement.classList.add('no-scroll');
+}
+
+function closeMenu() {
+  overlay?.classList.remove('open');
+  hamburger?.classList.remove('active');
+  hamburger?.setAttribute('aria-expanded', 'false');
+  overlay?.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('no-scroll');
+  document.documentElement.classList.remove('no-scroll');
+}
+
+hamburger?.addEventListener('click', () => {
+  overlay?.classList.contains('open') ? closeMenu() : openMenu();
+});
+
+overlay?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && overlay?.classList.contains('open'))
+    closeMenu();
+});
 </script>
 
 <style>
-  /* ─── Design tokens (local, mirror global) ─── */
-  :root {
-    --nav-accent:  #e5e7e0;
-    --nav-border:  #bfc1b7;
-    --nav-text:    #4d4f46;
-    --nav-red:     #f54e00;
-    --nav-orange:  #eb9d2a;
-    --nav-shadow:  #cd8407;
-    --nav-bg:      #fdfdf8;
-    --nav-height:  56px;
+  .navbar {
+    --nav-bg: #fdfdf8;
+    --nav-border: #e5e7e0;
+    --nav-text: #4d4f46;
+    --nav-text-muted: #9ea096;
+    --nav-red: #f54e00;
+    --nav-orange: #eb9d2a;
+    --nav-height: 60px;
   }
 
-  /* ─── Header bar ─── */
-  /*
-   * PostHog: nav inner is always bg-accent (#E5E7E0) with border-b (#BFC1B7).
-   * No transparent-then-scroll trick — the bar is always visible and solid.
-   */
   .navbar {
     position: sticky;
     top: 0;
-    left: 0;
     width: 100%;
     z-index: 999998;
-    background: var(--nav-accent);
+    background: var(--nav-bg);
     border-bottom: 1px solid var(--nav-border);
   }
 
+  .navbar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 8px;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .navbar.scrolled::after {
+    opacity: 1;
+  }
+
   .navbar-inner {
-    max-width: 1200px;
+    max-width: 1440px;
     margin: 0 auto;
     padding: 0 1.5rem;
     height: var(--nav-height);
@@ -176,16 +188,17 @@ const pathname = Astro.url.pathname;
     gap: 0.5rem;
     text-decoration: none;
     flex-shrink: 0;
+    color: var(--nav-red);
   }
 
   .logo-svg {
-    width: 32px;
-    height: 32px;
-    transition: transform 0.3s ease;
+    width: 26px;
+    height: 26px;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .logo:hover .logo-svg {
-    transform: rotate(-12deg) scale(1.08);
+    transform: rotate(-16deg) scale(1.1);
   }
 
   .logo-text {
@@ -196,76 +209,56 @@ const pathname = Astro.url.pathname;
     line-height: 1;
   }
 
-  .logo-rx      { color: var(--nav-red); }
-  .logo-devman  { color: var(--nav-text); }
+  .logo-rx { color: var(--nav-red); }
+  .logo-devman { color: var(--nav-text); }
 
   /* ─── Desktop nav links ─── */
   .nav-links {
     display: flex;
     align-items: center;
-    gap: 0.125rem;   /* 2px — PostHog packs links tightly */
+    gap: 0.75rem;
     flex: 1;
-    justify-content: center;
+    justify-content: flex-end;
   }
 
   .nav-link {
+    position: relative;
     font-family: 'IBM Plex Sans', system-ui, sans-serif;
-    font-size: 0.84375rem;   /* 13.5px — PostHog exact */
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--nav-text);
     text-decoration: none;
-    padding: 0.25rem 0.625rem;  /* 4px 10px */
-    border-radius: 6px;
-    opacity: 0.75;             /* PostHog: inactive links at 70% */
-    transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+    padding: 0.45rem 1.1rem;
+    border-radius: 8px;
     white-space: nowrap;
+    border: 1.5px solid transparent;
+    border-bottom-width: 3px;
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
   }
 
   .nav-link:hover {
-    opacity: 1;
     color: var(--nav-red);
-    background: rgba(0, 0, 0, 0.06);
+    background: rgba(245, 78, 0, 0.06);
   }
 
   .nav-link.active {
-    opacity: 1;
-    color: var(--nav-red);
+    color: #2b1f00;
+    background: var(--nav-orange);
+    border-color: #b17816;
+    font-weight: 700;
+  }
+
+  .nav-link-text {
+    position: relative;
+    z-index: 1;
   }
 
   /* ─── Right cluster ─── */
   .navbar-right {
     display: flex;
     align-items: center;
-    gap: 0.625rem;
+    gap: 0.5rem;
     flex-shrink: 0;
-  }
-
-  /* ─── CTA button (3D tactile) ─── */
-  .cta-btn {
-    font-family: 'IBM Plex Sans', system-ui, sans-serif;
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: #1a1a1a;
-    background: var(--nav-orange);
-    text-decoration: none;
-    padding: 0.4rem 1.1rem;
-    border-radius: 6px;
-    border: 1px solid var(--nav-shadow);
-    border-bottom: 3px solid var(--nav-shadow);
-    cursor: pointer;
-    white-space: nowrap;
-    display: inline-block;
-    line-height: 1.4;
-    transition: transform 0.12s ease, border-bottom-width 0.12s ease;
-  }
-
-  .cta-btn:hover {
-    transform: translateY(-2px);
-  }
-
-  .cta-btn:active {
-    transform: translateY(1px);
-    border-bottom-width: 1px;
   }
 
   /* ─── Hamburger ─── */
@@ -279,40 +272,46 @@ const pathname = Astro.url.pathname;
     height: 36px;
     background: transparent;
     border: 1px solid var(--nav-border);
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     padding: 0;
     flex-shrink: 0;
-    transition: background 0.15s ease;
+    transition: background 0.2s ease, border-color 0.2s ease;
   }
 
-  .hamburger:hover { background: rgba(0,0,0,0.06); }
+  .hamburger:hover {
+    background: rgba(245, 78, 0, 0.06);
+    border-color: var(--nav-red);
+  }
 
   .bar {
-    width: 15px;
+    width: 16px;
     height: 2px;
     background: var(--nav-text);
     border-radius: 2px;
     transform-origin: center;
-    transition: transform 0.28s ease, opacity 0.28s ease;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
   }
 
-  .hamburger.active .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.active .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); background: var(--nav-red); }
   .hamburger.active .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
-  .hamburger.active .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .hamburger.active .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--nav-red); }
 
   /* ─── Mobile overlay ─── */
   .mobile-overlay {
-    display: none;       /* show only on small screens via media query */
+    display: none;
     position: fixed;
-    inset: 0;
-    top: var(--nav-height);
-    background: var(--nav-bg);
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    background: #fdfdf8;
     border-top: 1px solid var(--nav-border);
     z-index: 999997;
     overflow-y: auto;
     transform: translateX(100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .mobile-overlay.open { transform: translateX(0); }
@@ -320,62 +319,104 @@ const pathname = Astro.url.pathname;
   .mobile-nav {
     display: flex;
     flex-direction: column;
-    padding: 1.5rem;
+    padding: 1rem 1.5rem 2rem;
     gap: 0.25rem;
   }
 
   .mobile-link {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
     font-family: 'IBM Plex Sans', system-ui, sans-serif;
-    font-size: 1.125rem;
-    font-weight: 600;
+    font-size: 1.05rem;
+    font-weight: 500;
     color: var(--nav-text);
     text-decoration: none;
-    padding: 0.7rem 1rem;
-    border-radius: 8px;
-    transition: color 0.15s ease, background 0.15s ease;
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    border: 1.5px solid transparent;
+    border-bottom-width: 3px;
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   }
 
-  .mobile-link:hover,
-  .mobile-link.active {
+  .mobile-link:hover {
     color: var(--nav-red);
-    background: var(--nav-accent);
+    background: rgba(245, 78, 0, 0.06);
+    transform: translateX(4px);
   }
 
-  .mobile-cta {
-    margin-top: 1.25rem;
-    text-align: center;
-    padding: 0.65rem 1rem;
-    font-size: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 3px 0 var(--nav-shadow);
+  .mobile-link.active {
+    color: #2b1f00;
+    background: var(--nav-orange);
+    border-color: #b17816;
+    font-weight: 700;
+    transform: none;
   }
+
+  .mobile-link-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #fdfdf8;
+    border: 1px solid var(--nav-border);
+    color: var(--nav-text-muted);
+    flex-shrink: 0;
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .mobile-link.active .mobile-link-icon,
+  .mobile-link:hover .mobile-link-icon {
+    color: var(--nav-red);
+    border-color: var(--nav-red);
+    background: #fff;
+  }
+
+  .mobile-link.active .mobile-link-icon {
+    color: #2b1f00;
+    border-color: rgba(43,31,0,0.2);
+    background: rgba(255,255,255,0.4);
+  }
+
+  .mobile-link-text { line-height: 1.3; }
 
   /* ─── Responsive ─── */
-  @media (max-width: 768px) {
-    .nav-links        { display: none; }
-    .cta-btn:not(.mobile-cta) { display: none; }
-    .hamburger        { display: flex; }
-    .mobile-overlay   { display: block; }
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .mobile-overlay { display: block; }
   }
 
   /* ─── Focus styles ─── */
   .nav-link:focus-visible,
   .logo:focus-visible,
   .hamburger:focus-visible,
-  .cta-btn:focus-visible {
+  .mobile-link:focus-visible {
     outline: 2px solid var(--nav-red);
     outline-offset: 3px;
-    border-radius: 6px;
+    border-radius: 8px;
   }
 
   /* ─── Global side-effects ─── */
-  :global(body.no-scroll) { overflow: hidden; }
+  :global(body.no-scroll),
+  :global(html.no-scroll) { overflow: hidden; }
 
   /* ─── Reduced motion ─── */
   @media (prefers-reduced-motion: reduce) {
-    .logo-svg, .nav-link, .cta-btn, .hamburger, .bar, .mobile-overlay {
+    .navbar,
+    .navbar::after,
+    .logo-svg,
+    .nav-link,
+    .hamburger,
+    .bar,
+    .mobile-overlay,
+    .mobile-link {
       transition: none;
+      animation: none;
     }
     .logo:hover .logo-svg { transform: none; }
+    .mobile-link:hover { transform: none; }
   }
 </style>

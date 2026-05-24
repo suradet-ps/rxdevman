@@ -22,7 +22,6 @@ export default defineConfig({
       imports: [
         // --- blog components  ---
         './src/components/blog/BlogPostCard.astro',
-        './src/components/blog/CategoryCard.astro',
         './src/components/blog/Toc.astro',
         './src/components/blog/ViewCounter.astro',
         './src/components/blog/ShareButtons.astro',
@@ -49,7 +48,6 @@ export default defineConfig({
         './src/components/ui/FeatureCard.astro',
         './src/components/ui/FeatureGrid.astro',
         './src/components/ui/ProgressBar.astro',
-        './src/components/ui/Search.astro',
       ],
     }),
     mdx(),
