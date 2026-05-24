@@ -8,44 +8,44 @@
    ───────────────────────────────────────── */
 :root {
   /* --- Page & Surface Colors --- */
-  --color-page-bg:        #FDFDF8;
-  --color-accent-surface: #E5E7E0;
-  --color-border:         #BFC1B7;
-  --color-card-bg:        #ffffff;
+  --color-page-bg: #fdfdf8;
+  --color-accent-surface: #e5e7e0;
+  --color-border: #bfc1b7;
+  --color-card-bg: #ffffff;
 
   /* --- Text Colors --- */
-  --color-text-primary:   #4D4F46;
-  --color-text-secondary: #65675E;
-  --color-text-muted:     #9EA096;
+  --color-text-primary: #4d4f46;
+  --color-text-secondary: #65675e;
+  --color-text-muted: #9ea096;
 
   /* --- Brand Colors --- */
-  --color-brand-red:      #F54E00;
-  --color-brand-orange:   #EB9D2A;
-  --color-btn-shadow:     #CD8407;
-  --color-btn-border:     #B17816;
+  --color-brand-red: #f54e00;
+  --color-brand-orange: #eb9d2a;
+  --color-btn-shadow: #cd8407;
+  --color-btn-border: #b17816;
 
   /* --- Dark / Footer Colors --- */
-  --color-footer-bg:      #08042f;
-  --color-dark-bg:        #1e1f23;
-  --color-near-black:     #23251D;
+  --color-footer-bg: #08042f;
+  --color-dark-bg: #1e1f23;
+  --color-near-black: #23251d;
 
   /* --- Semantic Colors --- */
   --color-success: #10b981;
   --color-warning: #f59e0b;
-  --color-danger:  #ef4444;
+  --color-danger: #ef4444;
 
   /*
    * Legacy aliases — keep backward-compat for blog/content components
    * that still reference the old token names.
    */
-  --brand-color:        var(--color-brand-red);
-  --accent-color:       var(--color-brand-orange);
-  --font-color:         var(--color-near-black);
-  --font-color-light:   var(--color-text-secondary);
-  --bg-color:           var(--color-page-bg);
-  --card-bg-color:      var(--color-card-bg);
-  --card-border-color:  var(--color-border);
-  --shadow-color:       rgba(191, 193, 183, 0.25);
+  --brand-color: var(--color-brand-red);
+  --accent-color: var(--color-brand-orange);
+  --font-color: var(--color-near-black);
+  --font-color-light: var(--color-text-secondary);
+  --bg-color: var(--color-page-bg);
+  --card-bg-color: var(--color-card-bg);
+  --card-border-color: var(--color-border);
+  --shadow-color: rgba(191, 193, 183, 0.25);
   --shadow-hover-color: rgba(191, 193, 183, 0.45);
 
   /* --- Typography — Font Families --- */
@@ -53,54 +53,68 @@
   --font-mono: 'Source Code Pro', 'JetBrains Mono', monospace;
 
   /* --- Typography — Fluid Text Scale --- */
-  --text-xs:   clamp(0.75rem,  0.7rem  + 0.2vw, 0.8rem);
-  --text-sm:   clamp(0.875rem, 0.85rem + 0.2vw, 0.95rem);
-  --text-base: clamp(1rem,     0.95rem + 0.3vw, 1.125rem);
-  --text-lg:   clamp(1.125rem, 1.05rem + 0.4vw, 1.3rem);
-  --text-xl:   clamp(1.25rem,  1.15rem + 0.6vw, 1.6rem);
-  --text-2xl:  clamp(1.5rem,   1.35rem + 0.9vw, 2rem);
-  --text-3xl:  clamp(1.875rem, 1.6rem  + 1.4vw, 2.5rem);
+  --text-xs: clamp(0.75rem, 0.7rem + 0.2vw, 0.8rem);
+  --text-sm: clamp(0.875rem, 0.85rem + 0.2vw, 0.95rem);
+  --text-base: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1.05rem + 0.4vw, 1.3rem);
+  --text-xl: clamp(1.25rem, 1.15rem + 0.6vw, 1.6rem);
+  --text-2xl: clamp(1.5rem, 1.35rem + 0.9vw, 2rem);
+  --text-3xl: clamp(1.875rem, 1.6rem + 1.4vw, 2.5rem);
 
   /* --- Spacing --- */
-  --space-1:  0.25rem;
-  --space-2:  0.5rem;
-  --space-3:  0.75rem;
-  --space-4:  1rem;
-  --space-5:  1.25rem;
-  --space-6:  1.5rem;
-  --space-8:  2rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
   --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
 
   /* --- Border Radii --- */
-  --radius-sm:   6px;
-  --radius-md:   10px;
-  --radius-lg:   14px;
-  --radius-xl:   20px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
   --radius-full: 9999px;
 
   /* --- Layout widths --- */
   --container-max-width: 1200px;
-  --prose-max-width:     760px;
+  --prose-max-width: 760px;
 }
 
 /* ─────────────────────────────────────────
    Keyframe Animations
    ───────────────────────────────────────── */
 @keyframes wiggle {
-  0%, 100% { transform: rotate(-3deg); }
-  50%       { transform: rotate(3deg);  }
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0);    }
-  50%       { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 @keyframes shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position:  200% center; }
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 }
 
 /* ─────────────────────────────────────────
@@ -159,7 +173,12 @@
   }
 
   /* --- Headings --- */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-sans);
     font-weight: 700;
     color: var(--color-near-black);
@@ -168,11 +187,26 @@
     letter-spacing: -0.01em;
   }
 
-  h1 { font-size: var(--text-3xl); }
-  h2 { font-size: var(--text-2xl); margin-top: var(--space-12); }
-  h3 { font-size: var(--text-xl);  margin-top: var(--space-8); }
-  h4 { font-size: var(--text-lg);  font-weight: 600; }
-  h5, h6 { font-size: var(--text-base); font-weight: 600; }
+  h1 {
+    font-size: var(--text-3xl);
+  }
+  h2 {
+    font-size: var(--text-2xl);
+    margin-top: var(--space-12);
+  }
+  h3 {
+    font-size: var(--text-xl);
+    margin-top: var(--space-8);
+  }
+  h4 {
+    font-size: var(--text-lg);
+    font-weight: 600;
+  }
+  h5,
+  h6 {
+    font-size: var(--text-base);
+    font-weight: 600;
+  }
 
   /* --- Paragraphs --- */
   p {
@@ -201,7 +235,9 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    a { transition: none; }
+    a {
+      transition: none;
+    }
   }
 
   /* --- Images --- */
@@ -220,7 +256,7 @@
 
   /* --- Selection --- */
   ::selection {
-    background-color: #EB9D2A33;
+    background-color: #eb9d2a33;
     color: var(--color-near-black);
   }
 }
@@ -229,7 +265,6 @@
    @layer components
    ───────────────────────────────────────── */
 @layer components {
-
   /* ── Layout: Container ────────────────── */
   .container {
     max-width: var(--container-max-width);
@@ -262,13 +297,17 @@
 
   .card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.10);
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.1);
     border-color: var(--color-btn-border);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .card { transition: none; }
-    .card:hover { transform: none; }
+    .card {
+      transition: none;
+    }
+    .card:hover {
+      transform: none;
+    }
   }
 
   /* ── CTA Button (3D Tactile) ──────────── */
@@ -318,9 +357,15 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .cta-button { transition: none; }
-    .cta-button:hover  { transform: none; }
-    .cta-button:active { transform: none; }
+    .cta-button {
+      transition: none;
+    }
+    .cta-button:hover {
+      transform: none;
+    }
+    .cta-button:active {
+      transform: none;
+    }
   }
 
   /* ── Secondary Button ─────────────────── */
@@ -365,9 +410,15 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .btn-secondary { transition: none; }
-    .btn-secondary:hover  { transform: none; }
-    .btn-secondary:active { transform: none; }
+    .btn-secondary {
+      transition: none;
+    }
+    .btn-secondary:hover {
+      transform: none;
+    }
+    .btn-secondary:active {
+      transform: none;
+    }
   }
 
   /* ── Prose (Blog / Long-form Content) ─── */
@@ -517,29 +568,44 @@
    ───────────────────────────────────────── */
 @layer utilities {
   /* --- Animation helpers --- */
-  .animate-wiggle  { animation: wiggle  0.5s ease-in-out infinite; }
-  .animate-float   { animation: float   3s ease-in-out infinite;   }
+  .animate-wiggle {
+    animation: wiggle 0.5s ease-in-out infinite;
+  }
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
   .animate-shimmer {
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.4) 50%,
-      transparent 100%
-    );
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
     background-size: 200% auto;
     animation: shimmer 2s linear infinite;
   }
 
   /* --- Text color helpers --- */
-  .text-muted     { color: var(--color-text-muted); }
-  .text-secondary { color: var(--color-text-secondary); }
-  .text-brand-red    { color: var(--color-brand-red); }
-  .text-brand-orange { color: var(--color-brand-orange); }
+  .text-muted {
+    color: var(--color-text-muted);
+  }
+  .text-secondary {
+    color: var(--color-text-secondary);
+  }
+  .text-brand-red {
+    color: var(--color-brand-red);
+  }
+  .text-brand-orange {
+    color: var(--color-brand-orange);
+  }
 
   /* --- Surface helpers --- */
-  .surface-accent { background-color: var(--color-accent-surface); }
-  .surface-dark   { background-color: var(--color-dark-bg); color: #e8e8e8; }
-  .surface-footer { background-color: var(--color-footer-bg); color: #e8e8e8; }
+  .surface-accent {
+    background-color: var(--color-accent-surface);
+  }
+  .surface-dark {
+    background-color: var(--color-dark-bg);
+    color: #e8e8e8;
+  }
+  .surface-footer {
+    background-color: var(--color-footer-bg);
+    color: #e8e8e8;
+  }
 }
 
 /* ─────────────────────────────────────────
