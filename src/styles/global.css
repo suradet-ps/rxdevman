@@ -160,6 +160,13 @@
    @layer base
    ───────────────────────────────────────── */
 @layer base {
+  /* overflow-x on html (not body) prevents body from becoming a scroll
+     container, which can cause position:fixed elements to mismeasure their
+     containing block in iOS Safari and some Chromium builds. */
+  html {
+    overflow-x: hidden;
+  }
+
   /* --- Document Body --- */
   body {
     font-family: var(--font-sans);
@@ -167,7 +174,6 @@
     color: var(--color-text-primary);
     font-size: var(--text-base);
     line-height: 1.7;
-    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
