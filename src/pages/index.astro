@@ -40,33 +40,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     </div>
   </section>
 
-  <!-- ── Feature Cards ────────────────────────────────── -->
-  <section class="features">
-    <div class="container">
-      <p class="features-section-label">Explore</p>
-      <div class="features-grid">
 
-        <a href="/blog" class="feature-card">
-          <div class="feature-icon">📝</div>
-          <h3 class="feature-title">Blog</h3>
-          <p class="feature-desc">บทความเกี่ยวกับ Astro, Vue, และการพัฒนาซอฟต์แวร์</p>
-        </a>
-
-        <a href="/hosxp" class="feature-card">
-          <div class="feature-icon">🏥</div>
-          <h3 class="feature-title">HOSxP</h3>
-          <p class="feature-desc">คู่มือและเทคนิคสำหรับระบบ HOSxP โรงพยาบาล</p>
-        </a>
-
-        <a href="/tools" class="feature-card">
-          <div class="feature-icon">🔧</div>
-          <h3 class="feature-title">Tools</h3>
-          <p class="feature-desc">เครื่องมือที่สร้างขึ้นเพื่อช่วยในงานประจำวัน</p>
-        </a>
-
-      </div>
-    </div>
-  </section>
 
 </BaseLayout>
 
@@ -158,69 +132,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     flex-shrink: 0;
   }
 
-  /* ── Feature Cards ────────────────────── */
-  .features {
-    padding: 4rem 0 6rem;
-    border-top: 1px solid var(--color-border);
-  }
 
-  .features-section-label {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 600;
-    color: var(--color-text-muted);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    margin-bottom: 2rem;
-  }
-
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-5);
-  }
-
-  .feature-card {
-    background: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    border-bottom: 3px solid var(--color-border);
-    border-radius: 8px;
-    padding: 1.75rem 1.5rem;
-    text-decoration: none;
-    display: block;
-    transition:
-      transform 0.15s ease,
-      border-color 0.15s ease,
-      box-shadow 0.15s ease;
-  }
-
-  .feature-card:hover {
-    transform: translateY(-3px);
-    border-bottom-color: var(--color-brand-orange);
-    box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.1);
-  }
-
-  .feature-icon {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-    line-height: 1;
-    display: block;
-  }
-
-  .feature-title {
-    font-size: 1.0625rem;
-    font-weight: 700;
-    color: var(--color-near-black);
-    margin-bottom: 0.4rem;
-    margin-top: 0;
-  }
-
-  .feature-desc {
-    font-size: 0.9375rem;
-    color: var(--color-text-secondary);
-    margin-bottom: 0;
-    line-height: 1.65;
-  }
 
   /* ── Responsive ───────────────────────── */
   @media (max-width: 1024px) {
@@ -253,10 +165,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
       height: 200px;
     }
 
-    .features-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-4);
-    }
   }
 
   @media (max-width: 640px) {
@@ -266,10 +174,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 
     .hero-inner {
       gap: 2rem;
-    }
-
-    .features-grid {
-      grid-template-columns: 1fr;
     }
 
     .hero-headline {
@@ -283,10 +187,13 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .feature-card,
     .cta-secondary {
       transition: none;
     }
+    .cta-secondary:hover {
+      gap: 0.3rem;
+    }
+  }
     .feature-card:hover {
       transform: none;
     }
