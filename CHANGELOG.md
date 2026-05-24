@@ -1,3 +1,22 @@
+## [1.13.0](https://github.com/suradet-ps/rxdevman/compare/v1.12.2...v1.13.0) (2026-05-24)
+
+### 🚀 New Features
+
+* implement BentoNav component and update layout structure ([d105725](https://github.com/suradet-ps/rxdevman/commit/d1057255c292d4add5bcc2962d4b3ba3168c4fa1))
+
+### 🐛 Bug Fixes
+
+* update action versions in CI workflow for consistency ([6fdd795](https://github.com/suradet-ps/rxdevman/commit/6fdd795ab62e39835e4e361adb26fcf2d2487d60))
+* update action versions in release workflow for consistency ([e8888c3](https://github.com/suradet-ps/rxdevman/commit/e8888c3c9940db725b9fd5e2fc562e2c64a7f854))
+
+### ♻️ Refactoring
+
+* enhance mobile menu functionality and improve progress bar performance ([b9e964b](https://github.com/suradet-ps/rxdevman/commit/b9e964bcc8b8e237d983357d7dd735cb990631d7))
+* redesign all pages ([82307bf](https://github.com/suradet-ps/rxdevman/commit/82307bf12a51667eda0ba718b0e7a5920d4d134e))
+* remove blog collection configuration ([e1dbbf8](https://github.com/suradet-ps/rxdevman/commit/e1dbbf86b26525e227f3b2e224474719647e3090))
+* remove feature cards section and associated styles ([7a053ff](https://github.com/suradet-ps/rxdevman/commit/7a053ff74da7a70c73af6b2649f7ddd19a62230f))
+* update Navbar component with icons and improve styles ([c737fae](https://github.com/suradet-ps/rxdevman/commit/c737fae60ec0a9ea2210e77773d60412f1142f66))
+
 ## [1.12.2](https://github.com/suradet-ps/rxdevman/compare/v1.12.1...v1.12.2) (2026-05-13)
 
 ### 📦 Dependency Updates
