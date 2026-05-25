@@ -186,6 +186,7 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
   }, { passive: true });
 
   hamburgerButton.addEventListener('click', () => {
+    overlayElement.classList.remove('instant-close');
     setMenuState(!isMenuOpen);
   });
 
@@ -199,6 +200,8 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
       // Close menu state directly without stealing focus back to hamburger
       // (the browser is about to navigate, so focus restoration is unnecessary
       // and causes a paint cycle that makes navigation feel sluggish)
+      overlayElement.classList.add('instant-close');
+
       isMenuOpen = false;
       overlayElement.classList.remove('open');
       hamburgerButton.classList.remove('active');
@@ -207,6 +210,8 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
       document.body.classList.remove('no-scroll');
       document.documentElement.classList.remove('no-scroll');
       overlayElement.inert = true;
+
+      void overlayElement.offsetHeight;
     }
   });
 
@@ -424,6 +429,11 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
 
   .mobile-overlay-logo {
     min-height: var(--nav-height);
+  }
+
+  .mobile-overlay.instant-close {
+    transition: none !important;
+    visibility: hidden !important;
   }
 
   .mobile-close {
