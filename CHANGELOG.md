@@ -1,3 +1,9 @@
+## [1.13.3](https://github.com/suradet-ps/rxdevman/compare/v1.13.2...v1.13.3) (2026-05-25)
+
+### 🐛 Bug Fixes
+
+* change mobile overlay visibility to display none ([ad62114](https://github.com/suradet-ps/rxdevman/commit/ad62114f591515f0866ee04679e7c5abf8734423))
+
 ## [1.13.2](https://github.com/suradet-ps/rxdevman/compare/v1.13.1...v1.13.2) (2026-05-25)
 
 ### 🐛 Bug Fixes
