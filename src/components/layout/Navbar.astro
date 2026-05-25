@@ -139,6 +139,14 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
       return;
 
     isMenuOpen = nextOpen;
+
+    // State Management: Always reset instant-close when opening the menu.
+    // This prevents the overlay from getting stuck in a no-transition state
+    // (e.g., if navigation fails or the user uses the browser back button in SPA).
+    if (nextOpen) {
+      overlayElement.classList.remove('instant-close');
+    }
+
     overlayElement.classList.toggle('open', nextOpen);
     hamburgerButton.classList.toggle('active', nextOpen);
     hamburgerButton.setAttribute('aria-expanded', String(nextOpen));
@@ -196,9 +204,9 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
   overlayElement.addEventListener('click', (event) => {
     const link = event.target instanceof Element ? event.target.closest('a') : null;
     if (link) {
-      // Close menu state directly without stealing focus back to hamburger
-      // (the browser is about to navigate, so focus restoration is unnecessary
-      // and causes a paint cycle that makes navigation feel sluggish)
+      // Instantly hide overlay to prevent transition jank during navigation
+      overlayElement.classList.add('instant-close');
+
       isMenuOpen = false;
       overlayElement.classList.remove('open');
       hamburgerButton.classList.remove('active');
@@ -207,6 +215,12 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
       document.body.classList.remove('no-scroll');
       document.documentElement.classList.remove('no-scroll');
       overlayElement.inert = true;
+
+      // Force a synchronous layout reflow.
+      // This ensures the browser flushes its layout queue and applies the
+      // 'instant-close' state immediately BEFORE Astro View Transitions
+      // or the browser starts painting the next page, preventing animation jank.
+      void overlayElement.offsetHeight;
     }
   });
 
@@ -406,6 +420,12 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     pointer-events: auto;
     /* on open: visibility becomes visible immediately (no delay) */
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0s;
+  }
+
+  .mobile-overlay.instant-close {
+    transition: none;
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .mobile-overlay-header {
