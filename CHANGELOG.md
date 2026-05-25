@@ -1,3 +1,9 @@
+## [1.13.2](https://github.com/suradet-ps/rxdevman/compare/v1.13.1...v1.13.2) (2026-05-25)
+
+### 🐛 Bug Fixes
+
+* enhance mobile overlay with instant-close functionality ([#35](https://github.com/suradet-ps/rxdevman/issues/35)) ([78ab804](https://github.com/suradet-ps/rxdevman/commit/78ab804a6335eb1e9adbe8f3b62e82994c813d87))
+
 ## [1.13.1](https://github.com/suradet-ps/rxdevman/compare/v1.13.0...v1.13.1) (2026-05-24)
 
 ### 🐛 Bug Fixes
