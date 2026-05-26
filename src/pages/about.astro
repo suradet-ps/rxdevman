@@ -3,137 +3,294 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="About Me">
+  <section class="page-about">
+    <div class="container">
+      <div class="bento-grid">
 
-  <!-- ── Page Header ───────────────────────────────────── -->
-  <section class="page-banner">
-    <div class="container page-banner-inner">
-      <p class="eyebrow">ABOUT</p>
-      <h1 class="page-title">จากเภสัชกรสู่โปรแกรมเมอร์</h1>
-    </div>
-  </section>
-
-  <!-- ── Content ───────────────────────────────────────── -->
-  <section class="about-section">
-    <div class="container about-grid">
-
-      <!-- Left: Text -->
-      <div class="text-content">
-        <p>
-          เส้นทางของผมเริ่มต้นที่เคาน์เตอร์จ่ายยาท่ามกลางใบสั่งยาและการดูแลผู้ป่วย
-          มาวันนี้ผมเปลี่ยนมาสร้างสรรค์โซลูชันดิจิทัล เขียนโค้ดที่สะอาดตา
-          และออกแบบประสบการณ์ผู้ใช้ที่เข้าใจง่าย
-          นี่คือเรื่องราวการเดินทางของผมจากบทบาทเภสัชกรสู่การเป็นนักพัฒนาซอฟต์แวร์
-        </p>
-        <p>
-          ผมคือเภสัชกรสุรเดช ประถมศักดิ์ ผู้สร้าง RxDev Man
-          ด้วยความหลงใหลในตรรกะ การแก้ปัญหา และประสิทธิภาพ
-          ซึ่งเป็นทักษะที่ได้ฝึกฝนจากงานสายสาธารณสุข
-          ทำให้ผมได้ค้นพบเส้นทางใหม่ในการพัฒนาซอฟต์แวร์
-          ผมทึ่งกับวิธีที่เทคโนโลยีสามารถแก้ปัญหาที่ซับซ้อนในวงกว้างได้
-          และตัดสินใจที่จะกระโดดเข้ามาเรียนรู้อย่างเต็มตัว
-        </p>
-        <p>
-          เว็บไซต์นี้เปรียบเสมือนคลังความรู้ส่วนตัวและบันทึกการเรียนรู้ที่ผมเปิดเผยสู่สาธารณะ
-          ผมเขียนเกี่ยวกับหัวข้อต่างๆ ที่กำลังศึกษา ตั้งแต่ frontend frameworks
-          อย่าง Astro และ Vue ไปจนถึงความท้าทายเฉพาะทางในซอฟต์แวร์โรงพยาบาลอย่าง
-          HOSxP
-          เป้าหมายของผมคือการสร้างความเข้าใจที่ลึกซึ้งยิ่งขึ้นผ่านการแบ่งปันความรู้ให้ผู้อื่น
-          และเผยแพร่แหล่งข้อมูลที่เป็นประโยชน์ซึ่งผมได้ใช้ตลอดเส้นทางนี้
-        </p>
-
-        <h2 class="section-divider">ช่องทางการติดต่อ</h2>
-        <p>
-          ผมเปิดรับการพูดคุยเกี่ยวกับโปรเจกต์ใหม่ๆ แลกเปลี่ยนความรู้
-          หรือเรื่องราวเกี่ยวกับเทคโนโลยีเสมอ อย่าลังเลที่จะติดต่อมานะครับ
-        </p>
-
-        <div class="social-links">
-          <a
-            href="https://github.com/suradet-ps/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-pill"
-          >
-            <!-- GitHub icon -->
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.09.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
-            </svg>
-            GitHub
-          </a>
-
-          <a
-            href="mailto:pharmacistsabot@gmail.com"
-            class="social-pill"
-          >
-            <!-- Email icon -->
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="2" y="4" width="20" height="16" rx="2" />
-              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-            </svg>
-            อีเมล
-          </a>
+        <div class="bento-card bento-photo">
+          <img
+            src="/images/common/profile-placeholder.jpg"
+            alt="A portrait of Suradet Prathomsak"
+            class="bento-photo-img"
+          />
+          <h2 class="bento-photo-name">สุรเดช ประถมศักดิ์</h2>
+          <p class="bento-photo-role">เภสัชกร  →  นักพัฒนาซอฟต์แวร์</p>
         </div>
-      </div>
 
-      <!-- Right: Image -->
-      <div class="image-content">
-        <img
-          src="/images/common/profile-placeholder.jpg"
-          alt="A portrait of Sabot"
-          class="profile-image"
-        />
-      </div>
+        <div class="bento-card bento-hero">
+          <p class="eyebrow">ABOUT</p>
+          <h1 class="bento-hero-title">จากเภสัชกรสู่โปรแกรมเมอร์</h1>
+          <p class="bento-hero-desc">
+            ผมคือ<span class="hl">เภสัชกรสุรเดช ประถมศักดิ์</span> ผู้สร้าง <span class="hl">RxDev Man</span>
+            ด้วยความหลงใหลใน<span class="hl">ตรรกะ</span> <span class="hl">การแก้ปัญหา</span> และประสิทธิภาพ
+            ซึ่งเป็นทักษะที่ได้ฝึกฝนจากงานสายสาธารณสุข
+            ทำให้ผมได้ค้นพบเส้นทางใหม่ในการพัฒนาซอฟต์แวร์
+            ผมทึ่งกับวิธีที่<span class="hl">เทคโนโลยี</span>สามารถแก้ปัญหาที่ซับซ้อนในวงกว้างได้
+            และตัดสินใจที่จะกระโดดเข้ามา<span class="hl">เรียนรู้</span>อย่างเต็มตัว
+          </p>
+        </div>
 
+        <div class="bento-card bento-story bento-story--full">
+          <p>
+            เส้นทางของผมเริ่มต้นที่เคาน์เตอร์จ่ายยาท่ามกลางใบสั่งยาและการดูแลผู้ป่วย
+            มาวันนี้ผมเปลี่ยนมาสร้างสรรค์<span class="hl">โซลูชันดิจิทัล</span> เขียน<span class="hl">โค้ดที่สะอาดตา</span>
+            และออกแบบ<span class="hl">ประสบการณ์ผู้ใช้</span>ที่เข้าใจง่าย
+            นี่คือเรื่องราวการเดินทางของผมจากบทบาท<span class="hl">เภสัชกร</span>สู่การเป็น<span class="hl">นักพัฒนาซอฟต์แวร์</span>
+          </p>
+          <p>
+            เว็บไซต์นี้เปรียบเสมือน<span class="hl">คลังความรู้</span>ส่วนตัวและบันทึกการเรียนรู้ที่ผมเปิดเผยสู่สาธารณะ
+            ผมเขียนเกี่ยวกับหัวข้อต่างๆ ที่กำลังศึกษา ตั้งแต่ frontend frameworks
+            อย่าง <span class="hl">Astro</span> และ <span class="hl">Vue</span> ไปจนถึงความท้าทายเฉพาะทางในซอฟต์แวร์โรงพยาบาลอย่าง <span class="hl">HOSxP</span>
+            เป้าหมายของผมคือการสร้างความเข้าใจที่ลึกซึ้งยิ่งขึ้นผ่านการ<span class="hl">แบ่งปันความรู้</span>ให้ผู้อื่น
+            และเผยแพร่แหล่งข้อมูลที่เป็นประโยชน์ซึ่งผมได้ใช้ตลอดเส้นทางนี้
+          </p>
+        </div>
+
+        <div class="bento-card bento-contact">
+          <h2 class="contact-heading">ช่องทางการติดต่อ</h2>
+          <p>
+            ผมเปิดรับการพูดคุยเกี่ยวกับโปรเจกต์ใหม่ๆ แลกเปลี่ยนความรู้
+            หรือเรื่องราวเกี่ยวกับเทคโนโลยีเสมอ อย่าลังเลที่จะติดต่อมานะครับ
+          </p>
+
+          <div class="social-links">
+            <a
+              href="https://github.com/suradet-ps/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-pill"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.09.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+              </svg>
+              GitHub
+            </a>
+
+            <a
+              href="mailto:pharmacistsabot@gmail.com"
+              class="social-pill"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+              </svg>
+              อีเมล
+            </a>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
-
 </BaseLayout>
 
 <style>
-  .about-section {
-    padding: 4.5rem 0 6rem;
+  .page-about {
+    padding: 0.5rem 0 6rem;
   }
 
-  .about-grid {
+  .bento-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 4rem;
-    align-items: start;
+    grid-template-columns: 260px 1fr;
+    grid-template-areas:
+      "photo  hero"
+      "story1 story1"
+      "contact contact";
+    gap: 1.5rem;
   }
 
-  .text-content p {
-    color: var(--text-secondary);
-    font-size: 1.0625rem;
-    line-height: 1.8;
-  }
-
-  .image-content {
-    position: sticky;
-    top: 80px;
-  }
-
-  .profile-image {
-    width: 100%;
-    border-radius: var(--radius-lg);
-    object-fit: cover;
+  .bento-card {
+    background: var(--surface-card);
     border: 1px solid var(--border-default);
-    border-bottom: var(--depth-border) solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
   }
 
-  @media (max-width: 900px) {
-    .about-grid {
+  .hl {
+    color: var(--brand-red);
+    font-weight: 600;
+  }
+
+  .bento-photo {
+    grid-area: photo;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    padding: 2.5rem 2rem;
+    background: linear-gradient(145deg,
+      color-mix(in srgb, var(--brand-orange) 8%, var(--surface-card)) 0%,
+      var(--surface-card) 60%
+    );
+  }
+
+  .bento-photo-img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--brand-orange);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+
+  .bento-photo-name {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin: 0;
+  }
+
+  .bento-photo-role {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+
+  .bento-hero {
+    grid-area: hero;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.75rem;
+    position: relative;
+  }
+
+  .bento-hero::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1rem;
+    bottom: 1rem;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--brand-orange), var(--brand-red));
+    border-radius: 4px;
+  }
+
+  .bento-hero .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .bento-hero-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--text-heading);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .bento-hero-desc {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .bento-story--full {
+    grid-area: story1;
+  }
+
+  .bento-story--full p + p {
+    margin-top: 1.5rem;
+  }
+
+  .bento-story p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  .bento-contact {
+    grid-area: contact;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bento-contact::after {
+    content: '';
+    position: absolute;
+    bottom: -2rem;
+    right: -1rem;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center,
+      color-mix(in srgb, var(--brand-orange) 8%, transparent) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .contact-heading {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin: 0 0 1rem;
+  }
+
+  .bento-contact > p {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 768px) {
+    .page-about {
+      padding: 0.5rem 0 4rem;
+    }
+
+    .bento-grid {
       grid-template-columns: 1fr;
-      gap: 2.5rem;
+      grid-template-areas:
+        "photo"
+        "hero"
+        "story1"
+        "contact";
+      gap: 1rem;
     }
-    .image-content {
-      order: -1;
-      position: static;
-      max-width: 260px;
-      margin: 0 auto;
-    }
-  }
 
-  @media (max-width: 480px) {
-    .about-section { padding: 3rem 0 4rem; }
+    .bento-card {
+      padding: 1.5rem;
+    }
+
+    .bento-contact::after {
+      display: none;
+    }
+
+    .bento-photo {
+      padding: 2rem 1.5rem;
+    }
+
+    .bento-photo-img {
+      width: 120px;
+      height: 120px;
+    }
+
+    .bento-photo-name {
+      font-size: 1rem;
+    }
+
+    .bento-hero::before {
+      width: 3px;
+      top: 0.75rem;
+      bottom: 0.75rem;
+    }
   }
 </style>
