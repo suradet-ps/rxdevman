@@ -53,22 +53,22 @@ const preloadHero = heroImage
       fetchpriority="high"
     />
   )}
-  <div class="layout-grid">
-    <aside class="left-sidebar">
+  <div class="blog-layout-grid">
+    <aside class="blog-left-sidebar">
       <Toc headings={headings} />
     </aside>
     <article class="prose">
       <header class="post-header">
         <a
           href={`/blog/categories/${slugify(category)}`}
-          class="category-link"
+          class="post-header-category"
         >{category}</a
         >
         <h1>{title}</h1>
         <p class="description">{description}</p>
-        <div class="meta">
+        <div class="post-meta">
           <span>Published on {formattedDate}</span>
-          <span class="separator">•</span>
+          <span class="post-meta-separator">•</span>
           <ViewCounter slug={postSlug} />
         </div>
       </header>
@@ -78,7 +78,7 @@ const preloadHero = heroImage
           <Image
             src={heroImage}
             alt={`Hero image for ${title}`}
-            class="hero-image"
+            class="post-hero-image"
             loading="eager"
             fetchpriority="high"
             decoding="async"
@@ -114,171 +114,5 @@ const preloadHero = heroImage
 </BaseLayout>
 
 <style>
-  .layout-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 220px) minmax(0, 800px);
-    gap: clamp(1.5rem, 3vw, 2.5rem);
-    justify-content: center;
-  }
-
-  .prose {
-    grid-column: 2;
-    min-width: 0;
-  }
-
-  .left-sidebar {
-    grid-column: 1;
-    position: sticky;
-    top: calc(60px + 1.5rem);
-    align-self: start;
-    max-height: calc(100vh - 4rem);
-    overflow-y: auto;
-  }
-
-  /* ── Post Header ── */
-  .post-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-
-  .category-link {
-    font-family: 'Source Code Pro', monospace;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #F54E00;
-    letter-spacing: 0.08em;
-    text-decoration: none;
-  }
-
-  .category-link:hover {
-    color: #EB9D2A;
-  }
-
-  h1 {
-    margin: 0.5rem 0 1rem;
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    font-family: 'IBM Plex Sans', 'Noto Sans Thai', system-ui, sans-serif;
-    font-weight: 700;
-    color: #23251D;
-    line-height: 1.2;
-  }
-
-  .description {
-    font-size: 1rem;
-    color: #65675E;
-    max-width: 680px;
-    margin: 0 auto 1.5rem;
-    line-height: 1.6;
-  }
-
-  /* ── Meta ── */
-  .meta {
-    font-size: 0.875rem;
-    color: #9EA096;
-    font-family: 'IBM Plex Sans', 'Noto Sans Thai', system-ui, sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-
-  .separator {
-    color: #BFC1B7;
-  }
-
-  /* ── Hero Image — PostHog 3D card style ── */
-  .hero-image {
-    width: 100%;
-    max-height: 600px;
-    object-fit: cover;
-    object-position: center;
-    border: 1px solid #BFC1B7;
-    border-bottom: 3px solid #BFC1B7;
-    border-radius: 8px;
-    margin-bottom: 3rem;
-    display: block;
-  }
-
-  /* ── Post Footer ── */
-  .post-footer {
-    margin-top: 4rem;
-    border-top: 1px solid #BFC1B7;
-    padding-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  /* ── Tags ── */
-  .tags-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    justify-content: center;
-  }
-
-  .tag-chip {
-    background: #ffffff;
-    border: 1px solid #BFC1B7;
-    border-bottom: 3px solid #BFC1B7;
-    padding: 0.25rem 0.75rem;
-    border-radius: 6px;
-    color: #4D4F46;
-    font-size: 0.8125rem;
-    font-family: 'IBM Plex Sans', 'Noto Sans Thai', system-ui, sans-serif;
-    text-decoration: none;
-    transition:
-      border-color 0.15s ease,
-      transform 0.15s ease;
-  }
-
-  .tag-chip:hover {
-    border-color: #EB9D2A;
-    border-bottom-color: #EB9D2A;
-    transform: translateY(-2px);
-    color: #23251D;
-  }
-
-  .tag-chip:focus-visible {
-    outline: 2px solid #F54E00;
-    outline-offset: 2px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .tag-chip {
-      transition: none;
-    }
-  }
-
-  @media (max-width: 1100px) {
-    .layout-grid {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 1.5rem;
-    }
-    .left-sidebar {
-      display: none;
-    }
-    .prose {
-      grid-column: 1;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .layout-grid {
-      padding: 0 var(--space-4);
-    }
-    .post-header {
-      margin-bottom: 2rem;
-    }
-    .hero-image {
-      border-radius: 0;
-      border-left: none;
-      border-right: none;
-      margin-left: -1rem;
-      margin-right: -1rem;
-      width: calc(100% + 2rem);
-      max-width: calc(100% + 2rem);
-    }
-  }
+  .post-header-category:hover { color: var(--brand-orange); }
 </style>

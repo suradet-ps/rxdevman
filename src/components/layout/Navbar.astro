@@ -235,22 +235,12 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
 
 <style>
   .navbar {
-    --nav-bg: #fdfdf8;
-    --nav-border: #e5e7e0;
-    --nav-text: #4d4f46;
-    --nav-text-muted: #9ea096;
-    --nav-red: #f54e00;
-    --nav-orange: #eb9d2a;
-    --nav-height: 60px;
-  }
-
-  .navbar {
     position: sticky;
     top: 0;
     width: 100%;
-    z-index: 999998;
-    background: var(--nav-bg);
-    border-bottom: 1px solid var(--nav-border);
+    z-index: var(--z-navbar);
+    background: var(--surface-page);
+    border-bottom: 1px solid var(--border-accent);
   }
 
   .navbar::after {
@@ -262,13 +252,11 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     height: 8px;
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--duration-300) var(--ease);
     pointer-events: none;
   }
 
-  .navbar.scrolled::after {
-    opacity: 1;
-  }
+  .navbar.scrolled::after { opacity: 1; }
 
   .navbar-inner {
     max-width: 1440px;
@@ -281,38 +269,34 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     gap: 1rem;
   }
 
-  /* ─── Logo ─── */
   .logo {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     text-decoration: none;
     flex-shrink: 0;
-    color: var(--nav-red);
+    color: var(--brand-red);
   }
 
   .logo-svg {
     width: 26px;
     height: 26px;
-    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform var(--duration-300) var(--ease-spring);
   }
 
-  .logo:hover .logo-svg {
-    transform: rotate(-16deg) scale(1.1);
-  }
+  .logo:hover .logo-svg { transform: rotate(-16deg) scale(1.1); }
 
   .logo-text {
-    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-family: var(--font-sans);
     font-size: 1.1rem;
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1;
   }
 
-  .logo-rx { color: var(--nav-red); }
-  .logo-devman { color: var(--nav-text); }
+  .logo-rx { color: var(--brand-red); }
+  .logo-devman { color: var(--text-primary); }
 
-  /* ─── Desktop nav links ─── */
   .nav-links {
     display: flex;
     align-items: center;
@@ -323,37 +307,35 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
 
   .nav-link {
     position: relative;
-    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.95rem;
     font-weight: 600;
-    color: var(--nav-text);
+    color: var(--text-primary);
     text-decoration: none;
     padding: 0.45rem 1.1rem;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     white-space: nowrap;
     border: 1.5px solid transparent;
     border-bottom-width: 3px;
-    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    transition: color var(--duration-200) var(--ease),
+      background var(--duration-200) var(--ease),
+      border-color var(--duration-200) var(--ease);
   }
 
   .nav-link:hover {
-    color: var(--nav-red);
-    background: rgba(245, 78, 0, 0.06);
+    color: var(--brand-red);
+    background: color-mix(in srgb, var(--brand-red) 6%, transparent);
   }
 
   .nav-link.active {
     color: #2b1f00;
-    background: var(--nav-orange);
-    border-color: #b17816;
+    background: var(--brand-orange);
+    border-color: var(--brand-btn-border);
     font-weight: 700;
   }
 
-  .nav-link-text {
-    position: relative;
-    z-index: 1;
-  }
+  .nav-link-text { position: relative; z-index: 1; }
 
-  /* ─── Right cluster ─── */
   .navbar-right {
     display: flex;
     align-items: center;
@@ -361,7 +343,6 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     flex-shrink: 0;
   }
 
-  /* ─── Hamburger ─── */
   .hamburger {
     display: none;
     flex-direction: column;
@@ -371,79 +352,76 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     width: 36px;
     height: 36px;
     background: transparent;
-    border: 1px solid var(--nav-border);
-    border-radius: 8px;
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius-sm);
     cursor: pointer;
     padding: 0;
     flex-shrink: 0;
-    transition: background 0.2s ease, border-color 0.2s ease;
+    transition: background var(--duration-200) var(--ease),
+      border-color var(--duration-200) var(--ease);
   }
 
   .hamburger:hover {
-    background: rgba(245, 78, 0, 0.06);
-    border-color: var(--nav-red);
+    background: color-mix(in srgb, var(--brand-red) 6%, transparent);
+    border-color: var(--brand-red);
   }
 
   .bar {
     width: 16px;
     height: 2px;
-    background: var(--nav-text);
+    background: var(--text-primary);
     border-radius: 2px;
     transform-origin: center;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+    transition: transform var(--duration-300) var(--ease-spring),
+      opacity var(--duration-200) var(--ease);
   }
 
-  .hamburger.active .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); background: var(--nav-red); }
+  .hamburger.active .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); background: var(--brand-red); }
   .hamburger.active .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
-  .hamburger.active .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--nav-red); }
+  .hamburger.active .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--brand-red); }
 
-  /* ─── Mobile overlay ─── */
   .mobile-overlay {
     display: none;
     position: fixed;
     inset: 0;
     width: 100%;
     height: 100dvh;
-    background: #fdfdf8;
-    z-index: 999999;
+    background: var(--surface-page);
+    z-index: var(--z-overlay);
     overflow-y: auto;
     overscroll-behavior: contain;
     transform: translateX(100%);
     visibility: hidden;
     pointer-events: none;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.3s;
+    transition: transform var(--duration-300) var(--ease-panel),
+      visibility 0s linear var(--duration-300);
   }
 
   .mobile-overlay.open {
     transform: translateX(0);
     visibility: visible;
     pointer-events: auto;
-    /* on open: visibility becomes visible immediately (no delay) */
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0s;
+    transition: transform var(--duration-300) var(--ease-panel),
+      visibility 0s linear 0s;
   }
 
-  .mobile-overlay.instant-close {
-    transition: none;
-    display: none;
-  }
+  .mobile-overlay.instant-close { transition: none; display: none; }
 
   .mobile-overlay-header {
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: var(--z-sticky);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
     min-height: calc(var(--nav-height) + env(safe-area-inset-top));
     padding: env(safe-area-inset-top) 1.5rem 0;
-    background: #fdfdf8;
-    border-bottom: 1px solid var(--nav-border);
+    background: var(--surface-page);
+    border-bottom: 1px solid var(--border-accent);
   }
 
-  .mobile-overlay-logo {
-    min-height: var(--nav-height);
-  }
+  .mobile-overlay-logo { min-height: var(--nav-height); }
 
   .mobile-close {
     position: relative;
@@ -454,17 +432,19 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     height: 40px;
     min-width: 40px;
     background: transparent;
-    border: 1px solid var(--nav-border);
-    border-radius: 10px;
-    color: var(--nav-text);
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
     cursor: pointer;
-    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    transition: background var(--duration-200) var(--ease),
+      border-color var(--duration-200) var(--ease),
+      color var(--duration-200) var(--ease);
   }
 
   .mobile-close:hover {
-    background: rgba(245, 78, 0, 0.06);
-    border-color: var(--nav-red);
-    color: var(--nav-red);
+    background: color-mix(in srgb, var(--brand-red) 6%, transparent);
+    border-color: var(--brand-red);
+    color: var(--brand-red);
   }
 
   .mobile-close-bar {
@@ -472,16 +452,11 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     width: 18px;
     height: 2px;
     background: currentColor;
-    border-radius: 999px;
+    border-radius: var(--radius-full);
   }
 
-  .mobile-close-bar:nth-child(1) {
-    transform: rotate(45deg);
-  }
-
-  .mobile-close-bar:nth-child(2) {
-    transform: rotate(-45deg);
-  }
+  .mobile-close-bar:nth-child(1) { transform: rotate(45deg); }
+  .mobile-close-bar:nth-child(2) { transform: rotate(-45deg); }
 
   .mobile-nav {
     display: flex;
@@ -495,34 +470,34 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     display: flex;
     align-items: center;
     gap: 0.875rem;
-    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-family: var(--font-sans);
     font-size: 1.05rem;
     font-weight: 500;
-    color: var(--nav-text);
+    color: var(--text-primary);
     text-decoration: none;
     padding: 0.85rem 1rem;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     border: 1.5px solid transparent;
     border-bottom-width: 3px;
-    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    transition: color var(--duration-200) var(--ease),
+      background var(--duration-200) var(--ease),
+      border-color var(--duration-200) var(--ease),
+      transform var(--duration-200) var(--ease);
   }
 
   .mobile-link:hover {
-    color: var(--nav-red);
-    background: rgba(245, 78, 0, 0.06);
+    color: var(--brand-red);
+    background: color-mix(in srgb, var(--brand-red) 6%, transparent);
   }
 
-  /* Only apply slide-right on true pointer devices (not touch) */
   @media (hover: hover) and (pointer: fine) {
-    .mobile-link:hover {
-      transform: translateX(4px);
-    }
+    .mobile-link:hover { transform: translateX(4px); }
   }
 
   .mobile-link.active {
     color: #2b1f00;
-    background: var(--nav-orange);
-    border-color: #b17816;
+    background: var(--brand-orange);
+    border-color: var(--brand-btn-border);
     font-weight: 700;
     transform: none;
   }
@@ -533,56 +508,52 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     justify-content: center;
     width: 32px;
     height: 32px;
-    border-radius: 8px;
-    background: #fdfdf8;
-    border: 1px solid var(--nav-border);
-    color: var(--nav-text-muted);
+    border-radius: var(--radius-sm);
+    background: var(--surface-page);
+    border: 1px solid var(--border-accent);
+    color: var(--text-muted);
     flex-shrink: 0;
-    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    transition: color var(--duration-200) var(--ease),
+      background var(--duration-200) var(--ease),
+      border-color var(--duration-200) var(--ease);
   }
 
   .mobile-link.active .mobile-link-icon,
   .mobile-link:hover .mobile-link-icon {
-    color: var(--nav-red);
-    border-color: var(--nav-red);
-    background: #fff;
+    color: var(--brand-red);
+    border-color: var(--brand-red);
+    background: var(--color-white);
   }
 
   .mobile-link.active .mobile-link-icon {
     color: #2b1f00;
-    border-color: rgba(43,31,0,0.2);
-    background: rgba(255,255,255,0.4);
+    border-color: rgba(43, 31, 0, 0.2);
+    background: rgba(255, 255, 255, 0.4);
   }
 
   .mobile-link-text { line-height: 1.3; }
 
-  /* ─── Responsive ─── */
   @media (max-width: 900px) {
     .nav-links { display: none; }
     .hamburger { display: flex; }
     .mobile-overlay { display: block; }
   }
 
-  /* ─── Focus styles ─── */
   .nav-link:focus-visible,
   .logo:focus-visible,
   .hamburger:focus-visible,
   .mobile-link:focus-visible,
   .mobile-close:focus-visible {
-    outline: 2px solid var(--nav-red);
+    outline: var(--focus-ring-red);
     outline-offset: 3px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
   }
 
-  /* ─── Global side-effects ─── */
   :global(body.no-scroll),
   :global(html.no-scroll) { overflow: hidden; }
 
-  :global(html) {
-    scrollbar-gutter: stable;
-  }
+  :global(html) { scrollbar-gutter: stable; }
 
-  /* ─── Reduced motion ─── */
   @media (prefers-reduced-motion: reduce) {
     .navbar,
     .navbar::after,

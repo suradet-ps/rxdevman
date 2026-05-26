@@ -35,53 +35,14 @@ const invsPosts = allPosts
 </BaseLayout>
 
 <style>
-  .invs-container {
-    text-align: center;
-    /* .container provides max-width and centering */
-    padding-block: 0;
-    padding-bottom: var(--space-12);
-  }
-
+  .invs-container { text-align: center; padding-bottom: var(--space-12); }
   .invs-title {
     font-size: clamp(1.35rem, 2.5vw, 1.75rem);
     margin-bottom: var(--space-2);
   }
-
   .invs-subtitle {
     font-size: var(--text-base);
-    color: var(--font-color-light);
+    color: var(--text-secondary);
     margin-bottom: var(--space-8);
-  }
-
-  .post-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 420px));
-    justify-content: center;
-    gap: var(--space-6);
-    margin-bottom: var(--space-12);
-    text-align: left;
-  }
-
-  .status-box {
-    border: 2px dashed var(--card-border-color);
-    border-radius: var(--radius-lg);
-    padding: var(--space-12) var(--space-8);
-    margin-bottom: var(--space-8);
-  }
-
-  .status-box p {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--font-color-light);
-    margin: 0;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  @media (max-width: 640px) {
-    .post-grid {
-      grid-template-columns: 1fr;
-      gap: var(--space-4);
-    }
   }
 </style>

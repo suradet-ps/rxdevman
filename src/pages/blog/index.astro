@@ -35,27 +35,7 @@ const sortedPosts = allPosts.sort(
 </BaseLayout>
 
 <style>
-  .blog-header {
-    text-align: center;
-    margin: 0 auto;
-    padding-top: 0;
-    padding-bottom: var(--space-2);
-  }
-
-  .blog-header h1 {
-    font-size: clamp(1.35rem, 2.5vw, 1.75rem);
-    margin-bottom: var(--space-2);
-  }
-
-  .blog-header p {
-    font-size: var(--text-base);
-    color: var(--font-color-light);
-  }
-
-  .post-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: var(--space-6);
-    padding-bottom: var(--space-8);
-  }
+  .blog-header { text-align: center; margin: 0 auto; padding-bottom: var(--space-2); }
+  .blog-header h1 { font-size: clamp(1.35rem, 2.5vw, 1.75rem); margin-bottom: var(--space-2); }
+  .blog-header p { font-size: var(--text-base); color: var(--text-secondary); }
 </style>

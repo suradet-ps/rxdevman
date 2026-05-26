@@ -26,9 +26,9 @@ const { posts, displayName } = Astro.props;
 ---
 <BaseLayout title={`Posts tagged with: ${displayName}`}>
   <div class="page-header">
-    <p class="tag-label">Tag</p>
+    <p class="filter-label">Tag</p>
     <h1>#{displayName}</h1>
-    <p class="subtitle">
+    <p class="filter-subtitle">
       Found {posts.length} article{posts.length !== 1 ? 's' : ''} with this tag.
     </p>
   </div>
@@ -45,29 +45,5 @@ const { posts, displayName } = Astro.props;
     margin-left: auto;
     margin-right: auto;
   }
-
-  .tag-label {
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--font-color-light);
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-  }
-
-  .page-header h1 {
-    margin-bottom: 0.5rem;
-  }
-
-  .subtitle {
-    font-size: 1.2rem;
-    color: var(--font-color-light);
-  }
-
-  /* This grid style is identical to /blog/index.astro for consistency */
-  .post-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 1.5rem;
-  }
+  .page-header h1 { margin-bottom: 0.5rem; }
 </style>
