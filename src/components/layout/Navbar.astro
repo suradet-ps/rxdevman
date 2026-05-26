@@ -152,7 +152,6 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     hamburgerButton.setAttribute('aria-expanded', String(nextOpen));
     overlayElement.setAttribute('aria-hidden', String(!nextOpen));
     document.body.classList.toggle('no-scroll', nextOpen);
-    document.documentElement.classList.toggle('no-scroll', nextOpen);
     overlayElement.inert = !nextOpen;
 
     if (nextOpen) {
@@ -204,22 +203,8 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
   overlayElement.addEventListener('click', (event) => {
     const link = event.target instanceof Element ? event.target.closest('a') : null;
     if (link) {
-      // Instantly hide overlay to prevent transition jank during navigation
       overlayElement.classList.add('instant-close');
-
-      isMenuOpen = false;
-      overlayElement.classList.remove('open');
-      hamburgerButton.classList.remove('active');
-      hamburgerButton.setAttribute('aria-expanded', 'false');
-      overlayElement.setAttribute('aria-hidden', 'true');
-      document.body.classList.remove('no-scroll');
-      document.documentElement.classList.remove('no-scroll');
-      overlayElement.inert = true;
-
-      // Force a synchronous layout reflow.
-      // This ensures the browser flushes its layout queue and applies the
-      // 'instant-close' state immediately BEFORE Astro View Transitions
-      // or the browser starts painting the next page, preventing animation jank.
+      setMenuState(false);
       void overlayElement.offsetHeight;
     }
   });
@@ -374,6 +359,7 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     transform-origin: center;
     transition: transform var(--duration-300) var(--ease-spring),
       opacity var(--duration-200) var(--ease);
+    will-change: transform;
   }
 
   .hamburger.active .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); background: var(--brand-red); }
@@ -381,7 +367,6 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
   .hamburger.active .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--brand-red); }
 
   .mobile-overlay {
-    display: none;
     position: fixed;
     inset: 0;
     width: 100%;
@@ -391,21 +376,27 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     overflow-y: auto;
     overscroll-behavior: contain;
     transform: translateX(100%);
+    opacity: 0;
     visibility: hidden;
     pointer-events: none;
     transition: transform var(--duration-300) var(--ease-panel),
-      visibility 0s linear var(--duration-300);
+      opacity var(--duration-300) var(--ease);
+    will-change: transform;
   }
 
   .mobile-overlay.open {
     transform: translateX(0);
+    opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    transition: transform var(--duration-300) var(--ease-panel),
-      visibility 0s linear 0s;
   }
 
-  .mobile-overlay.instant-close { transition: none; display: none; }
+  .mobile-overlay.instant-close {
+    transition: none;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
 
   .mobile-overlay-header {
     position: sticky;
@@ -549,8 +540,9 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     border-radius: var(--radius-sm);
   }
 
-  :global(body.no-scroll),
-  :global(html.no-scroll) { overflow: hidden; }
+  :global(body.no-scroll) {
+    overflow: hidden;
+  }
 
   :global(html) { scrollbar-gutter: stable; }
 
