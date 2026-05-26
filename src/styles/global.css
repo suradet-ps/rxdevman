@@ -1106,7 +1106,7 @@
     padding: 0.15em 0.4em;
     border-radius: var(--radius-sm);
     font-size: 0.875em;
-    overflow-wrap: break-word;
+    word-break: break-word;
   }
   .prose pre {
     background-color: #1e1e1e;
@@ -1163,7 +1163,6 @@
     color: inherit;
     font-size: inherit;
     line-height: inherit;
-    display: block;
   }
   .prose pre > code > .line {
     display: block;
@@ -1172,8 +1171,7 @@
   }
   @media (max-width: 768px) {
     .prose pre {
-      margin-left: calc(-1 * var(--space-4));
-      margin-right: calc(-1 * var(--space-4));
+      white-space: pre-wrap;
       border-radius: 0;
       padding: var(--space-12) var(--space-4) var(--space-4) var(--space-4);
       font-size: var(--text-xs);
@@ -1209,6 +1207,8 @@
     text-align: left;
     padding: var(--space-3) var(--space-4);
     border-bottom: 2px solid var(--border-default);
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
   .prose td {
     padding: var(--space-3) var(--space-4);
