@@ -1326,6 +1326,7 @@
     .footer-brand {
       text-align: center;
       align-items: center;
+      padding-left: 0;
     }
     .footer-tagline {
       max-width: 100%;
