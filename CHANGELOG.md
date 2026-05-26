@@ -1,3 +1,9 @@
+## [1.13.4](https://github.com/suradet-ps/rxdevman/compare/v1.13.3...v1.13.4) (2026-05-26)
+
+### ♻️ Refactoring
+
+* migrate to design tokens and remove terminal.css ([#36](https://github.com/suradet-ps/rxdevman/issues/36)) ([60e53ae](https://github.com/suradet-ps/rxdevman/commit/60e53aed22c685f0fb02a32d929f73dd6e4d65b3))
+
 ## [1.13.3](https://github.com/suradet-ps/rxdevman/compare/v1.13.2...v1.13.3) (2026-05-25)
 
 ### 🐛 Bug Fixes
