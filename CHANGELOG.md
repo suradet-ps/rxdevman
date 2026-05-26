@@ -1,3 +1,9 @@
+## [1.14.1](https://github.com/suradet-ps/rxdevman/compare/v1.14.0...v1.14.1) (2026-05-26)
+
+### ♻️ Refactoring
+
+* enhance Developer Tools page layout and add featured tools ([4bc6f2b](https://github.com/suradet-ps/rxdevman/commit/4bc6f2bda56be18ec03bca96a5c33f74c49a93d6))
+
 ## [1.14.0](https://github.com/suradet-ps/rxdevman/compare/v1.13.4...v1.14.0) (2026-05-26)
 
 ### 🚀 New Features
