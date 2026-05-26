@@ -140,7 +140,9 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
 
     isMenuOpen = nextOpen;
 
-    overlayElement.classList.remove('instant-close');
+    if (nextOpen) {
+      overlayElement.classList.remove('instant-close');
+    }
 
     overlayElement.classList.toggle('open', nextOpen);
     hamburgerButton.classList.toggle('active', nextOpen);
