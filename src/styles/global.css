@@ -121,6 +121,7 @@
   /* ── Brand ── */
   --brand-red: var(--color-red-600);
   --brand-orange: var(--color-orange-400);
+  --brand-orange-hover: color-mix(in srgb, var(--brand-orange), white 10%);
   --brand-btn-shadow: var(--color-orange-600);
   --brand-btn-border: var(--color-orange-500);
 
@@ -422,7 +423,7 @@
       background-color var(--duration-150) var(--ease);
   }
   .cta-button:hover {
-    background-color: #f0a83a;
+    background-color: var(--brand-orange-hover);
     color: var(--text-heading);
     transform: translateY(-1px);
     box-shadow: var(--depth-shadow-hover);
@@ -825,7 +826,7 @@
     position: sticky;
     top: calc(var(--nav-height) + 1.5rem);
     align-self: start;
-    max-height: calc(100vh - 4rem);
+    max-height: calc(100vh - var(--nav-height) - 2.5rem);
     overflow-y: auto;
   }
   @media (max-width: 1100px) {
@@ -1051,7 +1052,7 @@
     max-width: 760px;
     margin: 0 auto;
     overflow-wrap: break-word;
-    word-wrap: break-word;
+
     color: var(--text-secondary);
     font-size: var(--text-base);
     line-height: 1.8;
@@ -1105,7 +1106,7 @@
     padding: 0.15em 0.4em;
     border-radius: var(--radius-sm);
     font-size: 0.875em;
-    word-break: break-word;
+    overflow-wrap: break-word;
   }
   .prose pre {
     background-color: #1e1e1e;
@@ -1361,6 +1362,14 @@
     background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
     background-size: 200% auto;
     animation: shimmer 2s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-wiggle,
+    .animate-float,
+    .animate-shimmer {
+      animation: none;
+    }
   }
 
   .text-muted {
