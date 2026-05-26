@@ -1,3 +1,9 @@
+## [1.14.0](https://github.com/suradet-ps/rxdevman/compare/v1.13.4...v1.14.0) (2026-05-26)
+
+### 🚀 New Features
+
+* restructure About page layout and enhance content presentation ([e765880](https://github.com/suradet-ps/rxdevman/commit/e7658808bca182406684c9b614a67dd4cd117898))
+
 ## [1.13.4](https://github.com/suradet-ps/rxdevman/compare/v1.13.3...v1.13.4) (2026-05-26)
 
 ### ♻️ Refactoring
