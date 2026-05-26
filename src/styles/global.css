@@ -351,7 +351,7 @@
   @media (max-width: 900px) {
     .page-layout {
       padding: 0;
-      min-height: auto;
+      min-height: 60dvh;
     }
     .page-layout main {
       padding: 1.5rem;
