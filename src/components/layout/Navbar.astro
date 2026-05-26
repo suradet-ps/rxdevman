@@ -225,20 +225,9 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     border-bottom: 1px solid var(--border-accent);
   }
 
-  .navbar::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 8px;
-    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
-    opacity: 0;
-    transition: opacity var(--duration-300) var(--ease);
-    pointer-events: none;
+  .navbar.scrolled {
+    border-bottom-color: color-mix(in srgb, var(--border-accent) 60%, transparent);
   }
-
-  .navbar.scrolled::after { opacity: 1; }
 
   .navbar-inner {
     max-width: 1440px;
