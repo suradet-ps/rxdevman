@@ -28,19 +28,61 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <!-- Right: Image -->
+      <!-- Right: Terminal -->
       <div class="hero-image-wrap">
-        <img
-          src="/images/common/profile-placeholder.jpg"
-          alt="A portrait of the author"
-          class="hero-avatar"
-        />
+        <div class="terminal">
+          <div class="terminal-bar">
+            <div class="terminal-dots">
+              <span class="terminal-dot dot-red"></span>
+              <span class="terminal-dot dot-yellow"></span>
+              <span class="terminal-dot dot-green"></span>
+            </div>
+            <span class="terminal-title">rxdevman — zsh</span>
+          </div>
+
+          <div class="terminal-body">
+            <div class="line" style="--delay: 0.4s; --chars: 6">
+              <span class="prompt">$</span>
+              <span class="typed">whoami</span>
+            </div>
+            <div class="line" style="--delay: 1.6s; --chars: 23">
+              <span class="out">&gt;</span>
+              <span class="typed">pharmacist -&gt; rustacean</span>
+            </div>
+            <div class="line" style="--delay: 3s; --chars: 14">
+              <span class="prompt">$</span>
+              <span class="typed">echo $PASSION</span>
+            </div>
+            <div class="line" style="--delay: 4.4s; --chars: 27">
+              <span class="out">&gt;</span>
+              <span class="typed">building things that matter</span>
+            </div>
+            <div class="line" style="--delay: 5.8s; --chars: 10">
+              <span class="prompt">$</span>
+              <span class="typed">ls skills/</span>
+            </div>
+            <div class="line" style="--delay: 7.2s; --chars: 35">
+              <span class="typed line-out">Rust Astro Vue TypeScript HOSxP</span>
+            </div>
+            <div class="line" style="--delay: 9s; --chars: 0">
+              <span class="prompt">$</span>
+              <span class="cursor">_</span>
+            </div>
+          </div>
+
+          <div class="terminal-footer">
+            <img
+              src="/images/common/profile-placeholder.jpg"
+              alt=""
+              class="terminal-avatar"
+            />
+            <span class="terminal-username">suradet-ps</span>
+          </div>
+        </div>
       </div>
 
     </div>
   </section>
-
-
 
 </BaseLayout>
 
@@ -53,5 +95,173 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     letter-spacing: 0.14em;
     text-transform: uppercase;
     margin-bottom: var(--space-4);
+  }
+
+  /* ── Terminal ── */
+  .terminal {
+    width: 100%;
+    max-width: 500px;
+    background: #1a1b1e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    box-shadow:
+      0 8px 0 #0f0f11,
+      0 12px 32px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+  }
+
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background: #2a2b2e;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .terminal-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .terminal-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .dot-red { background: #ff5f57; }
+  .dot-yellow { background: #ffbd2e; }
+  .dot-green { background: #28c840; }
+
+  .terminal-title {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+    margin-left: auto;
+  }
+
+  .terminal-body {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    min-height: 180px;
+  }
+
+  .line {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    opacity: 0;
+    animation: appear 0.15s ease forwards;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes appear {
+    to { opacity: 1; }
+  }
+
+  .prompt {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--brand-orange);
+    flex-shrink: 0;
+  }
+
+  .out {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+  }
+
+  .typed {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.8);
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: bottom;
+    width: 0;
+    animation: typing calc(var(--chars) * 50ms) steps(var(--chars)) forwards;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes typing {
+    to { width: calc(var(--chars) * 1ch); }
+  }
+
+  .line-out {
+    color: rgba(255, 255, 255, 0.5);
+    margin-left: 0;
+  }
+
+  .cursor {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--brand-orange);
+    animation: blink 0.7s step-end infinite;
+    animation-delay: 9.5s;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .terminal-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .terminal-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .terminal-username {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  @media (max-width: 1024px) {
+    .terminal {
+      max-width: 480px;
+    }
+
+    .terminal-body {
+      min-height: 160px;
+      padding: 0.875rem 1rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .terminal-body {
+      min-height: 140px;
+      padding: 0.75rem 0.875rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .line {
+      opacity: 1;
+      animation: none;
+    }
+    .typed {
+      width: auto;
+      animation: none;
+    }
+    .cursor {
+      animation: none;
+    }
   }
 </style>
