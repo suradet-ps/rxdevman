@@ -23,21 +23,21 @@ const { title, icon } = Astro.props;
 <style>
   .feature-card {
     background-color: transparent;
-    border: 1px solid #BFC1B7;
-    border-bottom: 3px solid #BFC1B7;
-    border-radius: 8px;
+    border: 1px solid var(--border-default);
+    border-bottom: var(--depth-border) solid var(--border-default);
+    border-radius: var(--radius-sm);
     padding: 1.5rem;
-    color: #4D4F46;
+    color: var(--text-primary);
     transition:
-      transform 0.15s ease,
-      border-bottom-color 0.15s ease,
-      background-color 0.15s ease;
+      transform var(--duration-150) var(--ease),
+      border-bottom-color var(--duration-150) var(--ease),
+      background-color var(--duration-150) var(--ease);
   }
 
   .feature-card:hover {
     transform: translateY(-4px);
-    border-bottom-color: #EB9D2A;
-    background-color: #FDFDF8;
+    border-bottom-color: var(--brand-orange);
+    background-color: var(--surface-page);
   }
 
   .card-header {
@@ -54,12 +54,12 @@ const { title, icon } = Astro.props;
     justify-content: center;
     width: 44px;
     height: 44px;
-    background-color: rgba(245, 78, 0, 0.1);
-    border-radius: 8px;
+    background-color: color-mix(in srgb, var(--brand-red) 10%, transparent);
+    border-radius: var(--radius-sm);
   }
 
   .card-icon {
-    color: #F54E00;
+    color: var(--brand-red);
     width: 24px;
     height: 24px;
   }
@@ -68,27 +68,25 @@ const { title, icon } = Astro.props;
     margin: 0;
     font-size: 1.0625rem;
     font-weight: 600;
-    font-family: 'IBM Plex Sans', 'Noto Sans Thai', system-ui, sans-serif;
-    color: #23251D;
+    font-family: var(--font-sans);
+    color: var(--text-heading);
   }
 
   .card-content {
     line-height: 1.6;
-    color: #65675E;
+    color: var(--text-secondary);
   }
 
   .card-content :global(a) {
-    color: #F54E00;
+    color: var(--brand-red);
     text-decoration: underline;
   }
 
   .card-content :global(a:hover) {
-    color: #EB9D2A;
+    color: var(--brand-orange);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .feature-card {
-      transition: none;
-    }
+    .feature-card { transition: none; }
   }
 </style>

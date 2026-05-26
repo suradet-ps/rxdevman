@@ -4,7 +4,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Developer Tools">
-        <div class="container page-header">
+        <div class="container section-header">
             <h1>Tools & Projects</h1>
             <p>
                 รวมเว็บแอปและเครื่องมือที่ผมสร้างขึ้นเพื่อแก้ปัญหาจริงในงานด้านเภสัชกรรมไปจนถึงช่วยให้นักพัฒนาทำงานได้สะดวกขึ้น
@@ -28,24 +28,4 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
         </div>
 </BaseLayout>
 
-<style>
-    .page-header {
-        text-align: center;
-        margin-inline: auto;
-        padding-top: 0;
-        padding-bottom: var(--space-2);
-    }
-    .page-header h1 {
-        font-size: clamp(1.35rem, 2.5vw, 1.75rem);
-        margin-bottom: var(--space-2);
-    }
-    .page-header p {
-        font-size: var(--text-base);
-        color: var(--font-color-light);
-    }
-    .tools-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: var(--space-6);
-    }
-</style>
+

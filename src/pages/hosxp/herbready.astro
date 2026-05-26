@@ -97,78 +97,21 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 
 <style>
   .project-header {
-    text-align: center;
-    margin: var(--space-8) 0 var(--space-8);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--space-4);
   }
-  .title-icon {
-    width: 80px;
-    height: 80px;
-  }
-
-  .screenshot-container {
-    max-width: 1000px;
-    margin: 0 auto var(--space-12);
-  }
-  .main-screenshot {
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--card-border-color);
-    box-shadow: 0 15px 40px var(--shadow-hover-color);
-    width: 100%;
-    height: auto;
-  }
+  .title-icon { width: 80px; height: 80px; }
   .subtitle {
-    font-size: var(--text-base);
-    margin: var(--space-4) auto var(--space-8);
-    max-width: 800px;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
   }
-
-  .desc-line {
-    color: var(--font-color-light);
-  }
-
-.project-details {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
+  .desc-line { color: var(--font-color-light); }
   .download-section {
     margin-top: var(--space-12);
     text-align: center;
   }
-
-  .coming-soon {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-3);
-    padding: 1.5rem 2.5rem;
-    border: 2px dashed var(--card-border-color);
-    border-radius: var(--radius-lg);
-    background-color: var(--card-bg-color);
-    opacity: 0.7;
-  }
-
-  .coming-soon-badge {
-    display: inline-block;
-    background-color: var(--brand-color);
-    color: #ffffff;
-    padding: 0.4rem 1.2rem;
-    border-radius: var(--radius-full);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    letter-spacing: 0.05em;
-  }
-
-  .coming-soon-text {
-    margin: 0;
-    color: var(--font-color-light);
-    font-size: var(--text-sm);
-  }
-  </style>
+  .coming-soon { opacity: 0.7; }
+</style>
