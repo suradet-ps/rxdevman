@@ -77,7 +77,7 @@
   --z-sticky: 100;
   --z-navbar: 999998;
   --z-overlay: 999999;
-  --z-progress: 999999;
+  --z-progress: 1000000;
 
   /* ── Transition Durations ── */
   --duration-100: 100ms;

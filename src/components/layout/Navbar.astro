@@ -140,12 +140,7 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
 
     isMenuOpen = nextOpen;
 
-    // State Management: Always reset instant-close when opening the menu.
-    // This prevents the overlay from getting stuck in a no-transition state
-    // (e.g., if navigation fails or the user uses the browser back button in SPA).
-    if (nextOpen) {
-      overlayElement.classList.remove('instant-close');
-    }
+    overlayElement.classList.remove('instant-close');
 
     overlayElement.classList.toggle('open', nextOpen);
     hamburgerButton.classList.toggle('active', nextOpen);

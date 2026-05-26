@@ -52,7 +52,7 @@ if (progressBar instanceof HTMLDivElement && !progressBar.dataset.initialized) {
     height: 3px;
     background: linear-gradient(to right, var(--brand-red), var(--brand-orange));
     width: 100%;
-    z-index: 999999;
+    z-index: var(--z-progress);
     transform: scaleX(0);
     transform-origin: left center;
     will-change: transform;
