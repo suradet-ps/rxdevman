@@ -1,3 +1,9 @@
+## [1.15.0](https://github.com/suradet-ps/rxdevman/compare/v1.14.1...v1.15.0) (2026-05-26)
+
+### 🚀 New Features
+
+* replace hero image with interactive terminal showcasing skills and passion ([35d7698](https://github.com/suradet-ps/rxdevman/commit/35d7698ca3cb44e9ff00e921c3b73e4c4476788d))
+
 ## [1.14.1](https://github.com/suradet-ps/rxdevman/compare/v1.14.0...v1.14.1) (2026-05-26)
 
 ### ♻️ Refactoring
