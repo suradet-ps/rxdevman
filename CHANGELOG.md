@@ -1,3 +1,9 @@
+## [1.15.1](https://github.com/suradet-ps/rxdevman/compare/v1.15.0...v1.15.1) (2026-05-27)
+
+### ♻️ Refactoring
+
+* update spacing and padding using CSS variables for consistency across pages ([cf11488](https://github.com/suradet-ps/rxdevman/commit/cf11488fa93be6b50bed68acc302659f2bbf3199))
+
 ## [1.15.0](https://github.com/suradet-ps/rxdevman/compare/v1.14.1...v1.15.0) (2026-05-26)
 
 ### 🚀 New Features
