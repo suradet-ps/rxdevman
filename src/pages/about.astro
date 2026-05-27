@@ -96,14 +96,14 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
       "photo  hero"
       "story1 story1"
       "contact contact";
-    gap: 1.5rem;
+    gap: var(--space-6);
   }
 
   .bento-card {
     background: var(--surface-card);
     border: 1px solid var(--border-default);
     border-radius: var(--radius-lg);
-    padding: 2rem;
+    padding: var(--space-8);
     box-shadow: var(--shadow-sm);
   }
 
@@ -118,8 +118,8 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 1rem;
-    padding: 2.5rem 2rem;
+    gap: var(--space-4);
+    padding: var(--space-10) var(--space-8);
     background: linear-gradient(145deg,
       color-mix(in srgb, var(--brand-orange) 8%, var(--surface-card)) 0%,
       var(--surface-card) 60%
@@ -154,7 +154,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 0.75rem;
+    gap: var(--space-3);
     position: relative;
   }
 
@@ -166,7 +166,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     bottom: 1rem;
     width: 4px;
     background: linear-gradient(to bottom, var(--brand-orange), var(--brand-red));
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
   }
 
   .bento-hero .eyebrow {
@@ -200,7 +200,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   }
 
   .bento-story--full p + p {
-    margin-top: 1.5rem;
+    margin-top: var(--space-6);
   }
 
   .bento-story p {
@@ -235,19 +235,19 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     font-size: 1.125rem;
     font-weight: 700;
     color: var(--text-heading);
-    margin: 0 0 1rem;
+    margin: 0 0 var(--space-4);
   }
 
   .bento-contact > p {
     color: var(--text-secondary);
     font-size: 0.9375rem;
     line-height: 1.7;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-6);
   }
 
   .social-links {
     display: flex;
-    gap: 1rem;
+    gap: var(--space-4);
     flex-wrap: wrap;
   }
 
@@ -263,11 +263,11 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
         "hero"
         "story1"
         "contact";
-      gap: 1rem;
+      gap: var(--space-4);
     }
 
     .bento-card {
-      padding: 1.5rem;
+      padding: var(--space-6);
     }
 
     .bento-contact::after {
@@ -275,7 +275,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     }
 
     .bento-photo {
-      padding: 2rem 1.5rem;
+      padding: var(--space-8) var(--space-6);
     }
 
     .bento-photo-img {
@@ -289,8 +289,8 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 
     .bento-hero::before {
       width: 3px;
-      top: 0.75rem;
-      bottom: 0.75rem;
+      top: var(--space-3);
+      bottom: var(--space-3);
     }
   }
 </style>

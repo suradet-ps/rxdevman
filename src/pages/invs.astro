@@ -10,39 +10,97 @@ const invsPosts = allPosts
 ---
 
 <BaseLayout title="INVS Resources">
-  <div class="container invs-container">
-    <h1 class="invs-title">INVS</h1>
-    <p class="invs-subtitle">
-      พื้นที่สำหรับรวบรวมเครื่องมือ คู่มือ และบันทึกต่าง ๆ ที่เกี่ยวข้องกับโปรแกรมจัดซื้อและบริหารคลังเวชภัณฑ์ยา INVS
-    </p>
+  <section class="page-invs">
+    <div class="container">
+      <header class="invs-header">
+        <p class="eyebrow">INVS</p>
+        <h1>โปรแกรมจัดซื้อและบริหารคลังเวชภัณฑ์</h1>
+        <p>
+          พื้นที่สำหรับรวบรวมเครื่องมือ คู่มือ และบันทึกต่าง ๆ ที่เกี่ยวข้องกับโปรแกรมจัดซื้อและบริหารคลังเวชภัณฑ์ยา INVS
+        </p>
+      </header>
 
-    {invsPosts.length > 0
-? (
-      <div class="post-grid">
-        {invsPosts.map(post => (
-          <BlogPostCard post={post} />
-        ))}
-      </div>
-    )
-: (
-      <div class="status-box" role="status" aria-live="polite">
-        <p>Coming Soon</p>
-      </div>
-    )}
+      {invsPosts.length > 0
+  ? (
+        <div class="invs-articles">
+          {invsPosts.map(post => (
+            <BlogPostCard post={post} />
+          ))}
+        </div>
+      )
+  : (
+        <div class="status-box" role="status" aria-live="polite">
+          <p>Coming Soon</p>
+        </div>
+      )}
 
-    <a href="/blog" class="cta-button">Back to Blog</a>
-  </div>
+      <div class="invs-footer">
+        <a href="/blog" class="cta-button">ดูบทความทั้งหมด</a>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-  .invs-container { text-align: center; padding-bottom: var(--space-12); }
-  .invs-title {
-    font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  .page-invs {
+    padding: 0.5rem 0 6rem;
+  }
+
+  .invs-header {
+    margin-bottom: var(--space-12);
+  }
+
+  .invs-header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     margin-bottom: var(--space-2);
   }
-  .invs-subtitle {
-    font-size: var(--text-base);
+
+  .invs-header h1 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--text-heading);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0 0 var(--space-3);
+    padding-bottom: var(--space-4);
+    border-bottom: 2px solid var(--brand-orange);
+  }
+
+  .invs-header p {
     color: var(--text-secondary);
-    margin-bottom: var(--space-8);
+    font-size: var(--text-base);
+    line-height: 1.7;
+    max-width: 640px;
+    margin: 0;
+  }
+
+  .invs-articles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    max-width: 700px;
+  }
+
+  .invs-footer {
+    margin-top: var(--space-12);
+  }
+
+  @media (max-width: 768px) {
+    .page-invs {
+      padding: 0.5rem 0 4rem;
+    }
+
+    .invs-header {
+      margin-bottom: var(--space-8);
+    }
+
+    .invs-footer {
+      margin-top: var(--space-8);
+    }
   }
 </style>

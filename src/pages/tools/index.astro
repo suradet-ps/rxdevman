@@ -89,7 +89,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   .tools-bento {
     display: grid;
     grid-template-columns: 1.6fr 1fr;
-    gap: 1.5rem;
+    gap: var(--space-6);
     align-items: stretch;
   }
 
@@ -114,11 +114,11 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 
   .tool-featured-header {
     position: relative;
-    padding: 2.5rem 2rem 2rem;
+    padding: var(--space-10) var(--space-8) var(--space-8);
     background: linear-gradient(135deg, var(--brand-orange), var(--brand-red));
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--space-4);
     overflow: hidden;
   }
 
@@ -129,7 +129,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     right: -1rem;
     width: 160px;
     height: 160px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
     pointer-events: none;
   }
@@ -155,7 +155,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     font-weight: 600;
     color: rgba(255, 255, 255, 0.9);
     background: rgba(255, 255, 255, 0.15);
-    padding: 0.25rem 0.75rem;
+    padding: var(--space-1) var(--space-3);
     border-radius: var(--radius-full);
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -163,11 +163,11 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   }
 
   .tool-featured-body {
-    padding: 1.75rem 2rem 2rem;
+    padding: 1.75rem var(--space-8) var(--space-8);
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--space-3);
   }
 
   .tool-featured-title {
@@ -188,8 +188,8 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   .tool-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.25rem;
+    gap: var(--space-2);
+    margin-top: var(--space-1);
   }
 
   .tool-link {
@@ -197,10 +197,10 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     font-weight: 600;
     color: var(--brand-red);
     margin-top: auto;
-    padding-top: 0.75rem;
+    padding-top: var(--space-3);
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: var(--space-1);
   }
 
   .tool-link-arrow {
@@ -220,7 +220,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     border: 1px solid var(--border-default);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
-    padding: 2rem;
+    padding: var(--space-8);
     position: relative;
     transition: box-shadow var(--duration-300) var(--ease),
       transform var(--duration-300) var(--ease);
@@ -235,8 +235,8 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     content: '';
     position: absolute;
     top: 0;
-    left: 1.5rem;
-    right: 1.5rem;
+    left: var(--space-6);
+    right: var(--space-6);
     height: 3px;
     background: linear-gradient(90deg, var(--brand-orange), var(--brand-red), transparent);
     border-radius: 0 0 3px 3px;
@@ -249,7 +249,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     place-items: center;
     background: color-mix(in srgb, var(--brand-orange) 10%, var(--surface-card));
     border-radius: var(--radius-md);
-    margin-bottom: 1.25rem;
+    margin-bottom: var(--space-5);
   }
 
   .standard-icon-svg {
@@ -262,7 +262,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
   .tool-standard-title {
@@ -284,7 +284,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     font-size: 1.25rem;
     color: var(--text-muted);
     align-self: flex-end;
-    margin-top: 1rem;
+    margin-top: var(--space-4);
     transition: transform var(--duration-200) var(--ease),
       color var(--duration-200) var(--ease);
   }
@@ -301,24 +301,24 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 
     .tools-bento {
       grid-template-columns: 1fr;
-      gap: 1rem;
+      gap: var(--space-4);
     }
 
     .tool-featured-header {
-      padding: 2rem 1.5rem 1.5rem;
+      padding: var(--space-8) var(--space-6) var(--space-6);
     }
 
     .tool-featured-body {
-      padding: 1.25rem 1.5rem 1.5rem;
+      padding: var(--space-5) var(--space-6) var(--space-6);
     }
 
     .tool-standard {
-      padding: 1.5rem;
+      padding: var(--space-6);
     }
 
     .tool-standard::before {
-      left: 1rem;
-      right: 1rem;
+      left: var(--space-4);
+      right: var(--space-4);
     }
   }
 
