@@ -1,3 +1,9 @@
+## [1.16.0](https://github.com/suradet-ps/rxdevman/compare/v1.15.1...v1.16.0) (2026-05-28)
+
+### 🚀 New Features
+
+* implement visitor tracking system with Supabase integration ([19972f6](https://github.com/suradet-ps/rxdevman/commit/19972f6b7026950be62e10d98e0e085d239aa971))
+
 ## [1.15.1](https://github.com/suradet-ps/rxdevman/compare/v1.15.0...v1.15.1) (2026-05-27)
 
 ### ♻️ Refactoring
