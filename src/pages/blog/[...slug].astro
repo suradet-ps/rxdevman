@@ -1,9 +1,10 @@
 ---
-// src/pages/blog/[...slug].astro
 import { getCollection, render } from 'astro:content';
 
 import BlogPostLayout from '@/layouts/BlogPostLayout.astro';
 import { getEntrySlug } from '@/utils/slugify';
+
+export const prerender = false;
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
