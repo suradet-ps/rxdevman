@@ -6,16 +6,14 @@ import { getEntrySlug } from '@/utils/slugify';
 
 export const prerender = false;
 
-export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  return posts.map(post => ({
-    params: { slug: getEntrySlug(post.id) },
-    props: post,
-  }));
+const posts = await getCollection('blog');
+const slug = Astro.params.slug as string;
+const post = posts.find(p => getEntrySlug(p.id) === slug);
+
+if (!post) {
+  return Astro.redirect('/404', 404);
 }
 
-const post = Astro.props;
-const slug = getEntrySlug(post.id);
 const { Content, headings } = await render(post);
 ---
 
