@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 
 import { sha256 } from '@/lib/hash';
-import { supabaseServer } from '@/lib/supabase';
+import { getSupabaseServer } from '@/lib/supabase';
 
 export const prerender = false;
 
@@ -21,7 +21,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     const ipHash = await sha256(`${ip}:${import.meta.env.HASH_SALT}`);
 
-    const { error: insertError } = await supabaseServer
+    const { error: insertError } = await getSupabaseServer()
       .from('rxdevman_page_views')
       .insert({
         page_slug: slug,
@@ -33,7 +33,7 @@ export const POST: APIRoute = async ({ request }) => {
     if (insertError)
       throw insertError;
 
-    const { error: rpcError } = await supabaseServer
+    const { error: rpcError } = await getSupabaseServer()
       .rpc('increment_view_count', { p_slug: slug });
 
     if (rpcError)

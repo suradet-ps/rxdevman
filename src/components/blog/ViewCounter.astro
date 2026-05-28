@@ -1,5 +1,5 @@
 ---
-import { supabaseServer } from '@/lib/supabase';
+import { getSupabaseServer } from '@/lib/supabase';
 
 type Props = {
   slug: string;
@@ -9,13 +9,18 @@ type Props = {
 
 const { slug, label = 'visitors', labelBefore = false } = Astro.props;
 
-const { data } = await supabaseServer
-  .from('rxdevman_view_counts')
-  .select('unique_visitors')
-  .eq('page_slug', slug)
-  .single();
-
-const count = data?.unique_visitors ?? 0;
+let count = 0;
+try {
+  const { data } = await getSupabaseServer()
+    .from('rxdevman_view_counts')
+    .select('unique_visitors')
+    .eq('page_slug', slug)
+    .single();
+  count = data?.unique_visitors ?? 0;
+}
+ catch {
+  // Gracefully fallback during prerender/build when env vars aren't available
+}
 ---
 
 <span class="view-counter" data-slug={slug}>
