@@ -1,3 +1,9 @@
+## [1.16.1](https://github.com/suradet-ps/rxdevman/compare/v1.16.0...v1.16.1) (2026-05-28)
+
+### 🐛 Bug Fixes
+
+* replace supabaseServer with getSupabaseServer for improved client management ([5ffcb44](https://github.com/suradet-ps/rxdevman/commit/5ffcb44c1888b62d2dadb603f46f14c9af1c4349))
+
 ## [1.16.0](https://github.com/suradet-ps/rxdevman/compare/v1.15.1...v1.16.0) (2026-05-28)
 
 ### 🚀 New Features
