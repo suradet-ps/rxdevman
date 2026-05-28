@@ -1,43 +1,46 @@
 ---
+import { supabaseServer } from '@/lib/supabase';
+
 type Props = {
   slug: string;
+  label?: string;
+  labelBefore?: boolean;
 };
 
-const { slug } = Astro.props;
+const { slug, label = 'visitors', labelBefore = false } = Astro.props;
+
+const { data } = await supabaseServer
+  .from('rxdevman_view_counts')
+  .select('unique_visitors')
+  .eq('page_slug', slug)
+  .single();
+
+const count = data?.unique_visitors ?? 0;
 ---
 
-<span class="view-counter">
-  <span id="view-count-value">...</span> views
+<span class="view-counter" data-slug={slug}>
+  {labelBefore ? `${label} ${count.toLocaleString()}` : `${count.toLocaleString()} ${label}`}
 </span>
 
-<script is:inline define:vars={{ slug }}>
-  const viewCountElement = document.getElementById('view-count-value');
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const el = document.querySelector<HTMLElement>('.view-counter');
+  if (!el)
+    return;
 
-  async function updateViewCount() {
-    try {
-      const res = await fetch(`/api/views/${slug}`, {
-        method: 'POST',
-      });
-      const data = await res.json();
+  const slug = el.dataset.slug!;
 
-      if (viewCountElement) {
-        viewCountElement.textContent = data.count;
-      }
-    }
-    catch (e) {
-      console.error('Error fetching view count:', e);
-      if (viewCountElement) {
-        viewCountElement.textContent = '0';
-      }
-    }
+  try {
+    await fetch('/api/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug }),
+    });
   }
-
-  if ('requestIdleCallback' in window) {
-    window.requestIdleCallback(() => updateViewCount(), { timeout: 2000 });
+  catch {
+    // Silently fail
   }
-  else {
-    window.setTimeout(updateViewCount, 150);
-  }
+});
 </script>
 
 <style>

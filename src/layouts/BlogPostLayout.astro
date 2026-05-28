@@ -69,7 +69,7 @@ const preloadHero = heroImage
         <div class="post-meta">
           <span>Published on {formattedDate}</span>
           <span class="post-meta-separator">•</span>
-          <ViewCounter slug={postSlug} />
+          <ViewCounter slug={`/posts/${postSlug}`} label="views" />
         </div>
       </header>
 
