@@ -1,3 +1,9 @@
+## [1.16.2](https://github.com/suradet-ps/rxdevman/compare/v1.16.1...v1.16.2) (2026-05-28)
+
+### 🐛 Bug Fixes
+
+* add missing prerender export to blog and index pages ([0c103c5](https://github.com/suradet-ps/rxdevman/commit/0c103c58d34e6e3a3f5e2460482a5d0f2ef3157f))
+
 ## [1.16.1](https://github.com/suradet-ps/rxdevman/compare/v1.16.0...v1.16.1) (2026-05-28)
 
 ### 🐛 Bug Fixes
