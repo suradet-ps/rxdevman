@@ -1,3 +1,9 @@
+## [1.16.4](https://github.com/suradet-ps/rxdevman/compare/v1.16.3...v1.16.4) (2026-05-29)
+
+### 🐛 Bug Fixes
+
+* update dependencies for @astrojs/mdx and astro to latest versions ([daf6209](https://github.com/suradet-ps/rxdevman/commit/daf6209354cc5e5ee2378342d9fef31f1e0bac93))
+
 ## [1.16.3](https://github.com/suradet-ps/rxdevman/compare/v1.16.2...v1.16.3) (2026-05-28)
 
 ### 🐛 Bug Fixes
