@@ -30,27 +30,13 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
           </p>
         </div>
 
-        <div class="bento-card bento-story bento-story--full">
-          <p>
-            My journey started behind a pharmacy counter, surrounded by prescriptions and patient care.
-            Today, I build <span class="hl">digital solutions</span>, write <span class="hl">clean code</span>,
-            and design intuitive <span class="hl">user experiences</span>.
-            This is the story of my transition from <span class="hl">pharmacist</span> to <span class="hl">software developer</span>.
-          </p>
-          <p>
-            This site serves as my <span class="hl">personal knowledge base</span> and learning journal — open to the public.
-            I write about topics I'm studying, from frontend frameworks
-            like <span class="hl">Astro</span> and <span class="hl">Vue</span> to the niche challenges of hospital software like <span class="hl">HOSxP</span>.
-            My goal is to deepen understanding through <span class="hl">knowledge sharing</span>
-            and to provide useful resources I've gathered along the way.
-          </p>
-        </div>
+
 
         <div class="bento-card bento-contact">
           <h2 class="contact-heading">Get in Touch</h2>
           <p>
             I'm always open to chatting about new projects, exchanging knowledge,
-            or anything tech-related. Feel free to reach out!
+            or anything tech-related. Feel free to reach out.
           </p>
 
           <div class="social-links">
@@ -94,7 +80,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     grid-template-columns: 260px 1fr;
     grid-template-areas:
       "photo  hero"
-      "story1 story1"
       "contact contact";
     gap: var(--space-6);
   }
@@ -192,21 +177,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     font-size: var(--text-sm);
     color: var(--text-secondary);
     line-height: 1.7;
-    margin: 0;
-  }
-
-  .bento-story--full {
-    grid-area: story1;
-  }
-
-  .bento-story--full p + p {
-    margin-top: var(--space-6);
-  }
-
-  .bento-story p {
-    color: var(--text-secondary);
-    font-size: var(--text-base);
-    line-height: 1.8;
     margin: 0;
   }
 
