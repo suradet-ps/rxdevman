@@ -1,3 +1,20 @@
+## [1.16.5](https://github.com/suradet-ps/rxdevman/compare/v1.16.4...v1.16.5) (2026-05-29)
+
+### 🐛 Bug Fixes
+
+* increase logo text font size for better visibility ([f91d76d](https://github.com/suradet-ps/rxdevman/commit/f91d76dd2bc64385689f2eee0e68a9b313cc9c9d))
+
+### 📦 Dependency Updates
+
+* translate about page content to English ([700d0a6](https://github.com/suradet-ps/rxdevman/commit/700d0a6efb2404f9e82dd9b6dc92b1543f4d9574))
+* translate blog header description to English ([e128281](https://github.com/suradet-ps/rxdevman/commit/e12828167586dc7ca4f6573cd2f6a6cb25db7ab1))
+* translate tools section description to English ([21beec2](https://github.com/suradet-ps/rxdevman/commit/21beec205a6fcca7ac88edaafbc91a13550f5efb))
+* update hero section text and translate welcome message to English ([b1314cd](https://github.com/suradet-ps/rxdevman/commit/b1314cd6ffdb17343e1a7beb4efb76ebdabc7f6a))
+
+### ♻️ Refactoring
+
+* change hardcode css to design tokens ([434ba67](https://github.com/suradet-ps/rxdevman/commit/434ba67ef63acdd0ae03464fd6c53c15099a1110))
+
 ## [1.16.4](https://github.com/suradet-ps/rxdevman/compare/v1.16.3...v1.16.4) (2026-05-29)
 
 ### 🐛 Bug Fixes
