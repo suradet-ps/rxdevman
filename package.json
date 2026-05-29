@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
-    "@astrojs/mdx": "^5.0.4",
+    "@astrojs/mdx": "^6.0.1",
     "@astrojs/sitemap": "^3.7.2",
     "@astrojs/vercel": "^10.0.6",
     "@iconify-json/fa6-brands": "^1.2.6",
@@ -23,7 +23,7 @@
     "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/ri": "^1.2.10",
     "@supabase/supabase-js": "^2.105.4",
-    "astro": "^6.3.1",
+    "astro": "^6.4.2",
     "astro-auto-import": "^0.5.1",
     "astro-icon": "^1.1.5",
     "astro-pagefind": "^2.0.0",
