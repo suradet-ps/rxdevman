@@ -1,3 +1,14 @@
+## [1.16.6](https://github.com/suradet-ps/rxdevman/compare/v1.16.5...v1.16.6) (2026-05-29)
+
+### 📦 Dependency Updates
+
+* translate HOSxP resources description to English ([7943c9f](https://github.com/suradet-ps/rxdevman/commit/7943c9fbeb65eaf70e51dc1ee71125b1589e1d49))
+
+### ♻️ Refactoring
+
+* remove personal story section from about page ([e83d2c9](https://github.com/suradet-ps/rxdevman/commit/e83d2c9cec3e36f572d7a36bd8cd02282d6eae8c))
+* simplify INVS resources page layout and content ([3795ccd](https://github.com/suradet-ps/rxdevman/commit/3795ccd7b3d5fa17769a0a9a3f587271ff59c3fd))
+
 ## [1.16.5](https://github.com/suradet-ps/rxdevman/compare/v1.16.4...v1.16.5) (2026-05-29)
 
 ### 🐛 Bug Fixes
