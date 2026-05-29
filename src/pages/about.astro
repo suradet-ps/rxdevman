@@ -86,7 +86,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 
 <style>
   .page-about {
-    padding: 0.5rem 0 6rem;
+    padding: var(--space-2) 0 var(--space-16);
   }
 
   .bento-grid {
@@ -136,7 +136,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   }
 
   .bento-photo-name {
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
     font-weight: 700;
     color: var(--text-heading);
     margin: 0;
@@ -189,7 +189,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   }
 
   .bento-hero-desc {
-    font-size: 0.9375rem;
+    font-size: var(--text-sm);
     color: var(--text-secondary);
     line-height: 1.7;
     margin: 0;
@@ -205,7 +205,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 
   .bento-story p {
     color: var(--text-secondary);
-    font-size: 1rem;
+    font-size: var(--text-base);
     line-height: 1.8;
     margin: 0;
   }
@@ -232,7 +232,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   }
 
   .contact-heading {
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
     font-weight: 700;
     color: var(--text-heading);
     margin: 0 0 var(--space-4);
@@ -240,7 +240,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 
   .bento-contact > p {
     color: var(--text-secondary);
-    font-size: 0.9375rem;
+    font-size: var(--text-sm);
     line-height: 1.7;
     margin-bottom: var(--space-6);
   }
@@ -253,7 +253,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 
   @media (max-width: 768px) {
     .page-about {
-      padding: 0.5rem 0 4rem;
+      padding: var(--space-2) 0 var(--space-16);
     }
 
     .bento-grid {
@@ -284,7 +284,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     }
 
     .bento-photo-name {
-      font-size: 1rem;
+      font-size: var(--text-base);
     }
 
     .bento-hero::before {

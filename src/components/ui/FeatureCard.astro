@@ -26,7 +26,7 @@ const { title, icon } = Astro.props;
     border: 1px solid var(--border-default);
     border-bottom: var(--depth-border) solid var(--border-default);
     border-radius: var(--radius-sm);
-    padding: 1.5rem;
+    padding: var(--space-6);
     color: var(--text-primary);
     transition:
       transform var(--duration-150) var(--ease),
@@ -43,8 +43,8 @@ const { title, icon } = Astro.props;
   .card-header {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
   }
 
   .icon-wrapper {
@@ -66,7 +66,7 @@ const { title, icon } = Astro.props;
 
   h3 {
     margin: 0;
-    font-size: 1.0625rem;
+    font-size: var(--text-base);
     font-weight: 600;
     font-family: var(--font-sans);
     color: var(--text-heading);

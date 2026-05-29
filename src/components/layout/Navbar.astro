@@ -232,27 +232,27 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
   .navbar-inner {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 var(--space-6);
     height: var(--nav-height);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--space-4);
   }
   @media (max-width: 768px) {
-    .navbar-inner { padding: 0 1rem; }
+    .navbar-inner { padding: 0 var(--space-4); }
   }
 
   .logo {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-2);
     text-decoration: none;
     flex-shrink: 0;
     color: var(--brand-red);
   }
   @media (min-width: 769px) {
-    .logo { padding-left: 1.5rem; }
+    .logo { padding-left: var(--space-6); }
   }
 
   .logo-svg {
@@ -265,7 +265,7 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
 
   .logo-text {
     font-family: var(--font-sans);
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1;
@@ -277,7 +277,7 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
   .nav-links {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--space-3);
     flex: 1;
     justify-content: flex-end;
   }
@@ -285,11 +285,11 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
   .nav-link {
     position: relative;
     font-family: var(--font-sans);
-    font-size: 0.95rem;
+    font-size: var(--text-sm);
     font-weight: 600;
     color: var(--text-primary);
     text-decoration: none;
-    padding: 0.45rem 1.1rem;
+    padding: var(--space-2) var(--space-4);
     border-radius: var(--radius-sm);
     white-space: nowrap;
     border: 1.5px solid transparent;
@@ -316,7 +316,7 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
   .navbar-right {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-2);
     flex-shrink: 0;
   }
 
@@ -347,7 +347,7 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     width: 16px;
     height: 2px;
     background: var(--text-primary);
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     transform-origin: center;
     transition: transform var(--duration-300) var(--ease-spring),
       opacity var(--duration-200) var(--ease);
@@ -397,9 +397,9 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--space-4);
     min-height: calc(var(--nav-height) + env(safe-area-inset-top));
-    padding: env(safe-area-inset-top) 1.5rem 0;
+    padding: env(safe-area-inset-top) var(--space-6) 0;
     background: var(--surface-page);
     border-bottom: 1px solid var(--border-accent);
   }
@@ -445,8 +445,8 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     display: flex;
     flex-direction: column;
     min-height: calc(100dvh - var(--nav-height) - env(safe-area-inset-top));
-    padding: 1rem 1.5rem max(2rem, env(safe-area-inset-bottom));
-    gap: 0.25rem;
+    padding: var(--space-4) var(--space-6) max(var(--space-8), env(safe-area-inset-bottom));
+    gap: var(--space-1);
   }
 
   .mobile-link {
@@ -454,11 +454,11 @@ if (navbar instanceof HTMLElement && hamburger instanceof HTMLButtonElement && o
     align-items: center;
     gap: 0.875rem;
     font-family: var(--font-sans);
-    font-size: 1.05rem;
+    font-size: var(--text-base);
     font-weight: 500;
     color: var(--text-primary);
     text-decoration: none;
-    padding: 0.85rem 1rem;
+    padding: var(--space-3) var(--space-4);
     border-radius: var(--radius-lg);
     border: 1.5px solid transparent;
     border-bottom-width: 3px;

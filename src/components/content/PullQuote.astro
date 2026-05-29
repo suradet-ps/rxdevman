@@ -12,8 +12,8 @@
 <style>
   .pull-quote {
     /* Layout */
-    margin: 3rem auto;
-    padding: 2rem 2.5rem;
+    margin: var(--space-12) auto;
+    padding: var(--space-8) var(--space-10);
     max-width: 600px;
     text-align: center;
 
@@ -74,15 +74,15 @@
     font-size: 0.9em;
     background-color: var(--card-border-color);
     padding: 0.15em 0.4em;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
   }
 
   /* Responsive */
   @media (max-width: 768px) {
     .pull-quote {
       font-size: 1.15rem;
-      padding: 1.5rem 1.5rem 1.5rem 2rem;
-      margin: 2rem 0;
+      padding: var(--space-6) var(--space-6) var(--space-6) var(--space-8);
+      margin: var(--space-8) 0;
       border-left: 4px solid var(--brand-color);
       text-align: left;
       font-style: italic;

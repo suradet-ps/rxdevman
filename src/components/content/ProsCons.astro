@@ -26,8 +26,8 @@ import { Icon } from 'astro-icon/components';
   .pros-cons-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin: 2.5rem 0;
+    gap: var(--space-6);
+    margin: var(--space-10) 0;
   }
   .card {
     padding: 0;
@@ -36,8 +36,8 @@ import { Icon } from 'astro-icon/components';
   .header {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 1rem 1.25rem;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
     border-bottom: 1px solid var(--card-border-color);
   }
   .header h4 {
@@ -55,10 +55,10 @@ import { Icon } from 'astro-icon/components';
   .cons-icon { color: var(--danger-color); }
 
   .content {
-    padding: 1.25rem;
+    padding: var(--space-5);
   }
   .content :global(ul) {
-    padding-left: 1.25rem;
+    padding-left: var(--space-5);
     margin: 0;
     line-height: 1.7;
     color: var(--font-color-light);

@@ -23,15 +23,15 @@ const { command, icon } = Astro.props;
         background-color: var(--card-bg-color);
         border: 1px solid var(--card-border-color);
         border-radius: var(--radius-lg);
-        margin: 3rem 0;
+        margin: var(--space-12) 0;
         box-shadow: 0 4px 12px var(--shadow-color);
         overflow: hidden;
     }
     .command-header {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        padding: 1rem 1.5rem;
+        gap: var(--space-4);
+        padding: var(--space-4) var(--space-6);
         background-color: color-mix(
             in srgb,
             var(--card-bg-color) 80%,
@@ -40,7 +40,7 @@ const { command, icon } = Astro.props;
         border-bottom: 1px solid var(--card-border-color);
     }
     .command-icon {
-        font-size: 1.5rem;
+        font-size: var(--text-2xl);
         color: var(--brand-color);
         flex-shrink: 0;
     }
@@ -52,7 +52,7 @@ const { command, icon } = Astro.props;
         scroll-margin-top: 100px;
     }
     .command-content {
-        padding: 1.5rem;
+        padding: var(--space-6);
     }
     .command-content :global(p:first-child) {
         margin-top: 0;

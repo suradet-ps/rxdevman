@@ -21,12 +21,12 @@
     margin: 0 auto;
 
     /* Spacing between sections */
-    padding: 1.5rem 0;
+    padding: var(--space-6) 0;
   }
 
   /* Paragraph styling */
   .narrative-section :global(p) {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-6);
     text-align: left; /* Thai text doesn't justify well without specific tools */
     line-height: 1.8; /* Adjusted for better readability */
   }
@@ -53,7 +53,7 @@
     background-color: var(--card-border-color);
     color: var(--brand-color);
     padding: 0.2em 0.4em;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     font-size: 0.85em;
   }
 
@@ -63,7 +63,7 @@
     text-decoration: underline;
     text-decoration-thickness: 2px;
     text-underline-offset: 2px;
-    transition: all 0.2s ease;
+    transition: all var(--duration-200) var(--ease);
   }
 
   .narrative-section :global(a:hover) {

@@ -129,7 +129,7 @@ const excerpt = description || bodyExcerpt;
     height: 100%;
     object-fit: cover;
     object-position: center;
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform var(--duration-300) var(--ease);
     border-radius: 0;
     border: none;
     box-shadow: none;
@@ -164,8 +164,8 @@ const excerpt = description || bodyExcerpt;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.75rem;
+    gap: var(--space-4);
+    margin-bottom: var(--space-3);
     flex-wrap: wrap;
   }
 
@@ -189,9 +189,9 @@ const excerpt = description || bodyExcerpt;
     font-family: var(--font-sans);
     font-size: var(--text-base);
     line-height: 1.4;
-    margin: 0 0 0.75rem;
+    margin: 0 0 var(--space-3);
     color: var(--font-color);
-    transition: color 0.2s ease;
+    transition: color var(--duration-200) var(--ease);
   }
 
   .card-link:hover .title {
@@ -229,7 +229,7 @@ const excerpt = description || bodyExcerpt;
     color: var(--brand-color);
     font-weight: 600;
     font-size: var(--text-sm);
-    transition: transform 0.2s ease;
+    transition: transform var(--duration-200) var(--ease);
     display: inline-block;
     will-change: transform;
   }
@@ -284,7 +284,7 @@ const excerpt = description || bodyExcerpt;
     .card-meta {
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.5rem;
+      gap: var(--space-2);
     }
   }
 </style>

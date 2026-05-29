@@ -35,7 +35,7 @@
   }
 
   :global(th) {
-    padding: 1rem 1.25rem;
+    padding: var(--space-4) var(--space-5);
     text-align: left;
     font-weight: 600;
     font-family: var(--font-sans);
@@ -47,7 +47,7 @@
 
   :global(tbody tr) {
     border-bottom: 1px solid var(--card-border-color);
-    transition: background-color 0.2s ease;
+    transition: background-color var(--duration-200) var(--ease);
   }
 
   :global(tbody tr:last-child) {
@@ -59,7 +59,7 @@
   }
 
   :global(td) {
-    padding: 1rem 1.25rem;
+    padding: var(--space-4) var(--space-5);
     color: var(--font-color-light);
     vertical-align: top;
     overflow-wrap: break-word;

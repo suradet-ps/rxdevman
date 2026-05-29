@@ -23,7 +23,7 @@ const { title, description, href, icon } = Astro.props;
   .tool-card {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: var(--space-6);
     text-decoration: none;
     color: var(--font-color);
   }
@@ -46,7 +46,7 @@ const { title, description, href, icon } = Astro.props;
     height: 100%;
   }
   h2 {
-    margin: 0 0 0.25rem;
+    margin: 0 0 var(--space-1);
   }
   p {
     margin: 0;
@@ -54,9 +54,9 @@ const { title, description, href, icon } = Astro.props;
   }
   .cta-arrow {
     margin-left: auto;
-    font-size: 1.5rem;
+    font-size: var(--text-2xl);
     color: var(--font-color-light);
-    transition: transform 0.2s ease, color 0.2s ease;
+    transition: transform var(--duration-200) var(--ease), color var(--duration-200) var(--ease);
   }
   .tool-card:hover .cta-arrow {
     color: var(--brand-color);
