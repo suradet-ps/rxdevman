@@ -1,3 +1,9 @@
+## [1.16.7](https://github.com/suradet-ps/rxdevman/compare/v1.16.6...v1.16.7) (2026-06-05)
+
+### 📦 Dependency Updates
+
+* **deps:** update actions/checkout action to v6.0.3 ([#38](https://github.com/suradet-ps/rxdevman/issues/38)) ([40f773a](https://github.com/suradet-ps/rxdevman/commit/40f773a923629e7035bdca6c0cfc4c6d0d4b5628))
+
 ## [1.16.6](https://github.com/suradet-ps/rxdevman/compare/v1.16.5...v1.16.6) (2026-05-29)
 
 ### 📦 Dependency Updates
