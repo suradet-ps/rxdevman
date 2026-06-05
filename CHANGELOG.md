@@ -1,3 +1,9 @@
+## [1.17.0](https://github.com/suradet-ps/rxdevman/compare/v1.16.7...v1.17.0) (2026-06-05)
+
+### 🚀 New Features
+
+* add new blog post about Tome reading tracker side project ([864431e](https://github.com/suradet-ps/rxdevman/commit/864431e8849a5a9db3590ef1e85228d42e0a501a))
+
 ## [1.16.7](https://github.com/suradet-ps/rxdevman/compare/v1.16.6...v1.16.7) (2026-06-05)
 
 ### 📦 Dependency Updates
