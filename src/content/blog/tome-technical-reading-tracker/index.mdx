@@ -1,0 +1,145 @@
+---
+title: 'Tome: เครื่องมืออ่านหนังสือ Tech ที่ผมสร้างขึ้นเพื่อหยุดการอ่านแบบลืมๆ'
+description: 'เล่าเรื่องการสร้าง Tome - โปรเจกต์ส่วนตัวที่รวม Progress Tracking, Markdown Notes, Flashcards และ Pomodoro ไว้ในที่เดียว เพื่อให้การอ่านหนังสือ Technical กลายเป็นการเรียนรู้ที่อยู่กับเราจริงๆ'
+pubDate: '2026-06-05'
+heroImage: './tome-hero.png'
+category: 'Side Project'
+tags: ['Vue 3', 'Supabase', 'Side Project', 'Learning', 'Productivity']
+featured: true
+---
+
+<NarrativeSection>
+
+ผมเคยอ่านหนังสือ *The Rust Book* จบหนึ่งรอบ แล้วผ่านไปสามเดือน กลับมาเขียนโค้ดจริงทีไรก็ Google คำว่า "rust borrow checker" ใหม่ทุกครั้ง เหมือนไม่เคยอ่านมาก่อนเลย
+
+ปัญหาไม่ใช่ที่หนังสือ - ปัญหาคือ **ผมอ่านโดยไม่มีระบบ** ไม่มีการจดบันทึกที่ค้นกลับได้ ไม่มีการทบทวนแบบจริงจัง และที่สำคัญที่สุดคือไม่รู้ว่าตัวเองอ่านไปถึงไหนแล้ว เพราะกระโดดข้ามไปมาตามอารมณ์
+
+เครื่องมืออ่านหนังสือทั่วไปอย่าง Goodreads ดีสำหรับนิยาย แต่ไม่ได้ออกแบบมาเพื่อหนังสือที่มีโค้ดบล็อกในทุกหน้า มีบทย่อย 1.1, 1.2, 1.3 ซ้อนกันลึก และต้องการการ "ทบทวน" มากกว่าการ "อ่านจบ"
+
+ผมเลยลงมือสร้างเครื่องมือของตัวเองชื่อ **Tome** ขึ้นมา
+
+</NarrativeSection>
+
+> อ่านหนังสือ Technical หนึ่งเล่ม ไม่ได้แปลว่า **เรียนรู้** หนังสือเล่มนั้นแล้ว
+
+## Tome คืออะไร?
+
+Tome เป็น web app สำหรับติดตามการอ่านหนังสือ Technical โดยเฉพาะ มันรวมสี่อย่างที่ผมต้องการเข้าด้วยกัน - ติดตามความคืบหน้าตามบทย่อย, จดโน้ตด้วย Markdown ที่มี Syntax Highlight, ทบทวนด้วย Flashcards แบบ Spaced Repetition และจับเวลาด้วย Pomodoro - ทั้งหมดอยู่ในหน้าจอเดียวที่เป็น **dark theme**
+
+ชื่อ Tome มาจากคำว่า "tome" ในภาษาอังกฤษที่หมายถึงหนังสือเล่มหนา ๆ ที่ดูจริงจัง - เพราะหนังสือ Technical ทุกเล่มมันก็มักจะเป็นแบบนั้น
+
+## สี่ฟีเจอร์หลักที่ทำงานร่วมกัน
+
+<FeatureGrid>
+  <FeatureCard title="Hierarchical Progress" icon="list-bullet">
+    ติดตามได้ถึงระดับบทย่อย (1.1, 1.2, 1.3) ด้วย `sequence_number` แบบ decimal ในฐานข้อมูล รองรับการซ้อนบทผ่าน `parent_id` แต่ละบทมี 4 สถานะคือ not started, in progress, completed, review needed
+  </FeatureCard>
+  <FeatureCard title="Markdown Notes" icon="document-text">
+    เขียนโน้ตเป็น Markdown มีพรีวิวสด ๆ ใช้ `marked` + `highlight.js` สำหรับโค้ดไฮไลต์ และผ่าน `DOMPurify` ทุกครั้งก่อนแสดงผล กันไม่ให้โน้ตของตัวเองกลายเป็นช่อง XSS
+  </FeatureCard>
+  <FeatureCard title="Spaced Repetition" icon="academic-cap">
+    Flashcards ใช้อัลกอริทึมแบบ SM-2 ที่ปรับ ease factor และ interval หลังจากตอบทุกครั้ง การ์ดที่จำได้ดีจะโผล่มาทบทวนห่างขึ้น การ์ดที่ลืมจะกลับมาเร็วขึ้น
+  </FeatureCard>
+  <FeatureCard title="Pomodoro Timer" icon="clock">
+    มีโหมด focus / short break / long break พร้อมระบบ log เวลาที่ใช้กับบทอัตโนมัติเวลาสลับบท - ทำให้เห็นย้อนหลังได้ว่าบทไหนกินเวลามากกว่าที่คิด
+  </FeatureCard>
+</FeatureGrid>
+
+## Stack ที่เลือกใช้และเหตุผล
+
+ฝั่ง frontend ผมเลือก **Vue 3.5** เป็นเฟรมเวิร์กหลัก เพราะ Composition API กับ `<script setup>` ทำให้โค้ดคอมโพเนนต์อ่านง่ายและสะอาดมากเมื่อเทียบกับ Options API แบบเก่า เหมาะกับโปรเจกต์เดี่ยวที่ผมต้องรับผิดชอบทุกบรรทัด build tool เป็น **Vite 8** ที่ HMR เร็วระดับมิลลิวินาที ทำให้ feedback loop ตอนปรับ UI สั้นจนรู้สึกเหมือนเขียนแอปบนกระดาษ ส่วน state management ใช้ **Pinia 3** เพราะเบากว่า Vuex หลายเท่า รองรับ TypeScript เต็มที่ และผมสามารถแยก store ตามตารางในฐานข้อมูลได้ตรง ๆ คือ `auth`, `books`, `progress`, `notes`
+
+ฝั่ง backend ผมตัดสินใจ "ไม่เขียน" backend เอง แต่ใช้ **Supabase** ที่ให้ Postgres, Auth และ Row-Level Security มาในที่เดียว ตัด work ที่น่าเบื่อที่สุดของการสร้าง side project (เซต JWT, hash password, write CRUD endpoint) ออกไปได้หมด แล้วเอาเวลามาโฟกัสที่ feature จริง ๆ
+
+เรื่อง styling ผมเลือก **Pure CSS + Design Tokens** ไม่พึ่ง Tailwind หรือ UI library ทุก ๆ สี ระยะห่าง ฟอนต์ มาจาก CSS variables ใน `:root` ทำให้ปรับธีมทั้งแอปได้จากไฟล์เดียวคือ `variables.css` ส่วน markdown pipeline เป็น **marked → highlight.js → DOMPurify** render เป็น HTML, ไฮไลต์โค้ด, แล้ว sanitize ก่อน inject เข้า DOM ปลอดภัยและเร็วพอสำหรับโน้ตขนาด 200,000 ตัวอักษร
+
+สุดท้ายเรื่อง deploy ใช้ **Vercel** เพราะคอนฟิก SPA fallback และ Security Headers (CSP, X-Frame-Options, Referrer-Policy) ทำได้ในไฟล์เดียวคือ `vercel.json` push เข้า main แล้วขึ้น production ภายในนาทีเดียว
+
+<SideNote type="note">
+  เหตุผลที่ผมเลือกเขียน **Pure CSS** แทนการใช้ Tailwind หรือ UI library คือ Tome เป็นโปรเจกต์ที่ผมอยากให้ design system นั่งอยู่บน CSS variables ล้วน ๆ ปรับธีมทั้งแอปได้จากไฟล์ `variables.css` ไฟล์เดียว และจะไม่มีวันถูก class name ยาว ๆ บังภายในเทมเพลต Vue
+</SideNote>
+
+## ปรัชญาเบื้องหลัง: Dark-First, ไม่ใช่ Dark Mode
+
+หลายแอปออกแบบ light theme เป็นหลัก แล้วค่อยใส่ dark mode ทีหลัง ผลลัพธ์คือ dark mode มักจะรู้สึก "เหมือนเอา light มาทับสีดำ" คอนทราสต์เพี้ยน ปุ่มเรืองเกินไป สีแดง alert บาดตา
+
+Tome ตรงข้าม ผมออกแบบ dark theme ก่อน แล้วทุกสีถูกเลือกให้ทำงานบน canvas เข้ม ๆ ตั้งแต่แรก
+
+<InfoBox title="Design Tokens แบบสรุป">
+  - **Canvas:** `#0b0e11` (เกือบดำ แต่อมเหลืองนิดๆ ไม่ใช้ดำสนิทเพราะแสบตา)
+  - **Surface card:** `#1e2329` (สำหรับการ์ดและ panel)
+  - **Surface elevated:** `#2b3139` (สำหรับ nested card และ hairline border)
+  - **Primary:** เหลือง `#fcd535` สำหรับ CTA, brand mark, progress bar สีเดียวที่ทำหน้าที่ brand voltage
+  - **On primary:** ดำ `#181a20` สำหรับข้อความบนปุ่มเหลือง (combo สัญลักษณ์ของแอป)
+  - **Body text:** `#eaecef` (ไม่ใช่ขาว 100% เพื่อไม่ให้บาดตา)
+  - **Trading semantics:** เขียว `#0ecb81` สำหรับ completed, แดง `#f6465d` สำหรับ review needed
+</InfoBox>
+
+## เรื่องที่ผมคิดผิดในตอนแรก
+
+ตอนเริ่มดีไซน์ฐานข้อมูล ผมตั้งใจให้ `sequence_number` เป็น `integer` เพราะคิดว่าบทมันก็ 1, 2, 3 ไง อะไรจะยากกว่านั้น
+
+พอเริ่มใส่หนังสือจริงเข้าไป ปัญหาก็โผล่ทันที *The Rust Book* มันมีบท 3.1 Variables and Mutability แล้วก็ 3.2 Data Types ซ้อนอยู่ใต้บท 3 Common Programming Concepts
+
+ผมเลยเปลี่ยน `sequence_number` เป็น `decimal` เก็บได้ทั้ง `3`, `3.1`, `3.2`, `3.2.1` และเพิ่ม `parent_id` ที่อ้างถึงตารางตัวเองเพื่อรองรับการซ้อนแบบไม่จำกัดระดับ
+
+```sql
+create table reading_chapters (
+  id uuid default gen_random_uuid() primary key,
+  book_id uuid references reading_books(id) on delete cascade not null,
+  title text not null,
+  sequence_number decimal not null,
+  parent_id uuid references reading_chapters(id) on delete cascade
+);
+```
+
+บทเรียนที่ได้คือ **โครงสร้างข้อมูลควรสะท้อนโลกจริง** ไม่ใช่ "วิธีที่เราอยากให้โลกเป็น"
+
+## ความปลอดภัย: ของส่วนตัวคือของส่วนตัว
+
+โน้ตที่ผมเขียนมันเป็นความคิดส่วนตัวล้วนและ TODO ที่ไม่อยากให้ใครเห็น เรื่อง security เลยเป็นเรื่องที่ผมไม่ยอมประนีประนอม
+
+- **RLS ทุกตาราง:** ทุก query ที่ออกจาก client จะถูก Postgres กรองด้วย policy `auth.uid() = user_id` ไม่มีทางที่ user A จะอ่านโน้ตของ user B ได้แม้แต่ค่าเดียว
+- **CSP header:** กำหนด script-src, style-src, connect-src ใน `vercel.json` ทำให้แม้จะมี XSS หลุดมาได้ บราวเซอร์ก็จะปฏิเสธไม่รัน
+- **DOMPurify ก่อน inject:** Markdown ทุกชิ้นผ่าน sanitizer ก่อนเข้า DOM
+- **Length cap:** จำกัดความยาวโน้ตที่ 200,000 ตัวอักษร กันการยัด payload ใหญ่จนระบบล่ม
+- **ไม่มี `as` cast:** ใช้ `createClient<Database>` ที่ generate type จาก schema จริง คอมไพเลอร์จับ type error แทนเราตั้งแต่เขียน
+
+<InfoBox title="Defense in Depth ไม่ใช่ Paranoia" type="info">
+  การมี security หลายชั้นไม่ใช่เพราะกลัวเกินเหตุ แต่เพราะ "ชั้นเดียวพอ" คือสมมติฐานที่ไม่เคยจริงในซอฟต์แวร์ RLS อาจเขียน policy ผิด, CSP อาจกรองพลาด, sanitizer อาจมี bypass แต่ถ้าทั้งสามอย่างพร้อมกันต้องพลาดในเวลาเดียว โอกาสที่ข้อมูลจะหลุดมันน้อยลงหลายเท่าตัวครับ
+</InfoBox>
+
+## สิ่งที่ Tome ไม่ใช่
+
+ผมตัดสินใจตั้งแต่ต้นว่า Tome จะ **ไม่ใช่** อะไรบ้าง เพราะ scope creep คือศัตรูที่ใหญ่ที่สุดของโปรเจกต์ส่วนตัว
+
+- ไม่ใช่ social network ของคนรักหนังสือ ไม่มี follower, ไม่มี like
+- ไม่ใช่ร้านขายหนังสือ แค่ track หนังสือที่คุณมีแล้ว
+- ไม่ใช่ e-reader เราอ่านหนังสือกระดาษ/PDF ในที่อื่น Tome แค่ track และจดโน้ตรอบ ๆ มัน
+- ไม่ใช่ note-taking app ทั่วไป โน้ตทุกอันต้อง "ผูก" กับบทใดบทหนึ่งเสมอ ไม่มี orphan note
+
+ข้อจำกัดเหล่านี้คือสิ่งที่ทำให้ Tome เป็นเครื่องมือเฉพาะทาง ไม่ใช่อีกหนึ่งแอปที่พยายามทำทุกอย่าง
+
+## บทเรียนสำหรับใครที่อยากสร้าง side project
+
+<NarrativeSection>
+
+โปรเจกต์นี้สอนผมหลายอย่างแต่สามเรื่องที่อยากแบ่งปันมากที่สุดคือ
+
+หนึ่ง **สร้างของที่ตัวเองอยากใช้จริง ๆ** ผมเปิด Tome ทุกวันเพราะมันแก้ปัญหาที่ผมเจอจริง ไม่ใช่ปัญหาที่ผมเดาว่าคนอื่นน่าจะเจอ การมี user คนแรกที่เป็นตัวเองทำให้ feedback loop เร็วและจริงใจ
+
+สอง **เลือกเทคโนโลยีที่ลด context switching** Vue + Supabase + Vercel ทำให้ผมเขียนทั้ง frontend, backend และ deploy ได้โดยอยู่ในภาษาเดียวกันคือ TypeScript ตลอดทาง
+
+สาม **จัดให้ความปลอดภัยเป็นเรื่องของ schema** RLS ทำให้แม้ผมจะลืมเช็คสิทธิ์ใน client code, Postgres ก็จะกันให้อยู่ดี การเอา security ไปฝังในชั้นที่ลึกที่สุดของระบบช่วยลด attack surface มากกว่าการพยายามเช็คทุกที่ใน application layer
+
+</NarrativeSection>
+
+## ลองใช้ดู
+
+Tome ตอนนี้อยู่ที่ version 0.1.0 ยังเป็น private project แต่โค้ดทั้งหมดเปิดให้อ่านได้ ผมเขียนไว้ละเอียดทั้ง [README](https://github.com/suradet-ps/tome/blob/main/README.md), [AGENTS.md](https://github.com/suradet-ps/tome/blob/main/AGENTS.md) ที่อธิบาย architecture และ [DESIGN.md](https://github.com/suradet-ps/tome/blob/main/DESIGN.md) ที่เป็น design spec แบบเต็ม
+
+ถ้าคุณกำลังจะสร้าง side project ของตัวเอง ผมอยากแนะนำให้เริ่มจากคำถามนี้
+
+> *"มีปัญหาอะไรที่คุณเจอทุกวัน แล้วยังไม่มีเครื่องมือที่ทำให้คุณรักได้"*
+
+คำตอบของผมคือ Tome แล้วของคุณล่ะครับ?
