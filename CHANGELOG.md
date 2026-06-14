@@ -1,3 +1,9 @@
+## [1.17.3](https://github.com/suradet-ps/rxdevman/compare/v1.17.2...v1.17.3) (2026-06-14)
+
+### 🐛 Bug Fixes
+
+* improve color contrast ratios to meet WCAG AA ([6bb8611](https://github.com/suradet-ps/rxdevman/commit/6bb86110c5e573ecb789f9f333008fef384e102e))
+
 ## [1.17.2](https://github.com/suradet-ps/rxdevman/compare/v1.17.1...v1.17.2) (2026-06-14)
 
 ### 📦 Dependency Updates
