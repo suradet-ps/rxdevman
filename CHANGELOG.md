@@ -1,3 +1,9 @@
+## [1.17.2](https://github.com/suradet-ps/rxdevman/compare/v1.17.1...v1.17.2) (2026-06-14)
+
+### 📦 Dependency Updates
+
+* **deps:** update github/codeql-action digest to 8aad20d ([#40](https://github.com/suradet-ps/rxdevman/issues/40)) ([bcd2799](https://github.com/suradet-ps/rxdevman/commit/bcd2799add62d6a7cd1aaad9f9fefb4363f6e384))
+
 ## [1.17.1](https://github.com/suradet-ps/rxdevman/compare/v1.17.0...v1.17.1) (2026-06-14)
 
 ### 📦 Dependency Updates
