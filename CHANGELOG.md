@@ -1,3 +1,10 @@
+## [1.17.1](https://github.com/suradet-ps/rxdevman/compare/v1.17.0...v1.17.1) (2026-06-14)
+
+### 📦 Dependency Updates
+
+* **deps:** update actions/checkout digest to df4cb1c ([#39](https://github.com/suradet-ps/rxdevman/issues/39)) ([610d399](https://github.com/suradet-ps/rxdevman/commit/610d399968ae12e1be147da8e7b1fcf3f99d246a))
+* pin GitHub Actions to commit hashes for supply-chain security ([6a31f75](https://github.com/suradet-ps/rxdevman/commit/6a31f750307101adcd308dcf53e7b5175340c64d))
+
 ## [1.17.0](https://github.com/suradet-ps/rxdevman/compare/v1.16.7...v1.17.0) (2026-06-05)
 
 ### 🚀 New Features
