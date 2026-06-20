@@ -1,3 +1,9 @@
+## [1.17.4](https://github.com/suradet-ps/rxdevman/compare/v1.17.3...v1.17.4) (2026-06-20)
+
+### 📦 Dependency Updates
+
+* **deps:** update actions/checkout action to v7 ([77a060c](https://github.com/suradet-ps/rxdevman/commit/77a060c07df4db60f95140f34c0f5216a1867024))
+
 ## [1.17.3](https://github.com/suradet-ps/rxdevman/compare/v1.17.2...v1.17.3) (2026-06-14)
 
 ### 🐛 Bug Fixes
