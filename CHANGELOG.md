@@ -1,3 +1,9 @@
+## [1.17.5](https://github.com/suradet-ps/rxdevman/compare/v1.17.4...v1.17.5) (2026-06-22)
+
+### 📦 Dependency Updates
+
+* **deps:** update dependency eslint-plugin-astro to v2 ([a28d5d3](https://github.com/suradet-ps/rxdevman/commit/a28d5d3f525ee251eb610e49c52809ec94ea8024))
+
 ## [1.17.4](https://github.com/suradet-ps/rxdevman/compare/v1.17.3...v1.17.4) (2026-06-20)
 
 ### 📦 Dependency Updates
