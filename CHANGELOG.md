@@ -1,3 +1,9 @@
+## [1.18.1](https://github.com/suradet-ps/rxdevman/compare/v1.18.0...v1.18.1) (2026-06-24)
+
+### 🐛 Bug Fixes
+
+* **deps:** update astro monorepo ([75d4afb](https://github.com/suradet-ps/rxdevman/commit/75d4afb9f736f99a3bac69f4697cf79e5bfadd0d))
+
 ## [1.18.0](https://github.com/suradet-ps/rxdevman/compare/v1.17.5...v1.18.0) (2026-06-24)
 
 ### 🚀 New Features
