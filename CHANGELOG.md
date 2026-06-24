@@ -1,3 +1,9 @@
+## [1.18.0](https://github.com/suradet-ps/rxdevman/compare/v1.17.5...v1.18.0) (2026-06-24)
+
+### 🚀 New Features
+
+* **herbready:** replace Coming Soon with visit website button ([c9d4a3d](https://github.com/suradet-ps/rxdevman/commit/c9d4a3d083989bd9bf9e9611c909b21c53087c1d))
+
 ## [1.17.5](https://github.com/suradet-ps/rxdevman/compare/v1.17.4...v1.17.5) (2026-06-22)
 
 ### 📦 Dependency Updates
