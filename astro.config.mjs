@@ -1,3 +1,4 @@
+import { unified } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
@@ -13,6 +14,7 @@ export default defineConfig({
     checkOrigin: false,
   },
   markdown: {
+    processor: unified(),
     shikiConfig: {
       theme: 'github-dark',
       wrap: true,
