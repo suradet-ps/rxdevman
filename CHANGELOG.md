@@ -1,3 +1,9 @@
+## [1.18.2](https://github.com/suradet-ps/rxdevman/compare/v1.18.1...v1.18.2) (2026-06-26)
+
+### 🐛 Bug Fixes
+
+* switch to unified() processor to fix MDX auto-import in Astro 7 ([48fee42](https://github.com/suradet-ps/rxdevman/commit/48fee42ddb8177554a982b55b6865d2da170152c))
+
 ## [1.18.1](https://github.com/suradet-ps/rxdevman/compare/v1.18.0...v1.18.1) (2026-06-24)
 
 ### 🐛 Bug Fixes
