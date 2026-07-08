@@ -23,7 +23,7 @@
     "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/ri": "^1.2.10",
     "@supabase/supabase-js": "^2.105.4",
-    "astro": "^7.0.0",
+    "astro": "^7.0.6",
     "astro-auto-import": "^0.5.1",
     "astro-icon": "^1.1.5",
     "astro-pagefind": "^2.0.0",
