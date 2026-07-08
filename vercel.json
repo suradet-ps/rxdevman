@@ -1,6 +1,6 @@
 {
-  "buildCommand": "bun run build",
-  "installCommand": "bun install",
+  "buildCommand": "npx astro build && npx pagefind --site dist",
+  "installCommand": "npm install",
   "headers": [
     {
       "source": "/(.*)",
