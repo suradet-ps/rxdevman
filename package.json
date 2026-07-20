@@ -27,7 +27,7 @@
     "astro-auto-import": "^0.5.1",
     "astro-icon": "^1.1.5",
     "astro-pagefind": "^2.0.0",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
