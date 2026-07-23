@@ -40,7 +40,7 @@
     "@semantic-release/npm": "^13.1.5",
     "conventional-changelog-conventionalcommits": "^10.0.0",
     "eslint": "^10.3.0",
-    "eslint-plugin-astro": "^2.0.0",
+    "eslint-plugin-astro": "^3.0.0",
     "eslint-plugin-format": "^2.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.4",
