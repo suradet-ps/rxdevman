@@ -1,3 +1,5 @@
+## [1.20.4](https://github.com/suradet-ps/rxdevman/compare/v1.20.3...v1.20.4) (2026-07-23)
+
 ## [1.20.3](https://github.com/suradet-ps/rxdevman/compare/v1.20.2...v1.20.3) (2026-07-09)
 
 ## [1.20.2](https://github.com/suradet-ps/rxdevman/compare/v1.20.1...v1.20.2) (2026-07-08)
