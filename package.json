@@ -40,14 +40,14 @@
     "@antfu/eslint-config": "^9.2.0",
     "@commitlint/cli": "^21.2.1",
     "@commitlint/config-conventional": "^21.2.0",
-    "@size-limit/file": "^13.0.3",
+    "@size-limit/file": "^14.0.0",
     "@typescript/native": "npm:typescript@^7.0.2",
     "eslint": "^10.8.0",
     "eslint-plugin-astro": "^3.1.0",
     "eslint-plugin-format": "^2.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^17.3.0",
-    "size-limit": "^13.0.3",
+    "size-limit": "^14.0.0",
     "vitest": "^5.0.0"
   },
   "overrides": {
