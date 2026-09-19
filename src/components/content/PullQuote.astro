@@ -1,7 +1,8 @@
 ---
 /**
  * PullQuote - Highlights key statements or memorable quotes
- * Centered, prominent typography for emphasis
+ * Editorial rules: gradient rule above, neutral rule below, centered text.
+ * Deliberately not italic: Thai text reads better upright.
  */
 ---
 
@@ -12,55 +13,58 @@
 <style>
   .pull-quote {
     /* Layout */
+    position: relative;
+    max-width: 640px;
     margin: var(--space-12) auto;
-    padding: var(--space-8) var(--space-10);
-    max-width: 600px;
+    padding: var(--space-8) 0;
     text-align: center;
 
     /* Typography */
-    font-size: 1.35rem;
+    font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem);
     font-weight: 500;
-    line-height: 1.7;
-    font-style: italic;
+    line-height: 1.8;
     color: var(--text-heading);
 
-    /* Visual accent */
-    position: relative;
+    /* Reset prose blockquote defaults */
+    background: transparent;
     border: none;
+    border-radius: 0;
+    font-style: normal;
   }
 
-  /* Quote marks - opening */
+  /* Rule above - brand gradient */
   .pull-quote::before {
-    content: "“";
+    content: "";
     position: absolute;
-    top: 1rem;
-    left: 1rem;
-    font-size: 3rem;
-    font-family: var(--font-sans);
-    font-style: normal;
-    color: var(--brand-red);
-    opacity: 0.25;
-    line-height: 1;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 72px;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--brand-red), var(--brand-orange));
   }
 
-  /* Quote marks - closing */
+  /* Rule below - neutral */
   .pull-quote::after {
-    content: "”";
+    content: "";
     position: absolute;
-    bottom: -1rem;
-    right: 1.5rem;
-    font-size: 3rem;
-    font-family: var(--font-sans);
-    font-style: normal;
-    color: var(--brand-red);
-    opacity: 0.25;
-    line-height: 1;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 72px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--border-default);
   }
 
-  /* Clean up nested elements */
+  /* Content cleanup */
   .pull-quote :global(p) {
     margin: 0;
-    display: inline;
+  }
+
+  .pull-quote :global(p + p) {
+    margin-top: var(--space-4);
   }
 
   .pull-quote :global(strong) {
@@ -68,28 +72,27 @@
     font-weight: 600;
   }
 
+  .pull-quote :global(em) {
+    font-style: normal;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--brand-red) 45%, transparent);
+    text-underline-offset: 4px;
+  }
+
   .pull-quote :global(code) {
     font-family: var(--font-mono);
-    font-style: normal;
     font-size: 0.9em;
     padding: 0.15em 0.4em;
     border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--brand-red) 8%, transparent);
   }
 
   /* Responsive */
   @media (max-width: 768px) {
     .pull-quote {
-      font-size: 1.15rem;
-      padding: var(--space-6) var(--space-6) var(--space-6) var(--space-8);
+      padding: var(--space-6) 0;
       margin: var(--space-8) 0;
-      border-left: 4px solid var(--brand-red);
-      text-align: left;
-      font-style: italic;
-    }
-
-    .pull-quote::before,
-    .pull-quote::after {
-      display: none;
+      font-size: 1.1rem;
     }
   }
 </style>
