@@ -1,0 +1,389 @@
+---
+title: 'วงจรชีวิตของ HTTP Request: ตั้งแต่ Client ถึง Handler'
+description: 'ไล่ทีละชั้นว่า request หนึ่งครั้งวิ่งผ่าน Middleware → Router → Handler แล้วกลายเป็น Response ได้อย่างไร พร้อมเทียบการทำงานจริงใน Express, Go, Axum, Django และ Rails'
+pubDate: '2026-09-19'
+heroImage: './http-request-lifecycle.png'
+category: 'Web Development'
+tags: ['HTTP', 'Web Development', 'Middleware', 'Backend', 'Rust', 'Express', 'Django']
+featured: false
+---
+
+ทุกครั้งที่เรากด Enter ในช่อง address bar หรือกดปุ่ม Login มีอะไรบางอย่างเกิดขึ้นที่ฝั่ง Server ที่เราไม่เคยเห็น นั่นคือการเดินทางของ **HTTP Request** หนึ่งครั้ง ที่วิ่งผ่านชั้นต่าง ๆ ตั้งแต่ Middleware, Router, Handler ไปจนถึงฐานข้อมูล แล้วค่อย ๆ ไหลย้อนกลับออกมาเป็น Response
+
+โครงสร้างนี้ไม่ได้เป็นของ framework ใด framework หนึ่งโดยเฉพาะ มันคือ pattern กลางที่ทุกเฟรมเวิร์กเว็บใช้เหมือนกันหมด ต่างกันแค่ชื่อและ syntax บทความนี้จะไล่จากบนลงล่างทีละชั้น ว่าแต่ละชั้นมีหน้าที่อะไร ทำไมต้องแยกชั้น และตรงไหนที่มือใหม่พลาดบ่อยที่สุด โดยอ้างอิงจากเอกสารทางการของแต่ละเครื่องมือ (ลิงก์อยู่ท้ายบทความ)
+
+ภาพรวมที่เราจะเดินไปด้วยกัน
+
+```text
+Client
+  │  (1) TCP/TLS + HTTP request message
+  ▼
+Middleware  ──  auth, logging, CORS, rate limit
+  │
+  ▼
+Router      ──  จับคู่ method + path
+  │
+  ▼
+Handler     ──  แปลง request เป็นคำสั่งของโดเมน
+  │
+  ▼
+Service / Repository  ──  business logic + database
+  │
+  ▼
+Response    ──  ไหลย้อนผ่าน Middleware ทุกชั้นอีกครั้ง
+  │
+  ▼
+Client
+```
+
+## 1. ก่อนถึง Middleware: HTTP คือข้อความ ไม่ใช่ฟังก์ชัน
+
+สิ่งแรกที่ต้องเข้าใจคือ HTTP เป็น **client-server protocol** ที่ฝั่ง client เป็นคนเริ่มบทสนทนาเสมอ และทั้งสองฝ่ายคุยกันด้วย "ข้อความ" สองชนิด คือ request กับ response ตามที่ [MDN อธิบายไว้ใน Overview of HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview)
+
+ลำดับการทำงานระดับเครือข่ายมีเพียง 4 ขั้น
+
+1. เปิดการเชื่อมต่อ TCP (จะห่อด้วย TLS สำหรับ HTTPS)
+2. ส่ง HTTP request message
+3. อ่าน HTTP response message ที่เซิร์ฟเวอร์ตอบกลับมา
+4. ปิดหรือเก็บ connection ไว้ใช้ต่อ
+
+ตัวข้อความในเวอร์ชัน HTTP/1.1 อ่านออกด้วยตามนุษย์ ตัวอย่าง request จริงคือ
+
+```http
+GET /users/42 HTTP/1.1
+Host: api.example.com
+Accept: application/json
+Authorization: Bearer eyJhbGciOi...
+```
+
+ซึ่งจะได้ response กลับมาแบบนี้
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 54
+
+{"id":42,"name":"Suradet","role":"developer"}
+```
+
+สังเกตว่าทั้งสองข้อความมีโครงเดียวกัน คือ บรรทัดเริ่มต้น (method + path + version สำหรับ request, version + status code สำหรับ response) ตามด้วย headers และ body ที่มีหรือไม่มีก็ได้ รายละเอียดโครงสร้างเต็มอยู่ใน [MDN: HTTP messages](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Messages)
+
+<InfoBox title="HTTP เป็น stateless แต่ session ไม่ได้ stateless" type="info">
+HTTP ไม่มีความจำระหว่าง request สองครั้งที่ต่อเนื่องกัน แต่กลไกอย่าง Cookie ช่วยให้เราสร้าง session ที่มี state ได้ นี่คือเหตุผลว่าทำไมเรื่อง session ถึงต้องถูกจัดการในชั้น middleware (เช่น Django `SessionMiddleware`) ไม่ใช่ในระดับโปรโตคอล
+</InfoBox>
+
+จุดสำคัญคือ **โค้ดของเรามองไม่เห็นชั้นนี้** - เบราว์เซอร์ เซิร์ฟเวอร์ HTTP อย่าง hyper หรือ net/http และ TLS จัดการทั้งหมดไว้แล้ว หน้าที่ของ Web Framework เริ่มต้นที่ข้อความ request ที่ถูก parse เสร็จแล้ว
+
+## 2. Middleware: ชั้นที่เห็นทุก request
+
+พอ request ถูก parse เป็น object แล้ว ชั้นแรกที่แตะมันคือ Middleware
+
+นิยามที่กระชับที่สุดมาจาก [คู่มือ Express](https://expressjs.com/en/guide/using-middleware.html) ที่บอกว่า *"แอปพลิเคชัน Express แท้จริงแล้วคือชุดของการเรียกฟังก์ชัน middleware ต่อกันในวงจร request-response"* โดย middleware หนึ่งตัวจะเข้าถึงได้ 3 อย่าง
+
+- request object (`req`)
+- response object (`res`)
+- ฟังก์ชันถัดไปในสาย (`next`)
+
+และทำได้ 4 อย่าง: รันโค้ดอะไรก็ได้, แก้ไข `req`/`res`, จบวงจร request-response หรือส่งต่อให้ตัวถัดไป สิ่งที่ต้องจำให้ขึ้นใจคือ **ถ้า middleware ไม่จบวงจรเอง มันต้องเรียก `next()` เสมอ ไม่งั้น request จะค้างอยู่ตรงนั้น** (Express เขียนเตือนไว้ตรง ๆ แบบนี้ในเอกสาร)
+
+```js
+// Express: middleware ที่รันทุก request
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.originalUrl}`);
+  next(); // ถ้าลืมบรรทัดนี้ request จะค้าง
+});
+
+// error-handling middleware ต้องมี 4 พารามิเตอร์เท่านั้น
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+```
+
+Middleware ไม่ได้มีแค่ฝั่ง JavaScript ฝั่งอื่นก็นิยามคล้ายกัน
+
+Django เรียก middleware ว่า *"framework ของ hooks เข้าไปในกระบวนการ request/response - ระบบ plugin ระดับล่างที่ใช้แก้ไข input หรือ output ของทั้งระบบ"* และเขียนเป็นฟังก์ชันที่ห่อ view ไว้
+
+```python
+# Django: middleware รับ get_response แล้วคืน callable ที่รับ request
+def simple_middleware(get_response):
+    def middleware(request):
+        # ก่อนถึง view
+        response = get_response(request)
+        # หลัง view ทำงานเสร็จ ขากลับ
+        return response
+    return middleware
+```
+
+ส่วน Axum ไม่มีระบบ middleware ของตัวเอง แต่ผสานกับ [tower](https://docs.rs/axum/latest/axum/middleware/index.html) ทำให้ middleware ของ ecosystem อย่าง `TraceLayer`, `CorsLayer`, `CompressionLayer` ใช้ได้ทันที
+
+```rust
+use axum::{middleware::{self, Next}, extract::Request, response::Response};
+
+async fn auth(req: Request, next: Next) -> Result<Response, StatusCode> {
+    if req.headers().get("authorization").is_none() {
+        return Err(StatusCode::UNAUTHORIZED); // short-circuit ได้
+    }
+    Ok(next.run(req).await)
+}
+
+let app = Router::new()
+    .route("/users/{id}", get(get_user))
+    .route_layer(middleware::from_fn(auth));
+```
+
+### โมเดลหัวหอม (Onion Model)
+
+ทั้ง [Django](https://docs.djangoproject.com/en/stable/topics/http/middleware/) และ [Axum](https://docs.rs/axum/latest/axum/middleware/index.html) อธิบาย middleware ด้วยภาพเดียวกัน คือ **หัวหอม** โดย middleware ชั้นนอกสุดเจอ request ก่อน แล้วส่งต่อเข้าไปเรื่อย ๆ จนถึง handler ที่เป็นแกนกลาง จากนั้น response จะไหลย้อนออกมาผ่าน middleware ทุกชั้น **ในลำดับย้อนกลับ**
+
+```text
+        requests
+           |
+           v
++----- layer_three -----+
+| +---- layer_two ----+ |
+| | +-- layer_one --+ | |
+| | |               | | |
+| | |    handler    | | |
+| | |               | | |
+| | +-- layer_one --+ | |
+| +---- layer_two ----+ |
++----- layer_three -----+
+           |
+           v
+        responses
+```
+
+Axum เขียนกำกับไว้ชัดเจนว่า นี่คือ *mental model* ที่มีประโยชน์ แม้ของจริงจะซับซ้อนกว่านี้ก็ตาม เพราะ **middleware มีสิทธิ์ตอบกลับก่อนได้** (เช่น authorization ไม่ผ่านแล้วตอบ 401 ทันที) โดยไม่เรียกชั้นถัดไปเลย
+
+<SideNote type="warning">
+ลำดับของ middleware สำคัญมาก Django ยกตัวอย่างว่า `AuthenticationMiddleware` ที่ผูก user เข้ากับ request ต้องรัน **หลัง** `SessionMiddleware` เพราะต้องอ่าน session ก่อน ถ้าสลับกันจะพังทันที กรณีแบบนี้เกิดบ่อยกับ middleware ที่พึ่งพากันเป็นทอด ๆ
+</SideNote>
+
+## 3. Router: จับคู่ method + path
+
+เมื่อ request ผ่าน middleware มาได้ ชั้นต่อไปคือ Router หรือบางที่เรียกว่า multiplexer มีหน้าที่เดียวคือ **ดูว่า request นี้ควรไปหา handler ตัวไหน** โดยเทียบจาก method และ path
+
+Go เรียกว่า `ServeMux` ซึ่งเป็น multiplexer ที่จับคู่ URL ของแต่ละ request กับ pattern ที่ลงทะเบียนไว้ แล้วเรียก handler ที่ตรงที่สุด ตัวอย่างการใช้งานตรงไปตรงมามาก
+
+```go
+mux := http.NewServeMux()
+
+mux.HandleFunc("GET /users/{id}", func(w http.ResponseWriter, r *http.Request) {
+    id := r.PathValue("id")
+    fmt.Fprintf(w, "user %s", id)
+})
+
+http.ListenAndServe(":8080", mux)
+```
+
+เฟรมเวิร์กอื่นใช้ไอเดียเดียวกันต่างกันแค่หน้าตา
+
+<Table>
+  <thead slot="head">
+    <tr>
+      <th>เฟรมเวิร์ก</th>
+      <th>ประกาศ route</th>
+      <th>สิ่งที่ส่งเข้า handler</th>
+    </tr>
+  </thead>
+  <tbody slot="body">
+    <tr>
+      <td>Express</td>
+      <td><code>app.get('/users/:id', handler)</code></td>
+      <td><code>req.params.id</code></td>
+    </tr>
+    <tr>
+      <td>Go net/http</td>
+      <td><code>mux.HandleFunc("GET /users/&#123;id&#125;", h)</code></td>
+      <td><code>r.PathValue("id")</code></td>
+    </tr>
+    <tr>
+      <td>Axum</td>
+      <td><code>.route("/users/&#123;id&#125;", get(get_user))</code></td>
+      <td>extractor <code>Path(id)</code></td>
+    </tr>
+    <tr>
+      <td>Django</td>
+      <td><code>path("users/&lt;int:id&gt;/", views.user_detail)</code></td>
+      <td>argument <code>id</code> ของ view</td>
+    </tr>
+    <tr>
+      <td>Rails</td>
+      <td><code>get "/users/:id", to: "users#show"</code></td>
+      <td><code>params[:id]</code> + controller action</td>
+    </tr>
+  </tbody>
+</Table>
+
+การออกแบบ routing แต่ละแบบมีรายละเอียดต่างกัน เช่น Axum ใช้ `matchit` จับคู่ path, Go 1.22+ รองรับ method ใน pattern และ Rails ใช้ `resources :users` สร้าง route มาตรฐานทั้งชุด ([Rails Routing](https://guides.rubyonrails.org/routing.html)) แต่หลักคิดเดียวกันหมดคือ **router ตัดสินก่อนว่า handler ตัวไหนจะถูกเรียก และถ้าไม่มีตัวไหนตรงเลย มันจะตอบ 404 (หรือ 405 เมื่อ path ตรงแต่ method ผิด) โดยที่ handler ของเราไม่เคยถูกเรียกด้วยซ้ำ** รายละเอียดฝั่ง Django อยู่ใน [URL dispatcher](https://docs.djangoproject.com/en/stable/topics/http/urls/)
+
+## 4. Handler: ปลายทางของ request
+
+เมื่อถึง handler ก็ถึงจุดที่โค้ดของเราทำงานจริง ๆ นิยามของ handler ขึ้นอยู่กับภาษา แต่ละแบบดังนี้
+
+**Go** ใช้ interface ที่เล็กมาก
+
+```go
+type Handler interface {
+    ServeHTTP(ResponseWriter, *Request)
+}
+```
+
+อะไรก็ตามที่มี method `ServeHTTP` ถือเป็น handler ทันที และมี adapter `http.HandlerFunc` ที่เปลี่ยนฟังก์ชันธรรมดาให้กลายเป็น Handler โดยไม่ต้องประกาศ type เอง ([net/http](https://pkg.go.dev/net/http))
+
+**Axum** ให้ภาพที่ต่างออกไปเล็กน้อย: handler คือ async function ที่ **รับ extractor ตั้งแต่ศูนย์ตัวขึ้นไป** เป็นพารามิเตอร์ และ **คืนค่าอะไรก็ได้ที่ implement `IntoResponse`** เบื้องหลังคือเทรต `Handler` ที่ Axum implement ให้ฟังก์ชัน async ทั่วไปที่มีพารามิเตอร์ไม่เกิน 16 ตัว โดยตัวสุดท้ายต้อง implement `FromRequest` (เช่น body) ส่วนตัวอื่น ๆ implement `FromRequestParts` (เช่น path, header) ([axum::handler](https://docs.rs/axum/latest/axum/handler/index.html))
+
+```rust
+async fn get_user(
+    Path(id): Path<u64>,       // extractor จาก path
+    State(db): State<Db>,      // extractor จาก app state
+) -> Json<User> {              // Json implements IntoResponse
+    Json(db.find_user(id).await)
+}
+```
+
+Extractor ทำงานสองทาง: ขาเข้าคือ "Deserialize ข้อมูลจาก request เข้าเป็นชนิดข้อมูลของ Rust" ขาออกคือ `IntoResponse` แปลงค่าที่คืนกลับเป็น HTTP response - นี่คือ plumbing ที่ Axum รับไปจัดการทั้งหมด
+
+<InfoBox title="เอกสาร Axum พูดว่า logic อยู่ใน handler" type="info">
+หน้า [axum::handler](https://docs.rs/axum/latest/axum/handler/index.html) เขียนไว้ว่า <em>"Handlers are where your application logic lives"</em> ซึ่งจริงในมุมของฝั่ง HTTP แต่ในงานจริงที่มี business logic ซับซ้อน เราจะแยก logic ไปอยู่ชั้น Service เพื่อให้ handler ทำเพียงสามอย่าง: ดึงข้อมูลจาก request → ส่งต่องาน → แปลงผลเป็น response (แนวคิด <strong>thin handler</strong>) ส่วนที่เหลือของบทจะเห็นว่าทำไม
+</InfoBox>
+
+เฟรมเวิร์กอื่นเรียก handler ด้วยชื่อต่างกัน: Express เรียก route handler (หน้าตาเหมือน middleware แต่จบวงจรเองด้วยการส่ง response ไม่เรียก `next`), Django เรียก view, Rails เรียก controller action ทั้งหมดคือ "ฟังก์ชันปลายทางที่ router เลือกมา"
+
+## 5. Service / Repository: บ้านของ business logic
+
+ชั้นนี้ไม่มีชื่อมาตรฐานตายตัว - บางทีเรียก Service, Use Case, Domain หรือ Interactor แต่ไอเดียเดียวกันคือ **เป็นที่อยู่ของ business logic และการเข้าถึงข้อมูล** ที่ไม่ผูกกับ HTTP
+
+เหตุผลที่ต้องแยกออกจาก handler มีสามข้อ
+
+1. **ทดสอบง่าย** - service รับ argument ธรรมดา ไม่ต้องสร้าง HTTP request ปลอมเพื่อทดสอบ business rule
+2. **ใช้ซ้ำได้** - CLI, background job หรือ gRPC endpoint ก็เรียก service ตัวเดียวกันได้
+3. **แก้ไขปลอดภัย** - เปลี่ยน schema ของ API โดยไม่ต้องแตะ business logic และกลับกัน
+
+ลองเทียบ handler สองแบบนี้
+
+```rust
+// แบบที่ควรหลีกเลี่ยง: handler อ้วน ปนทั้ง HTTP, business rule และ SQL
+async fn buy_ok(State(pool): State<PgPool>, Json(req): Json<BuyReq>) -> StatusCode {
+    let stock: i32 = sqlx::query_scalar("SELECT stock FROM products WHERE id = $1")
+        .bind(req.product_id).fetch_one(&pool).await.unwrap();
+    if stock <= 0 { return StatusCode::CONFLICT; }
+    // ... อีก 50 บรรทัดของส่วนลด ภาษี และเงื่อนไข
+    StatusCode::OK
+}
+
+// แบบที่แนะนำ: handler บาง แปลง HTTP ↔ โดเมน แล้วจบ
+async fn buy(State(svc): State<OrderService>, Json(req): Json<BuyReq>) -> Result<Json<Receipt>, AppError> {
+    let receipt = svc.place_order(req.into()).await?; // business logic อยู่ใน service
+    Ok(Json(receipt.into()))
+}
+```
+
+ถ้าเขียนโค้ดแล้วรู้สึกว่า handler เริ่มมี `if` ซ้อนหลายชั้น รัน SQL เอง หรือมีเงื่อนไขทางธุรกิจเต็มไปหมด นั่นคือสัญญาณว่าโค้ดเหล่านั้นกำลังอยู่ผิดที่
+
+<PullQuote>
+Handler ควรรู้เรื่อง HTTP แต่ไม่ควรรู้เรื่องธุรกิจ - ส่วน Service ควรรู้เรื่องธุรกิจ แต่ไม่ต้องรู้ว่ามันถูกเรียกผ่าน HTTP
+</PullQuote>
+
+## 6. Response: ขากลับที่ต้องผ่านทุกชั้นอีกครั้ง
+
+เมื่อ handler คืนค่า ระบบจะแปลงมันเป็น HTTP response ซึ่งมีองค์ประกอบตามที่ MDN ระบุไว้คือ version, status code, status message, headers และ body (มีหรือไม่มีก็ได้)
+
+จุดที่ต่างกันระหว่างภาษา
+
+- **Go** เขียน response ผ่าน `ResponseWriter` โดยตั้ง header ก่อน แล้วเรียก `WriteHeader(code)` จากนั้นค่อย `Write(body)` - ถ้าไม่เรียก `WriteHeader` เลย การ `Write` ครั้งแรกจะถือว่า status เป็น `200 OK` อัตโนมัติ
+- **Axum** handler คืนค่าที่ implement `IntoResponse` แล้ว Axum แปลงเป็น `Response` ให้ รวมถึงเรื่อง status และ `Content-Type` ของ `Json<T>`
+- **Express** ใช้ `res.status(200).json(data)` จบวงจรทันที
+- **Django/Rails** view/action คืน response object ที่ framework นำไป render ต่อ
+
+ส่วนที่หลายคนมองข้ามคือ response **ไหลย้อนผ่าน middleware ทุกชั้นอีกครั้ง** ในลำดับย้อนกลับ ทำให้ middleware เป็นที่เหมาะที่สุดสำหรับงานที่ต้องเห็นทั้งขาเข้าและขาออก เช่น
+
+- **Compression** - บีบอัด body ด้วย gzip ก่อนส่งออก (Axum ใช้ `CompressionLayer`)
+- **CORS** - เติม `Access-Control-Allow-*` แม้ request จะถูกปฏิเสธ
+- **Logging/Tracing** - เริ่มจับเวลาตอนรับ request แล้วบันทึกตอน response ออก (Axum ใช้ `TraceLayer`)
+- **Security headers** - เติม `Strict-Transport-Security`, `X-Content-Type-Options` ให้ทุก response
+
+```rust
+// Axum: middleware เรียงด้วย ServiceBuilder จะทำงานจากบนลงล่าง
+let app = Router::new()
+    .route("/users/{id}", get(get_user))
+    .layer(
+        ServiceBuilder::new()
+            .layer(TraceLayer::new_for_http())   // รับ request ก่อน
+            .layer(CompressionLayer::new())      // แล้วค่อยไปชั้นถัดไป
+    );
+```
+
+<SideNote type="warning">
+ระวังเรื่อง error ระหว่างทาง Django จัดการให้โดยแปลง exception เป็น HTTP response ระหว่างแต่ละชั้น middleware อัตโนมัติ ทำให้ middleware ทุกตัวมั่นใจได้ว่ามันจะได้ response กลับมาเสมอ ส่วน Axum ต่างออกไป - handler ต้องคืน response เสมอ ถ้า middleware มี error type ของตัวเอง ต้องผ่าน <code>HandleErrorLayer</code> เพื่อแปลงเป็น response ให้เรียบร้อย
+</SideNote>
+
+## 7. เดินครบวงจร: GET /users/42
+
+ประกอบทุกชั้นเข้าด้วยกันเป็นลำดับเดียว (ตัวอย่างฝั่ง Axum)
+
+1. **Client** เปิด connection แล้วส่ง `GET /users/42` พร้อม header `Authorization`
+2. **Middleware 1 (Trace)** เริ่มจับเวลาและออก request id ให้ทั้งวงจร
+3. **Middleware 2 (Auth)** ตรวจ token - ผ่าน แล้วส่งต่อด้วย `next.run(req)`
+4. **Router** จับคู่ `GET /users/{id}` เข้ากับ `get_user` แล้วส่ง `id = 42` เข้าไปใน extractor
+5. **Handler** ถูกเรียกด้วย `Path(42)` และ `State(db)` - มันไม่รู้จัก SQL และไม่รู้จัก business rule
+6. **Service/Repository** query ฐานข้อมูล คืนโดเมน object `User`
+7. **Serializer** แปลง `User` เป็น JSON ผ่าน `Json<User>` ที่ implement `IntoResponse` ได้ status `200` และ `Content-Type: application/json`
+8. **Response ไหลย้อน** ผ่าน Auth (ไม่ทำอะไร) แล้วผ่าน Compression (ใส่ gzip) และ Trace (ปิด timer บันทึก log) ก่อนออกถึง client
+
+ถ้าเป็น Express วงจรเดียวกันจะหน้าตาแบบนี้
+
+```js
+app.use(trace);                     // 1
+app.get('/users/:id', auth, async (req, res, next) => {   // 2-4
+  try {
+    const user = await userService.findById(req.params.id); // 5-6
+    res.json(user);                                         // 7
+  } catch (err) {
+    next(err); // ส่งต่อไป error-handling middleware
+  }
+});
+```
+
+จะเห็นว่าไม่ว่าจะภาษาไหน ลำดับชั้นก็เหมือนเดิมเสมอ ต่างกันแค่ไวยากรณ์
+
+## 8. กับดักที่เจอบ่อย
+
+- **ลืม `next()`** - request จะค้างไม่มีการตอบกลับเลย Express เตือนเรื่องนี้ไว้ในเอกสาร middleware โดยตรง
+- **error-handling middleware ผิด signature** - ต้องมี 4 พารามิเตอร์ `(err, req, res, next)` ถ้ามี 3 จะถูกตีความเป็น middleware ปกติและจับ error ไม่ได้
+- **วาง middleware ผิดลำดับ** - auth ก่อน session, CORS หลัง route หรือ compression ก่อน cache ล้วนสร้างบั๊กที่หาสาเหตุยาก จำโมเดลหัวหอมไว้ให้ดีว่า request เข้าจากนอกสุด และ response ออกทางเดิม
+- **เข้าใจผิดว่า handler คือที่แรกที่เห็น request** - จริง ๆ middleware ทำงานก่อนเสมอ ถ้าอยากรู้ว่า request ไปตายที่ไหน ให้เริ่ม debug จาก middleware ชั้นนอกสุดก่อน
+- **ยัด business logic ลง handler** - ทำให้ทดสอบยาก ใช้ซ้ำไม่ได้ และผูก business rule ไว้กับรายละเอียดของ HTTP
+- **คาดหวัง error handling ไม่เหมือนกันทุกเฟรมเวิร์ก** - Django แปลง exception เป็น response ให้อัตโนมัติระหว่างชั้น แต่ Axum/Express ต้องจัดการเองผ่าน `HandleErrorLayer` หรือ `next(err)`
+
+## สรุป
+
+วงจรชีวิตของ HTTP request ในทุกเฟรมเวิร์กมีโครงเดียวกันเสมอ
+
+```text
+Client → Middleware → Router → Handler → Service → Response → Client
+```
+
+จำแค่สามหลักก็พอ
+
+1. **Middleware คือชั้นหัวหอม** - เห็นทุก request, รันจากนอกเข้าใน และ response ไหลย้อนกลับออกมา ลำดับจึงสำคัญเสมอ
+2. **Router ตัดสินว่าใครทำงาน** - ไม่มี handler ตัวไหนถูกเรียก ถ้า method + path ไม่ match (นั่นคือ 404/405 ที่เกิดก่อนถึงโค้ดเรา)
+3. **Handler ควรบาง** - รับข้อมูลจาก request ส่งต่อให้ Service แล้วแปลงผลเป็น response ส่วน business logic ไม่ควรอยู่ตรงนี้
+
+เข้าใจภาพนี้แล้ว การย้ายจาก Express ไป Go, Axum, Django หรือ Rails จะง่ายขึ้นมาก เพราะที่เปลี่ยนคือ syntax แต่สถาปัตยกรรมข้างใต้นั้นเหมือนเดิม
+
+## แหล่งอ้างอิง
+
+1. [MDN - Overview of HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview)
+2. [MDN - HTTP messages](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Messages)
+3. [Express - Using middleware](https://expressjs.com/en/guide/using-middleware.html)
+4. [Express - Routing](https://expressjs.com/en/guide/routing.html)
+5. [Axum - handler module](https://docs.rs/axum/latest/axum/handler/index.html)
+6. [Axum - middleware module](https://docs.rs/axum/latest/axum/middleware/index.html)
+7. [Go - package net/http](https://pkg.go.dev/net/http)
+8. [Django - Middleware](https://docs.djangoproject.com/en/stable/topics/http/middleware/)
+9. [Django - URL dispatcher](https://docs.djangoproject.com/en/stable/topics/http/urls/)
+10. [Rails - Routing from the Outside In](https://guides.rubyonrails.org/routing.html)
+11. [RFC 9110 - HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110.html)
+12. [RFC 9112 - HTTP/1.1](https://www.rfc-editor.org/rfc/rfc9112.html)
