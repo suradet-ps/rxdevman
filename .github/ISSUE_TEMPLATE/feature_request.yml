@@ -23,7 +23,7 @@ body:
       description: Does this fit the project's single-author, content-first shape? See the Out of Scope section in docs/ROADMAP.md.
       options:
         - Yes, it fits the project's shape
-        - Maybe — I'd like a discussion
+        - Maybe - I'd like a discussion
         - I'm not sure
     validations:
       required: true
