@@ -1,13 +1,10 @@
 # RxDev Man
 
-```
-██████╗ ██╗  ██╗██████╗ ███████╗██╗   ██╗███╗   ███╗ █████╗ ███╗   ██╗
-██╔══██╗╚██╗██╔╝██╔══██╗██╔════╝██║   ██║████╗ ████║██╔══██╗████╗  ██║
-██████╔╝ ╚███╔╝ ██║  ██║█████╗  ██║   ██║██╔████╔██║███████║██╔██╗ ██║
-██╔══██╗ ███╔╝  ██║  ██║██╔══╝  ╚██╗ ██╔╝██║╚██╔╝██║██╔══██║██║╚██╗██║
-██║  ██║██╔██╗  ██████╔╝███████╗ ╚████╔╝ ██║ ╚═╝ ██║██║  ██║██║ ╚████║
-╚═╝  ╚═╝╚═╝╚═╝  ╚═════╝ ╚══════╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
-```
+[![CI](https://github.com/suradet-ps/rxdevman/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/suradet-ps/rxdevman/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/suradet-ps/rxdevman/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/suradet-ps/rxdevman/actions/workflows/codeql.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Astro 7](https://img.shields.io/badge/Astro-7-BC52EE?logo=astro&logoColor=white)](https://astro.build/)
+[![TypeScript 6](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
 ---
 
