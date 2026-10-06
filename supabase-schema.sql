@@ -1,6 +1,7 @@
 -- ============================================================
 -- rxdevman - Visitor Tracking Schema
 -- Run this entire script in the Supabase SQL Editor.
+-- This script is idempotent and safe to re-run.
 -- All tables use the `rxdevman_` prefix.
 -- ============================================================
 
@@ -8,7 +9,7 @@
 -- 1. rxdevman_page_views
 -- Stores every individual hit. IP is never stored raw - always hashed.
 -- ─────────────────────────────────────────────
-CREATE TABLE rxdevman_page_views (
+CREATE TABLE IF NOT EXISTS rxdevman_page_views (
   id          BIGSERIAL PRIMARY KEY,
   page_slug   TEXT        NOT NULL,  -- e.g. '/' or '/posts/my-article'
   ip_hash     TEXT        NOT NULL,  -- SHA-256(ip + HASH_SALT)
@@ -17,15 +18,15 @@ CREATE TABLE rxdevman_page_views (
   user_agent  TEXT                   -- optional, raw user-agent string
 );
 
-CREATE INDEX idx_rxdevman_pv_slug ON rxdevman_page_views (page_slug);
-CREATE INDEX idx_rxdevman_pv_hash ON rxdevman_page_views (ip_hash);
-CREATE INDEX idx_rxdevman_pv_date ON rxdevman_page_views (viewed_at);
+CREATE INDEX IF NOT EXISTS idx_rxdevman_pv_slug ON rxdevman_page_views (page_slug);
+CREATE INDEX IF NOT EXISTS idx_rxdevman_pv_hash ON rxdevman_page_views (ip_hash);
+CREATE INDEX IF NOT EXISTS idx_rxdevman_pv_date ON rxdevman_page_views (viewed_at);
 
 -- ─────────────────────────────────────────────
 -- 2. rxdevman_view_counts
 -- Pre-aggregated counts for fast UI reads. Updated atomically via RPC.
 -- ─────────────────────────────────────────────
-CREATE TABLE rxdevman_view_counts (
+CREATE TABLE IF NOT EXISTS rxdevman_view_counts (
   page_slug       TEXT PRIMARY KEY,
   total_views     BIGINT NOT NULL DEFAULT 0,   -- every hit, including repeat IPs
   unique_visitors BIGINT NOT NULL DEFAULT 0,   -- distinct ip_hash count
@@ -78,6 +79,7 @@ ALTER TABLE rxdevman_page_views ENABLE ROW LEVEL SECURITY;
 ALTER TABLE rxdevman_view_counts ENABLE ROW LEVEL SECURITY;
 
 -- Anyone (anon) can read aggregate counts - this powers the public view counter UI
+DROP POLICY IF EXISTS "rxdevman_view_counts: public select" ON rxdevman_view_counts;
 CREATE POLICY "rxdevman_view_counts: public select"
   ON rxdevman_view_counts
   FOR SELECT
@@ -85,6 +87,7 @@ CREATE POLICY "rxdevman_view_counts: public select"
   USING (true);
 
 -- Only the service role can insert new rows (first hit on a new slug)
+DROP POLICY IF EXISTS "rxdevman_view_counts: service role insert" ON rxdevman_view_counts;
 CREATE POLICY "rxdevman_view_counts: service role insert"
   ON rxdevman_view_counts
   FOR INSERT
@@ -92,6 +95,7 @@ CREATE POLICY "rxdevman_view_counts: service role insert"
   WITH CHECK (true);
 
 -- Only the service role can update existing counts
+DROP POLICY IF EXISTS "rxdevman_view_counts: service role update" ON rxdevman_view_counts;
 CREATE POLICY "rxdevman_view_counts: service role update"
   ON rxdevman_view_counts
   FOR UPDATE
