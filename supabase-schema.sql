@@ -1,6 +1,7 @@
 -- ============================================================
 -- rxdevman - Visitor Tracking Schema
 -- Run this entire script in the Supabase SQL Editor.
+-- This script is idempotent and safe to re-run.
 -- All tables use the `rxdevman_` prefix.
 -- ============================================================
 
@@ -8,7 +9,7 @@
 -- 1. rxdevman_page_views
 -- Stores every individual hit. IP is never stored raw - always hashed.
 -- ─────────────────────────────────────────────
-CREATE TABLE rxdevman_page_views (
+CREATE TABLE IF NOT EXISTS rxdevman_page_views (
   id          BIGSERIAL PRIMARY KEY,
   page_slug   TEXT        NOT NULL,  -- e.g. '/' or '/posts/my-article'
   ip_hash     TEXT        NOT NULL,  -- SHA-256(ip + HASH_SALT)
@@ -17,15 +18,15 @@ CREATE TABLE rxdevman_page_views (
   user_agent  TEXT                   -- optional, raw user-agent string
 );
 
-CREATE INDEX idx_rxdevman_pv_slug ON rxdevman_page_views (page_slug);
-CREATE INDEX idx_rxdevman_pv_hash ON rxdevman_page_views (ip_hash);
-CREATE INDEX idx_rxdevman_pv_date ON rxdevman_page_views (viewed_at);
+CREATE INDEX IF NOT EXISTS idx_rxdevman_pv_slug ON rxdevman_page_views (page_slug);
+CREATE INDEX IF NOT EXISTS idx_rxdevman_pv_hash ON rxdevman_page_views (ip_hash);
+CREATE INDEX IF NOT EXISTS idx_rxdevman_pv_date ON rxdevman_page_views (viewed_at);
 
 -- ─────────────────────────────────────────────
 -- 2. rxdevman_view_counts
 -- Pre-aggregated counts for fast UI reads. Updated atomically via RPC.
 -- ─────────────────────────────────────────────
-CREATE TABLE rxdevman_view_counts (
+CREATE TABLE IF NOT EXISTS rxdevman_view_counts (
   page_slug       TEXT PRIMARY KEY,
   total_views     BIGINT NOT NULL DEFAULT 0,   -- every hit, including repeat IPs
   unique_visitors BIGINT NOT NULL DEFAULT 0,   -- distinct ip_hash count
@@ -36,21 +37,31 @@ CREATE TABLE rxdevman_view_counts (
 -- 3. RPC Function - increment_view_count
 -- Called server-side after every INSERT into rxdevman_page_views.
 -- ─────────────────────────────────────────────
-CREATE OR REPLACE FUNCTION increment_view_count(p_slug TEXT)
-RETURNS void AS $$
+CREATE OR REPLACE FUNCTION public.increment_view_count(p_slug TEXT)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
 BEGIN
-  INSERT INTO rxdevman_view_counts (page_slug, total_views, unique_visitors, updated_at)
+  INSERT INTO public.rxdevman_view_counts AS counts (page_slug, total_views, unique_visitors, updated_at)
   VALUES (p_slug, 1, 1, now())
   ON CONFLICT (page_slug) DO UPDATE SET
-    total_views     = rxdevman_view_counts.total_views + 1,
+    total_views     = counts.total_views + 1,
     unique_visitors = (
-      SELECT COUNT(DISTINCT ip_hash)
-      FROM rxdevman_page_views
-      WHERE page_slug = p_slug
+      SELECT COUNT(DISTINCT views.ip_hash)
+      FROM public.rxdevman_page_views AS views
+      WHERE views.page_slug = p_slug
     ),
     updated_at = now();
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$;
+
+-- PostgreSQL grants EXECUTE to PUBLIC by default. Without the REVOKE below,
+-- the public anon key could call this function through PostgREST and inflate
+-- counts without going through the /api/track route.
+REVOKE EXECUTE ON FUNCTION public.increment_view_count(TEXT) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.increment_view_count(TEXT) TO service_role;
 
 -- ─────────────────────────────────────────────
 -- 4. Row Level Security (RLS)
@@ -68,6 +79,7 @@ ALTER TABLE rxdevman_page_views ENABLE ROW LEVEL SECURITY;
 ALTER TABLE rxdevman_view_counts ENABLE ROW LEVEL SECURITY;
 
 -- Anyone (anon) can read aggregate counts - this powers the public view counter UI
+DROP POLICY IF EXISTS "rxdevman_view_counts: public select" ON rxdevman_view_counts;
 CREATE POLICY "rxdevman_view_counts: public select"
   ON rxdevman_view_counts
   FOR SELECT
@@ -75,6 +87,7 @@ CREATE POLICY "rxdevman_view_counts: public select"
   USING (true);
 
 -- Only the service role can insert new rows (first hit on a new slug)
+DROP POLICY IF EXISTS "rxdevman_view_counts: service role insert" ON rxdevman_view_counts;
 CREATE POLICY "rxdevman_view_counts: service role insert"
   ON rxdevman_view_counts
   FOR INSERT
@@ -82,6 +95,7 @@ CREATE POLICY "rxdevman_view_counts: service role insert"
   WITH CHECK (true);
 
 -- Only the service role can update existing counts
+DROP POLICY IF EXISTS "rxdevman_view_counts: service role update" ON rxdevman_view_counts;
 CREATE POLICY "rxdevman_view_counts: service role update"
   ON rxdevman_view_counts
   FOR UPDATE
@@ -104,13 +118,21 @@ CREATE POLICY "rxdevman_view_counts: service role update"
 CREATE EXTENSION IF NOT EXISTS pg_cron;
 
 -- ฟังก์ชันสำหรับลบ record ที่เก่ากว่า 90 วัน
-CREATE OR REPLACE FUNCTION cleanup_old_page_views()
-RETURNS void AS $$
+CREATE OR REPLACE FUNCTION public.cleanup_old_page_views()
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
 BEGIN
-  DELETE FROM rxdevman_page_views
+  DELETE FROM public.rxdevman_page_views
   WHERE viewed_at < now() - INTERVAL '90 days';
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$;
+
+-- Only the owner may execute this function. pg_cron runs the job as its owner,
+-- so the scheduled cleanup keeps working after the REVOKE.
+REVOKE EXECUTE ON FUNCTION public.cleanup_old_page_views() FROM PUBLIC, anon, authenticated;
 
 -- สั่งให้รัน cleanup ทุกวันเวลา 03:00 น.
 SELECT cron.schedule(
