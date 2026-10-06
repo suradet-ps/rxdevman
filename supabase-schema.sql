@@ -36,21 +36,31 @@ CREATE TABLE rxdevman_view_counts (
 -- 3. RPC Function - increment_view_count
 -- Called server-side after every INSERT into rxdevman_page_views.
 -- ─────────────────────────────────────────────
-CREATE OR REPLACE FUNCTION increment_view_count(p_slug TEXT)
-RETURNS void AS $$
+CREATE OR REPLACE FUNCTION public.increment_view_count(p_slug TEXT)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
 BEGIN
-  INSERT INTO rxdevman_view_counts (page_slug, total_views, unique_visitors, updated_at)
+  INSERT INTO public.rxdevman_view_counts AS counts (page_slug, total_views, unique_visitors, updated_at)
   VALUES (p_slug, 1, 1, now())
   ON CONFLICT (page_slug) DO UPDATE SET
-    total_views     = rxdevman_view_counts.total_views + 1,
+    total_views     = counts.total_views + 1,
     unique_visitors = (
-      SELECT COUNT(DISTINCT ip_hash)
-      FROM rxdevman_page_views
-      WHERE page_slug = p_slug
+      SELECT COUNT(DISTINCT views.ip_hash)
+      FROM public.rxdevman_page_views AS views
+      WHERE views.page_slug = p_slug
     ),
     updated_at = now();
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$;
+
+-- PostgreSQL grants EXECUTE to PUBLIC by default. Without the REVOKE below,
+-- the public anon key could call this function through PostgREST and inflate
+-- counts without going through the /api/track route.
+REVOKE EXECUTE ON FUNCTION public.increment_view_count(TEXT) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.increment_view_count(TEXT) TO service_role;
 
 -- ─────────────────────────────────────────────
 -- 4. Row Level Security (RLS)
@@ -104,13 +114,21 @@ CREATE POLICY "rxdevman_view_counts: service role update"
 CREATE EXTENSION IF NOT EXISTS pg_cron;
 
 -- ฟังก์ชันสำหรับลบ record ที่เก่ากว่า 90 วัน
-CREATE OR REPLACE FUNCTION cleanup_old_page_views()
-RETURNS void AS $$
+CREATE OR REPLACE FUNCTION public.cleanup_old_page_views()
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
 BEGIN
-  DELETE FROM rxdevman_page_views
+  DELETE FROM public.rxdevman_page_views
   WHERE viewed_at < now() - INTERVAL '90 days';
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$;
+
+-- Only the owner may execute this function. pg_cron runs the job as its owner,
+-- so the scheduled cleanup keeps working after the REVOKE.
+REVOKE EXECUTE ON FUNCTION public.cleanup_old_page_views() FROM PUBLIC, anon, authenticated;
 
 -- สั่งให้รัน cleanup ทุกวันเวลา 03:00 น.
 SELECT cron.schedule(
