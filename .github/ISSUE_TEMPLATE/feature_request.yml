@@ -1,34 +1,45 @@
 name: Feature request
-description: Suggest an idea for RxDev Man
-labels: [enhancement]
+description: Suggest an idea or improvement for RxDev Man
+title: "[Feature]: "
+labels: ["enhancement"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea. Please describe the problem before the solution.
+
+        RxDev Man is a single-author, content-first knowledge base - features
+        that turn it into a social platform or a tracking machine are out of
+        scope on purpose (see docs/ROADMAP.md).
   - type: textarea
     id: problem
     attributes:
       label: Problem
-      description: What problem does this solve, and for whom?
+      description: What is hard, missing, or slow today?
     validations:
       required: true
   - type: textarea
-    id: solution
+    id: proposal
     attributes:
       label: Proposed solution
-      description: What should be built?
-    validations:
-      required: true
-  - type: dropdown
-    id: scope
-    attributes:
-      label: Scope check
-      description: Does this fit the project's single-author, content-first shape? See the Out of Scope section in docs/ROADMAP.md.
-      options:
-        - Yes, it fits the project's shape
-        - Maybe - I'd like a discussion
-        - I'm not sure
     validations:
       required: true
   - type: textarea
     id: alternatives
     attributes:
       label: Alternatives considered
-      description: What else have you tried or considered?
+    validations:
+      required: false
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Project constraints
+      options:
+        - label: This keeps the site content-first and single-author (no comments, follows, feeds, or multi-author features).
+          required: true
+        - label: This respects the performance budget and zero-JS-by-default rendering.
+          required: true
+        - label: This adds no reader tracking or personal data collection beyond the anonymous view counter.
+          required: true
+        - label: This keeps the design accessible (keyboard navigation, contrast, aria labels) and on the design tokens.
+          required: true

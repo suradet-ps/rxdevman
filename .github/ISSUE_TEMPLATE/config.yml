@@ -3,3 +3,9 @@ contact_links:
   - name: Security vulnerabilities
     url: https://github.com/suradet-ps/rxdevman/blob/main/docs/security.md
     about: Please do NOT open a public issue for security vulnerabilities. Follow the reporting process in docs/security.md.
+  - name: Contributing guide
+    url: https://github.com/suradet-ps/rxdevman/blob/main/docs/contributing.md
+    about: Branch names, commit conventions, and the checks every PR must pass
+  - name: Roadmap and out of scope
+    url: https://github.com/suradet-ps/rxdevman/blob/main/docs/ROADMAP.md
+    about: What RxDev Man is, where it is going, and the features deliberately out of scope

@@ -1,41 +1,102 @@
 name: Bug report
-description: Report a bug in RxDev Man
-labels: [bug]
+description: Something on the site is not working as it should
+title: "[Bug]: "
+labels: ["bug"]
 body:
-  - type: textarea
-    id: description
+  - type: markdown
     attributes:
-      label: Description
-      description: What happened, and what did you expect to happen?
+      value: |
+        Thanks for helping make RxDev Man better. Please fill in the fields below.
+
+        RxDev Man is a static, content-first site - the most useful reports
+        name the page, the browser, and what the console said. Never paste
+        secrets or personal data (env values, tokens, Supabase keys).
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: A short, clear description of the problem.
     validations:
       required: true
   - type: input
     id: url
     attributes:
       label: Page URL
-      description: Which page shows the problem? (e.g. https://rxdevman.com/blog/...)
+      description: Which page shows the problem?
+      placeholder: "e.g. https://www.rxdevman.com/blog/..."
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open ...
+        2. Click ...
+        3. See ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include the error message shown on the page or in the console, if any.
+    validations:
+      required: true
   - type: dropdown
     id: environment
     attributes:
       label: Environment
       description: Where did you see this?
       options:
-        - Online (rxdevman.com)
+        - Online (www.rxdevman.com)
         - Local dev server
         - Offline / PWA
     validations:
       required: true
-  - type: textarea
-    id: reproduce
+  - type: dropdown
+    id: browser
     attributes:
-      label: Steps to reproduce
-      description: How can the problem be reproduced?
-      placeholder: |
-        1. Go to ...
-        2. Click ...
-        3. See error
-  - type: textarea
-    id: context
+      label: Browser
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: os
     attributes:
-      label: Additional context
-      description: Browser, OS, theme (light/dark/sepia), screenshots, console errors.
+      label: Operating system
+      placeholder: "e.g. macOS 15, Windows 11, Android 15, iOS 19"
+    validations:
+      required: false
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Theme in use
+      description: If the bug involves colors or readability.
+      options:
+        - Light
+        - Dark
+        - Sepia
+        - System default
+        - Not applicable
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console output or extra context
+      description: Paste console/network errors or screenshots. Never paste secrets or personal data (env values, tokens, keys).
+      render: text
+    validations:
+      required: false
