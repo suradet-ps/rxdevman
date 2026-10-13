@@ -1,6 +1,6 @@
 ---
-title: 'จาก SSR สู่ Static: บันทึกการแก้ issue #90 และ PR #119'
-description: 'เรื่องราวเบื้องหลังการทำให้บทความทั้งหมดในเว็บนี้กลับมาเป็น static อีกครั้ง ย้าย view counter ไปฝั่ง client และบทเรียนที่เจอระหว่างทาง ทั้ง Pagefind, sitemap และ service worker ที่บดบัง Vite HMR'
+title: 'จาก SSR สู่ Static'
+description: 'เบื้องหลังการแก้ปัญหาบทความหายจาก sitemap และ Pagefind ด้วยการเปลี่ยนหน้าเว็บบน Astro ให้กลับมาเป็น Static (SSG)'
 pubDate: '2026-10-13'
 heroImage: './from-ssr-to-static-issue-90.png'
 category: 'Web Development'
@@ -8,17 +8,15 @@ tags: ['Astro', 'SSG', 'SSR', 'Supabase', 'SEO', 'Service Worker', 'View Counter
 featured: false
 ---
 
-เว็บที่คุณกำลังอ่านอยู่นี้ ถูกสร้างขึ้นมาเพื่อเป็นบันทึกของ developer คนหนึ่ง ดังนั้นเมื่อมันมีบั๊กที่ตัวมันเอง การแก้บั๊กก็ควรถูกบันทึกไว้ด้วยเช่นกัน
+บทความนี้สรุปแนวทางการแก้ปัญหาและสิ่งที่ได้เรียนรู้จาก [issue #90](https://github.com/suradet-ps/rxdevman/issues/90) และ [PR #119](https://github.com/suradet-ps/rxdevman/pull/119) ซึ่งเกี่ยวข้องกับการตั้งค่า render mode ของ Astro, การจัดการ Dynamic Data อย่าง View Counter, และผลกระทบต่อ SEO กับ Search Index
 
-บทความนี้คือเรื่องราวของ [issue #90](https://github.com/suradet-ps/rxdevman/issues/90) และ [PR #119](https://github.com/suradet-ps/rxdevman/pull/119) ตั้งแต่ตอนที่สังเกตเห็นว่ามีอะไรผิด ไปจนถึงตอนที่ตรวจสอบผลลัพธ์ด้วย build จริง ถ้าคุณกำลังทำเว็บด้วย Astro แล้วขีดเส้นแบ่งระหว่าง static กับ dynamic ไม่ชัดเจน บันทึกนี้เขียนไว้เพื่อคุณ
+## ปัญหาที่พบ
 
-## อาการ: README พูดอย่าง โค้ดทำอีกอย่าง
-
-ทุกอย่างเริ่มจากคำถามง่าย ๆ ว่า บทความในเว็บนี้จริง ๆ แล้วถูก generate เป็นไฟล์ HTML ตั้งแต่ตอน build หรือเปล่า เพราะ README ของโปรเจกต์เขียนไว้ชัดเจนว่า
+ใน README ของโปรเจกต์ระบุไว้ว่าเว็บนี้ทำงานแบบ
 
 > rendered with zero JS by default, searchable offline
 
-แต่เมื่อเปิดโฟลเดอร์ build ดูกลับเจอแบบนี้
+แต่พอตรวจสอบโฟลเดอร์ build output (`dist/client/blog/`) กลับพบโครงสร้างแบบนี้
 
 ```text
 dist/client/blog/
@@ -28,32 +26,30 @@ dist/client/blog/
 └── tags/
 ```
 
-ไม่มีโฟลเดอร์ของบทความสักชิ้น ทั้งที่ในเว็บมีบทความอยู่ 27 ชิ้น นี่คือสัญญาณแรกว่าคำโฆษณากับความจริงไม่ตรงกัน
+ไม่มีโฟลเดอร์หรือไฟล์ HTML ของบทความแต่ละตอนอยู่เลย ทั้งที่มีบทความอยู่ 27 บทความแล้ว นอกจากนี้ยังพบอาการข้างเคียงตามมาอีกสองอย่าง
 
-ตามมาด้วยหลักฐานอีกสองชิ้น
+- `sitemap-0.xml` มีเฉพาะ URL หน้า listing แต่ไม่มี URL ของบทความเลย
+- ตัวค้นหาของ Pagefind ค้นหาเนื้อหาในบทความไม่เจอ เจอแค่หน้า listing และหน้า tools
 
-- `sitemap-0.xml` มีแต่ URL ของหน้า listing ไม่มีบทความเลย
-- ดัชนี Pagefind ค้นไม่เจอเนื้อหาบทความ มีแต่หน้า listing กับหน้า tools
+สาเหตุเพราะถ้าหน้านั้นไม่ได้ถูก build ออกมาเป็น static HTML ตัว generator ของ sitemap และ crawler ของ Pagefind จะมองไม่เห็นหน้าเหล่านั้น ส่งผลเสียโดยตรงต่อ SEO และระบบ search บนเว็บ
 
-สำหรับเว็บที่เป็น knowledge base ปัญหานี้ร้ายกว่าที่คิด เพราะเว็บแบบนี้มีคุณค่าเพราะ "คนหาสิ่งที่เราเคยเขียนเจอ" ถ้า Google มองไม่เห็น และช่องค้นหาค้นไม่เจอ เนื้อหาทั้งหมดก็เท่ากับถูกฝังอยู่ใต้พรม
+## ความแตกต่างระหว่าง SSG และ SSR ใน Astro
 
-## ปูพื้นก่อน: Astro render ได้สองแบบ
+Astro ที่ติดตั้ง adapter (ในที่นี้คือ `@astrojs/vercel`) รองรับการทำงานแบบ Hybrid rendering
 
-Astro ที่ติด adapter อย่าง `@astrojs/vercel` จะทำงานแบบ hybrid ได้ คือเลือกได้ทีละหน้าว่าจะ render ตอนไหน
+<InfoBox title="SSG vs SSR ใน Astro">
+**Static (SSG)**: generate ไฟล์ HTML ออกมาตอนรัน `astro build` เก็บไว้ใน `dist/client/` เสิร์ฟตรงผ่าน CDN ได้ทันที โหลดเร็วและไม่ต้องพึ่งพา server runtime
 
-<InfoBox title="SSG กับ SSR ต่างกันตรงไหน">
-**Static (SSG)** คือการ generate HTML จริงตั้งแต่ตอน `astro build` ลงโฟลเดอร์ `dist/client/` ผู้ใช้โหลดไฟล์ตรงจาก CDN ได้เลย เร็วและ cache ง่าย
-
-**SSR** คือการ render HTML ตอนมี request เข้ามาถึง ผ่าน serverless function ทำให้ได้ข้อมูลสดใหม่ทุกครั้ง แต่แลกมาด้วยเวลา, ค่า server และการ cache ที่ยากขึ้น
+**SSR**: render HTML บน serverless function ทุกครั้งที่มี HTTP request เข้ามา ได้ข้อมูลที่เป็น dynamic เสมอ แต่มี overhead เรื่อง latency และค่า serverless execution
 </InfoBox>
 
-ค่าเริ่มต้นของหน้าใน Astro คือ static ถ้าหน้าไหนอยากเป็น SSR ต้องประกาศเองว่า
+ตามปกติ Astro จะใช้โหมด static เป็นค่าเริ่มต้น แต่ถ้าต้องการให้หน้านั้นเป็น SSR จะต้องใส่
 
 ```astro
 export const prerender = false;
 ```
 
-และนั่นคือสิ่งที่สองไฟล์นี้ทำ
+ซึ่งในโปรเจกต์มีสองไฟล์ที่ถูกตั้งค่าแบบนี้ไว้
 
 ```astro
 // src/pages/blog/[...slug].astro
@@ -63,13 +59,11 @@ export const prerender = false;
 export const prerender = false;
 ```
 
-ทุกบทความและหน้าแรกจึงกลายเป็น SSR โดยที่ไม่มีไฟล์ HTML อยู่ใน build เลย
+ทำให้หน้าบทความทั้งหมดและหน้าแรกกลายเป็น SSR ส่งผลให้ไม่มีไฟล์ static HTML ถูกสร้างขึ้นมาตอน build
 
-## รากของปัญหา: view counter ที่อ่านตอน render
+## สาเหตุที่ต้องเปิด SSR ไว้ตั้งแต่แรก
 
-คำถามต่อมาคือ แล้วทำไมถึงต้องปิด prerender ตั้งแต่แรก
-
-คำตอบอยู่ใน `ViewCounter.astro` เวอร์ชันเดิม ซึ่งอ่านยอดวิวจาก Supabase ด้วย service role key ตอน render
+เหตุผลที่ไฟล์ `[...slug].astro` ปิด `prerender` ไว้ มาจากคอมโพเนนต์ `ViewCounter.astro` เวอร์ชันเดิม ที่ดึงยอดวิวจาก Supabase ด้วย server-side key ตอน render
 
 ```astro
 ---
@@ -81,21 +75,19 @@ const { data } = await getSupabaseServer()
 ---
 ```
 
-เพื่อให้ตัวเลขถูกฝังลง HTML ตั้งแต่ first paint หน้านั้นจึงต้อง render ตอน request อ่าน database สด ๆ และเพื่อตัวเลขตัวเดียว หน้าแรกกับบทความทั้ง 27 ชิ้นก็ต้องกลายเป็น SSR ไปด้วย
+แนวคิดเดิมคือต้องการให้ตัวเลขยอดวิวฝังลงใน HTML ตั้งแต่ initial render เพื่อเลี่ยง layout shift แต่ผลที่ตามมาคือ หน้าบทความทั้งหมด 27 หน้าต้องกลายเป็น SSR และต้อง query ฐานข้อมูลทุกครั้งที่มีคนเข้าดู
 
-ที่น่าเจ็บกว่านั้นคือ ตัวเลขก็ยัง stale อยู่ดี เพราะ script ฝั่ง client แค่ POST ไปที่ `/api/track` แล้วไม่เอาเลขใหม่ไปอัปเดต DOM คนแรกที่เข้าชมจึงเห็นเลขก่อนหน้าเสมอ แล้ว refresh อีกทีก็บวกอีกครั้ง ปัญหาส่วนนี้ถูกแยกไปติดตามใน issue #114 ต่างหาก
+ที่สำคัญคือ ตัวเลขก็ไม่ได้ realtime อยู่ดี เพราะ script ฝั่ง client แค่ส่ง POST ไปที่ `/api/track` แต่ไม่ได้อัปเดต DOM ต่อ ผู้เข้าชมคนแรกจึงเห็นยอดวิวเดิมอยู่ดี (ส่วนนี้เปิด issue #114 เพื่อติดตามแก้ต่อ)
 
-<SideNote type="note">
-จุดนี้เป็นบทเรียนเรื่องต้นทุนของการเลือกสถาปัตยกรรม สิ่งที่ดูเหมือน "แค่ทำหน้าเป็น dynamic" จริง ๆ แล้วลากทั้งเว็บออกจาก CDN ไปผูกกับ serverless function โดยไม่จำเป็น
-</SideNote>
+การนำ dynamic data จุดเล็ก ๆ จุดเดียวมาไว้ใน server render ทำให้หน้าเว็บทั้งหน้าเสียประโยชน์จากการเป็น Static บน CDN ไปทั้งหมด
 
-## แก้อย่างไรใน PR #119
+## แนวทางแก้ไขใน PR #119
 
-เป้าหมายของการแก้คือ กลับด้านทั้งสมการ ทำให้ทุกหน้าเป็น static แล้วย้ายส่วน dynamic เพียงจุดเดียวไปไว้ฝั่ง client
+แนวทางคือปรับให้หน้าบทความทั้งหมดกลับมาเป็น Static (SSG) แล้วย้ายส่วน View Counter ไป fetch ฝั่ง client แทน
 
-### 1. ให้บทความ generate ตัวเองตอน build
+### 1. ให้บทความ generate เป็น Static ตอน build
 
-เปลี่ยน `[...slug].astro` ให้ประกาศ `getStaticPaths()` เพื่อบอก Astro ว่ามีหน้าไหนบ้างที่ต้องสร้าง และส่งข้อมูลโพสต์ผ่าน props แทนการค้นหาเองตอน request
+ลบ `export const prerender = false;` ออกจาก `[...slug].astro` แล้วใช้ `getStaticPaths()` เพื่อบอก Astro ให้สร้างหน้า HTML ล่วงหน้า:
 
 ```astro
 export async function getStaticPaths() {
@@ -110,11 +102,11 @@ const { post } = Astro.props;
 const { Content, headings } = await render(post);
 ```
 
-slug ที่ได้ยังเป็นค่าเดิมทั้งหมด เพราะใช้ `getEntrySlug(post.id)` ตัวเดียวกับที่เวอร์ชัน SSR ใช้ค้นหา URL จึงไม่เปลี่ยน ไม่มี redirect และไม่ต้องแก้ลิงก์เก่า
+URL ทุกอย่างยังคงโครงสร้างเดิม เพราะใช้ `getEntrySlug(post.id)` เดียวกัน จึงไม่กระทบกับ routing เดิม
 
-### 2. ย้ายการอ่านยอดวิวไปฝั่ง client
+### 2. ย้าย View Counter ไปอ่านฝั่ง Client
 
-`ViewCounter.astro` เปลี่ยนจากอ่าน database ตอน render เป็นเรนเดอร์เลข 0 ไว้ก่อน แล้วค่อย hydrate ทีหลังด้วย anon key ผ่าน PostgREST โดย RLS ของตาราง `rxdevman_view_counts` เปิดให้ anon อ่านค่า aggregate อยู่แล้ว
+แก้ `ViewCounter.astro` ให้ render ค่าเริ่มต้นเป็น 0 ไว้ก่อน แล้วใช้ client-side script ยิงไปดึงตัวเลขผ่าน PostgREST ด้วย Supabase anon key (ซึ่งฝั่ง database ตั้ง Row Level Security (RLS) ให้ anon อ่านค่า aggregate ได้อย่างเดียว)
 
 ```ts
 const params = new URLSearchParams({
@@ -129,61 +121,59 @@ const response = await fetch(
 );
 ```
 
-ส่วน write path ยังปลอดภัยเหมือนเดิม เพราะ `/api/track` ยังเป็น SSR route ที่ใช้ service role key ฝั่ง server เท่านั้น ฝั่ง browser ได้แค่ anon key ซึ่งถูกออกแบบมาให้เปิดเผยได้อยู่แล้ว
+ส่วน endpoint บันทึกยอดวิว (`/api/track`) ยังคงเป็น SSR route ที่ทำงานฝั่ง server และใช้ service role key ตามเดิม เพื่อความปลอดภัย
 
-### 3. รายละเอียดเล็ก ๆ ที่ตั้งใจ
+### 3. รายละเอียดเพิ่มเติมในการแก้
 
-- ใช้ `querySelectorAll` อัปเดตทุก counter บนหน้า ไม่ใช่แค่ตัวแรก
-- ถ้า environment variables หาย จะข้ามการอ่านอย่างเงียบ ๆ ไม่ทำให้หน้าเว็บพัง
-- ลำดับคืออ่านเลขก่อน แล้วค่อยยิง track เพื่อรักษาพฤติกรรม "เลขก่อนการเข้าชมครั้งนี้" ให้เหมือนเดิม (การบวกเลขบนจอเป็นเรื่องของ issue #114)
+- ใช้ `querySelectorAll` เพื่ออัปเดต counter ทุกจุดในหน้า (เช่น header และ footer)
+- มี fallback กรณีไม่มี environment variables โดยจะไม่ throw error ให้หน้าเว็บพัง
+- คงลำดับการทำงานเดิมไว้ คือดึงยอดวิวก่อน แล้วค่อยยิง track event
 
-## ตรวจสอบด้วย build จริง ไม่ใช่ด้วยความหวัง
+## ผลลัพธ์หลังการ Build
 
-หลังแก้เสร็จ ผมรัน `bun run build` ใหม่ทั้งหมด แล้วเทียบของจริง
+หลังจากรัน `bun run build` และเปรียบเทียบผลลัพธ์ระหว่างก่อนและหลังแก้:
 
-| ตัวชี้วัด | ก่อน | หลัง |
+| รายการ | ก่อนแก้ (SSR) | หลังแก้ (SSG) |
 | --- | --- | --- |
-| ไฟล์ HTML ของบทความใน `dist/client/blog/` | 0 | 27 |
+| ไฟล์ HTML บทความใน `dist/client/blog/` | 0 | 27 |
 | URL บทความใน `sitemap-0.xml` | 0 | 30 (รวมหน้า listing) |
-| หน้าในดัชนี Pagefind | 114 | 142 |
-| จำนวนคำในดัชนี Pagefind | 867 | 11,849 |
+| หน้าใน Pagefind index | 114 | 142 |
+| จำนวนคำใน Pagefind index | 867 | 11,849 |
 
-คำในดัชนีที่เพิ่มจากหลักร้อยเป็นหลักหมื่น คือหลักฐานตรงที่สุดว่าบทความเข้า index จริง ไม่ใช่แค่ build ผ่าน และเพื่อความแน่ใจ ผมยังเปิดไฟล์ `.pf_fragment` ของ Pagefind ดูด้วยว่ามีข้อความจากบทความอยู่ข้างในจริง
+เมื่อหน้าบทความถูก build ออกมาเป็น static HTML จริง Pagefind ก็สามารถ crawl เนื้อหาเข้าไปทำ search index ได้อย่างถูกต้อง (คำใน index เพิ่มขึ้นจาก 867 เป็น 11,849 คำ) และ sitemap ก็มี URL ของบทความครบถ้วน
 
-ส่วน gate อื่นผ่านครบทั้งหมด: `bun run lint`, `bun run test` (55 tests), `bunx astro check` (0 errors, 0 warnings) และ `bun run size` (1.16 kB gzipped ตาม budget)
+นอกจากนี้ test suites ทั้งหมดผ่านตามเกณฑ์: `bun run lint`, `bun run test` (55 tests), `bunx astro check` (0 errors), และ bundle size ยังอยู่ในเกณฑ์ปกติ
 
-## บทเรียนที่เจอระหว่างทาง
+## ปัญหาที่พบระหว่างทาง (Lessons Learned)
 
-### Service worker ต้องไม่แตะ dev server
+### Service Worker กวน Vite Dev Server
 
-ระหว่างทดสอบ dev ผมเจอ HMR websocket ต่อไม่ติด พร้อม error ประหลาดว่า `Cannot read properties of undefined (reading 'send')` สืบไปสืบมากลายเป็นว่า `public/sw.js` แคชทุก same-origin request ที่ไม่ใช่ HTML แบบ CacheFirst ซึ่งรวม `/@vite/client` ของ Vite dev server เข้าไปด้วย ทั้งที่ response นั้นส่ง `Cache-Control: no-cache` มาแล้วแท้ ๆ แต่ service worker ไม่สนใจ มันคืนสำเนาเก่าให้เบราว์เซอร์
+ตอนทดสอบบน local dev เจออาการ HMR websocket ต่อไม่ติด และมี error: `Cannot read properties of undefined (reading 'send')`
 
-ผลคือ browser รัน Vite client เวอร์ชันเก่า แล้ว HMR ก็พัง นี่คือตัวอย่างว่าทำไม service worker ต้องลงทะเบียนเฉพาะ production และต้องมีข้อยกเว้นสำหรับ path ของ dev (`/@vite`, `/@fs`, `/node_modules`) เรื่องนี้กำลังถูกติดตามใน issue #104
+พอไล่ดูพบว่าใน `public/sw.js` มีการใช้กลยุทธ์ `CacheFirst` กับ same-origin request ทั้งหมดที่ไม่ใช่ HTML ซึ่งรวมไปถึง path `/@vite/client` ของ Vite dev server ด้วย แม้ server จะส่ง `Cache-Control: no-cache` มา แต่ Service Worker ดันคืน cached response เก่ากลับไปแทน
 
-### สิ่งที่ย้ายไป client ต้องมี environment variables ตอน build
+**แนวทางแก้:** Service Worker ไม่ควรถูก register ในโหมด development หรือถ้าต้องเปิด ควร bypass path ที่เกี่ยวข้องกับ dev tool เสมอ (`/@vite`, `/@fs`, `/node_modules`) ปัญหานี้เปิด issue #104 เพื่อปรับปรุงต่อ
 
-การอ่านยอดวิวแบบใหม่ใช้ `PUBLIC_SUPABASE_URL` และ `PUBLIC_SUPABASE_ANON_KEY` ซึ่ง Vite จะ inline ลง HTML ตอน build ถ้า Vercel ไม่มีค่าเหล่านี้ ตัวเลขจะกลายเป็น 0 เงียบ ๆ โดยไม่ error เลย บทเรียนคือ ของที่ย้ายไปฝั่ง client ต้องเช็ค env ของทุก environment ตั้งแต่ตอน build ไม่ใช่ตอน runtime
+### Environment Variables ฝั่ง Client ต้องพร้อมตอน Build
 
-### CI เขียวไม่ได้แปลว่าผลลัพธ์ถูก
+การย้ายโค้ดไปรันฝั่ง client ทำให้ต้องใช้ `PUBLIC_SUPABASE_URL` และ `PUBLIC_SUPABASE_ANON_KEY` ซึ่ง Vite จะฝัง (inline) ค่านี่ลงไปในไฟล์ตอน build เลย ถ้า CI/CD (เช่น Vercel) ไม่ได้ตั้งค่าตัวแปรเหล่านี้ไว้ตอน build หน้าเว็บจะไม่ error แต่ตัวเลขยอดวิวจะไม่แสดงขึ้นมา
 
-ทุก gate ผ่านตั้งแต่ CI ไปจนถึง CodeQL แต่ไม่มี gate ไหนรู้ว่า "บทความหายจาก sitemap" สิ่งที่จับได้คือการเปิด artifact จริงดูด้วยตา ไฟล์ที่ build ออกมาจึงควรถูกตรวจเหมือนเป็นผลผลิต ไม่ใช่แค่ผลข้างเคียง
+### CI ผ่าน ไม่ได้การันตีว่า Build Output ถูกต้อง
 
-### แยกให้ออกระหว่างโค้ดพังกับ infra หน่วง
+ในเคสนี้ CI รันผ่านทุกอย่าง (lint ผ่าน, test ผ่าน, build สำเร็จ) แต่ไม่มี step ไหนตรวจเลยว่าหน้าบทความถูก generate ออกมาใน `dist/` หรือไม่ การตรวจดู build artifact ด้วยตนเองจึงยังจำเป็นในขั้นตอนการ setup สถาปัตยกรรมใหม่
 
-ระหว่างรอ PR ผมเห็น Vercel preview ค้างสถานะ Building นานผิดปกติ จากสถิติเดิม deployment ของโปรเจกต์นี้ใช้เวลาไม่ถึงหนึ่งนาที ครั้งนี้ค้างเกิน 27 นาที ซึ่งไม่เกี่ยวกับโค้ดที่แก้เลย เพราะ CI build ผ่านไปแล้ว การรู้ว่า baseline ปกติคือเท่าไร ทำให้เราตัดสินใจได้ว่าควรรอ หรือควร retrigger แทนที่จะนั่งแก้โค้ดที่ไม่มีปัญหา
+### แยกแยะปัญหาระหว่าง Code กับ Infrastructure
 
-## สิ่งที่แยกไปทำต่อ
+ระหว่างเปิด PR พบว่า Vercel preview ค้างสถานะ Building นานกว่า 27 นาที ทั้งที่ปกติโปรเจกต์นี้ใช้เวลา build ไม่ถึง 1 นาที พอเช็คใน GitHub Actions พบว่า build ผ่านไปเรียบร้อยแล้ว จึงรู้ว่าเป็นปัญหาที่ queue หรือ agent ของ Vercel เอง การรู้ baseline เวลาการ build ของระบบ ช่วยให้ตัดสินใจได้ว่าควรรอหรือกดยกเลิกแล้ว trigger build ใหม่
 
-การแก้ครั้งนี้ตั้งใจให้ scope แคบ PR จึงจงใจไม่แตะเรื่องเหล่านี้ แต่บันทึกไว้เพื่อกลับมาทำ
+## สิ่งที่ต้องทำต่อในอนาคต
 
-- #114 view counter ยังไม่บวกเลขหลัง track สำเร็จ
-- #92 build Pagefind ถูกรันซ้ำสองรอบ
-- #94 ยังไม่มีหน้า 404 จริง (slug ที่ผิดจะตกไปที่ 404 ของ platform)
-- #88 helper `getSupabasePublic()` ยังเป็น dead code
-- #104 service worker ยังใช้ cache name คงที่และไม่ได้ป้องกัน dev HMR
+- #114: ปรับให้ view counter อัปเดตตัวเลขบน DOM อัตโนมัติหลังยิง track สำเร็จ
+- #92: แก้ปัญหา build step ของ Pagefind ถูกรันซ้ำสองรอบ
+- #94: เพิ่ม Custom 404 page สำหรับ SSG
+- #88: จัดการ dead code ใน `getSupabasePublic()`
+- #104: ปรับปรุง Service Worker ไม่ให้แคชไฟล์ของ Vite dev server
 
 ## สรุป
 
-ถ้าจะให้สรุปเป็นประโยคเดียว บันทึกนี้คือการพาเว็บกลับบ้าน กลับไปเป็น static ตามที่มันควรจะเป็นตั้งแต่แรก แล้วเก็บความ dynamic ไว้แค่จุดเดียวที่จำเป็นจริง ๆ คือตัวเลขยอดวิว ซึ่งไม่จำเป็นต้องรู้ตอน render เลยด้วยซ้ำ
-
-สำหรับเว็บที่เป็นบันทึกของ developer การแก้บั๊กหนึ่งครั้งมักให้บทเรียนมากกว่าตัวโค้ดที่แก้ และบทเรียนที่คุ้มที่สุดของครั้งนี้คือ ประโยคใน README ควรถูกพิสูจน์ด้วย artifact ที่ build ออกมา ไม่ใช่ด้วยความตั้งใจตอนเขียน
+ปัญหาบทความหายจาก sitemap และระบบ search เกิดจากการเลือกใช้ SSR เพียงเพื่อรองรับ view counter เล็ก ๆ จุดเดียว การย้ายส่วน dynamic ไป fetch ฝั่ง client ช่วยให้หน้าเว็บทั้งหมดสามารถกลับมาใช้ SSG ได้ตามปกติ ได้ประโยชน์ทั้งเรื่อง CDN caching, SEO, และ offline search ตามที่ควรจะเป็น
