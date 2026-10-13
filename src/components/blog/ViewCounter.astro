@@ -1,6 +1,4 @@
 ---
-import { getSupabaseServer } from '@/lib/supabase';
-
 type Props = {
   slug: string;
   label?: string;
@@ -8,44 +6,81 @@ type Props = {
 };
 
 const { slug, label = 'visitors', labelBefore = false } = Astro.props;
-
-let count = 0;
-try {
-  const { data } = await getSupabaseServer()
-    .from('rxdevman_view_counts')
-    .select('unique_visitors')
-    .eq('page_slug', slug)
-    .single();
-  count = data?.unique_visitors ?? 0;
-}
- catch {
-  // Gracefully fallback during prerender/build when env vars aren't available
-}
 ---
 
 <span class="view-counter" data-slug={slug}>
-  {labelBefore ? `${label} ${count.toLocaleString()}` : `${count.toLocaleString()} ${label}`}
+  {labelBefore ? `${label} ` : null}<span class="view-count-value">0</span>{labelBefore
+    ? null
+    : ` ${label}`}
 </span>
 
 <script>
-document.addEventListener('DOMContentLoaded', async () => {
-  const el = document.querySelector<HTMLElement>('.view-counter');
-  if (!el)
-    return;
+  const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
-  const slug = el.dataset.slug!;
+  function displayCount(element: HTMLElement, count: number): void {
+    const value = element.querySelector<HTMLElement>('.view-count-value');
+    if (value)
+      value.textContent = count.toLocaleString();
+  }
 
-  try {
-    await fetch('/api/track', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ slug }),
-    });
+  // Reads the aggregate with the public anon key (RLS allows anon SELECT
+  // on rxdevman_view_counts). Skipped when the env vars are missing.
+  async function loadCount(element: HTMLElement, slug: string): Promise<void> {
+    if (!supabaseUrl || !supabaseAnonKey)
+      return;
+
+    try {
+      const params = new URLSearchParams({
+        select: 'unique_visitors',
+        page_slug: `eq.${slug}`,
+        limit: '1',
+      });
+      const response = await fetch(
+        `${supabaseUrl}/rest/v1/rxdevman_view_counts?${params}`,
+        {
+          headers: {
+            apikey: supabaseAnonKey,
+            Authorization: `Bearer ${supabaseAnonKey}`,
+          },
+        },
+      );
+      if (!response.ok)
+        return;
+
+      const rows = (await response.json()) as Array<{ unique_visitors?: number }>;
+      displayCount(element, rows[0]?.unique_visitors ?? 0);
+    }
+    catch {
+      // Keep the static placeholder when the count cannot be fetched.
+    }
   }
-  catch {
-    // Silently fail
+
+  async function trackVisit(slug: string): Promise<void> {
+    try {
+      await fetch('/api/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug }),
+      });
+    }
+    catch {
+      // Tracking is best effort.
+    }
   }
-});
+
+  async function hydrateCounters(): Promise<void> {
+    const counters = document.querySelectorAll<HTMLElement>('.view-counter');
+    for (const element of counters) {
+      const slug = element.dataset.slug;
+      if (!slug)
+        continue;
+      await loadCount(element, slug);
+      await trackVisit(slug);
+    }
+  }
+
+  void hydrateCounters();
 </script>
 
 <style>
