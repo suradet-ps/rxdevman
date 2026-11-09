@@ -39,4 +39,57 @@ describe('calculateReadingTime', () => {
     const words = Array.from({ length: 100 }).fill('word').join('   ');
     expect(calculateReadingTime(words)).toBe('1 min read');
   });
+
+  it('counts Thai words without relying on spaces', () => {
+    const words = Array.from({ length: 100 }).fill('สวัสดีครับ').join(' ');
+    expect(calculateReadingTime(words)).toBe('1 min read');
+  });
+
+  it('does not undercount a long Thai article', () => {
+    const sentence = 'ภาษาไทยไม่มีช่องว่างระหว่างคำ';
+    const content = Array.from({ length: 1000 }).fill(sentence).join(' ');
+    const minutes = Number(calculateReadingTime(content)?.split(' ')[0]);
+
+    expect(minutes).toBeGreaterThanOrEqual(30);
+  });
+
+  it('ignores fenced code blocks', () => {
+    const code = `\`\`\`ts\n${'const value = 1;\n'.repeat(1000)}\`\`\``;
+    expect(calculateReadingTime(`hello world\n${code}`)).toBe('1 min read');
+  });
+
+  it('ignores fenced code blocks with tildes', () => {
+    const code = `~~~ts\n${'const value = 1;\n'.repeat(1000)}~~~`;
+    expect(calculateReadingTime(`hello world\n${code}`)).toBe('1 min read');
+  });
+
+  it('returns null when the content is only code', () => {
+    expect(calculateReadingTime('```ts\nconst value = 1;\n```')).toBeNull();
+  });
+
+  it('ignores inline code', () => {
+    const code = Array.from({ length: 500 }).fill('`const value = 1`').join(' ');
+    expect(calculateReadingTime(`hello world ${code}`)).toBe('1 min read');
+  });
+
+  it('ignores MDX tags while keeping their prose', () => {
+    const ignoredProps = 'ignore '.repeat(500);
+    const content = `<InfoBox title="${ignoredProps}">hello world</InfoBox>`;
+    expect(calculateReadingTime(content)).toBe('1 min read');
+  });
+
+  it('ignores MDX imports', () => {
+    expect(calculateReadingTime(`import Foo from './Foo.astro'\n\nhello world`)).toBe('1 min read');
+  });
+
+  it('ignores frontmatter', () => {
+    const description = 'word '.repeat(500);
+    const content = `---\ntitle: Hello\ndescription: ${description}\n---\n\nhello world`;
+    expect(calculateReadingTime(content)).toBe('1 min read');
+  });
+
+  it('ignores image syntax and link URLs', () => {
+    const links = Array.from({ length: 300 }).fill('[hello](https://example.com/a/b?c=d)').join(' ');
+    expect(calculateReadingTime(`![alt text](./image.png) ${links} world`)).toBe('2 min read');
+  });
 });
