@@ -1,3 +1,7 @@
+import { fromMarkdown } from 'mdast-util-from-markdown';
+import { mdxFromMarkdown } from 'mdast-util-mdx';
+import { mdxjs } from 'micromark-extension-mdxjs';
+
 const WORDS_PER_MINUTE = 200;
 
 // Thai does not put spaces between words, so splitting on whitespace
@@ -5,63 +9,53 @@ const WORDS_PER_MINUTE = 200;
 // dictionary-based word segmentation for Thai while still handling Latin text.
 const WORD_SEGMENTER = new Intl.Segmenter('th', { granularity: 'word' });
 
+const MDX_OPTIONS = {
+  extensions: [mdxjs()],
+  mdastExtensions: [mdxFromMarkdown()],
+};
+
+type MarkdownNode = {
+  type: string;
+  value?: string;
+  children?: MarkdownNode[];
+};
+
+const proseCache = new Map<string, string>();
+
 /**
- * Removes fenced code blocks, including fences longer than three characters.
+ * Collects text nodes, skipping code, inline code, HTML, and MDX expressions.
  */
-function stripFencedCode(content: string): string {
-  const lines = content.split('\n');
-  const prose: string[] = [];
-  let openFence: string | null = null;
+function collectText(node: MarkdownNode, parts: string[]): void {
+  if (node.type === 'text' && typeof node.value === 'string')
+    parts.push(node.value);
 
-  for (const line of lines) {
-    const match = /^\s{0,3}(`{3,}|~{3,})/.exec(line);
-
-    if (openFence) {
-      // A closing fence must use the same character and be at least as long.
-      if (match && match[1][0] === openFence[0] && match[1].length >= openFence.length)
-        openFence = null;
-      continue;
-    }
-
-    if (match) {
-      openFence = match[1];
-      continue;
-    }
-
-    prose.push(line);
+  if (node.children) {
+    for (const child of node.children)
+      collectText(child, parts);
   }
-
-  return prose.join('\n');
 }
 
 /**
- * Strips Markdown/MDX syntax so code, markup, and URLs are not counted as prose.
+ * Parses Markdown/MDX and returns only its prose text.
  */
 function extractProse(content: string): string {
-  const body = content.replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, ' ');
+  const cached = proseCache.get(content);
+  if (cached !== undefined)
+    return cached;
 
-  return stripFencedCode(body)
-    .replace(/^(?:import|export)\s.*$/gm, ' ')
-    .replace(/<!--[\s\S]*?-->/g, ' ')
-    .replace(/\{\/\*[\s\S]*?\*\/\}/g, ' ')
-    .replace(/`[^`\n]*`/g, ' ')
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
-    .replace(/\[([^\]]+)\]\[[^\]]*\]/g, '$1')
-    .replace(/^\s*\[[^\]]+\]:\s+\S.*$/gm, ' ')
-    .replace(/<\/?[a-z][^>]*>/gi, ' ')
-    .replace(/(?:https?:\/\/|mailto:)\S+/g, ' ')
-    .replace(/^\s{0,3}#{1,6}\s+/gm, ' ')
-    .replace(/^\s{0,3}>\s?/gm, ' ')
-    .replace(/^\s{0,3}(?:[-*+]|\d+[.)])\s+/gm, ' ')
-    .replace(/^[\s:|-]+$/gm, ' ')
-    .replace(/\|/g, ' ')
-    .replace(/[*_~]/g, ' ')
-    .replace(/&(?:[a-z]+|#\d+|#x[\da-f]+);/gi, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+  const body = content.replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, ' ');
+  const tree = fromMarkdown(body, MDX_OPTIONS) as unknown as MarkdownNode;
+  const parts: string[] = [];
+  collectText(tree, parts);
+
+  const prose = parts.join(' ').replace(/\s+/g, ' ').trim();
+  proseCache.set(content, prose);
+  return prose;
 }
 
+/**
+ * Counts word-like segments, including Thai words that have no spaces.
+ */
 function countWords(prose: string): number {
   let count = 0;
 

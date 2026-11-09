@@ -34,6 +34,9 @@
     "astro-expressive-code": "^0.44.1",
     "astro-icon": "^1.1.5",
     "astro-pagefind": "^2.0.1",
+    "mdast-util-from-markdown": "^2.0.3",
+    "mdast-util-mdx": "^3.0.0",
+    "micromark-extension-mdxjs": "^3.0.0",
     "typescript": "^6.0.3",
     "zod": "^4.6.7"
   },
